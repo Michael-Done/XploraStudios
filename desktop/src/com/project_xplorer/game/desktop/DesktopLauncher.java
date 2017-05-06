@@ -9,6 +9,4 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new ProjectXplorerGame(), config);
 	}
-	
-	void fixBug1() {}
 }
