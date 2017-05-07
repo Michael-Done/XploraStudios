@@ -43,8 +43,8 @@ public class ProjectXploraGame implements ApplicationListener {
  
       // Create a camera and point it to our model
       camera = new PerspectiveCamera(70, screenWidth, screenHeight);
-      camera.position.set(0f, -4f, 3f);
-      camera.lookAt(0, 0, 0);
+      camera.position.set(0f, -30f, 10f);
+      camera.lookAt(0, 0, 10);
       camera.near = 0.1f;
       camera.far = 300f;
       camera.update();
