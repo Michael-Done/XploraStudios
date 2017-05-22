@@ -14,10 +14,14 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 
-/** Takes a {@link Camera} instance and controls it via w,a,s,d and mouse panning.
- * @author badlogic */
+/**
+ * Takes a {@link Camera} instance and controls it via w,a,s,d and mouse
+ * panning.
+ * 
+ * @author Michael Done, CyrusGandevia
+ */
 public class PlayerCameraController extends InputAdapter {
-	private final Camera camera;
+	final Camera camera;
 	private final IntIntMap keys = new IntIntMap();
 	private int STRAFE_LEFT = Keys.A;
 	private int STRAFE_RIGHT = Keys.D;
@@ -28,82 +32,127 @@ public class PlayerCameraController extends InputAdapter {
 	private float velocity = 5;
 	private float degreesPerPixel = 0.5f;
 	private final Vector3 tmp = new Vector3();
+	private boolean lockedPosition = false;
 
-	public PlayerCameraController (Camera camera) {
+	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
 	}
 
+	public PlayerCameraController(Camera camera, Settings settings) {
+		this.camera = camera;
+		FORWARD = settings.getForward();
+		BACKWARD = settings.getBackward();
+		STRAFE_LEFT = settings.getStrafe_left();
+		STRAFE_RIGHT = settings.getStrafe_right();
+		degreesPerPixel = (((float) settings.getMouseSens()) / 100) / 2;
+	}
+
+	public void lockPosition() {
+		lockedPosition = true;
+	}
+
+	public void unlockPosition() {
+		lockedPosition = false;
+	}
+
 	@Override
-	public boolean keyDown (int keycode) {
+	public boolean keyDown(int keycode) {
 		keys.put(keycode, keycode);
 		return true;
 	}
 
 	@Override
-	public boolean keyUp (int keycode) {
+	public boolean keyUp(int keycode) {
 		keys.remove(keycode, 0);
 		return true;
 	}
 
-	/** Sets the velocity in units per second for moving forward, backward and strafing left/right.
-	 * @param velocity the velocity in units per second */
-	public void setVelocity (float velocity) {
+	/**
+	 * Sets the velocity in units per second for moving forward, backward and
+	 * strafing left/right.
+	 * 
+	 * @param velocity
+	 *            the velocity in units per second
+	 */
+	public void setVelocity(float velocity) {
 		this.velocity = velocity;
 	}
 
-	/** Sets how many degrees to rotate per pixel the mouse moved.
-	 * @param degreesPerPixel */
-	public void setDegreesPerPixel (float degreesPerPixel) {
+	/**
+	 * Sets how many degrees to rotate per pixel the mouse moved.
+	 * 
+	 * @param degreesPerPixel
+	 */
+	public void setDegreesPerPixel(float degreesPerPixel) {
 		this.degreesPerPixel = degreesPerPixel;
 	}
 
 	@Override
-	public boolean mouseMoved (int screenX, int screenY) {
+	public boolean mouseMoved(int screenX, int screenY) {
 		float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel;
 		float deltaY = -Gdx.input.getDeltaY() * degreesPerPixel;
 		camera.direction.rotate(camera.up, deltaX);
 		tmp.set(camera.direction).crs(camera.up).nor();
 		camera.direction.rotate(tmp, deltaY);
-// camera.up.rotate(tmp, deltaY);
+		// camera.up.rotate(tmp, deltaY);
 		return true;
 	}
 
-	public void update () {
+	public void update() {
 		update(Gdx.graphics.getDeltaTime());
 	}
 
-	public void update (float deltaTime) {
-		if (keys.containsKey(FORWARD)) {
-			tmp.set(camera.direction).nor().scl(deltaTime * velocity);
-			tmp.z = 0;
-			camera.position.add(tmp);
-		}
-		if (keys.containsKey(BACKWARD)) {
-			tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
-			tmp.z = 0;
-			camera.position.add(tmp);
-		}
-		if (keys.containsKey(STRAFE_LEFT)) {
-			tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
-			tmp.z = 0;
-			camera.position.add(tmp);
-		}
-		if (keys.containsKey(STRAFE_RIGHT)) {
-			tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
-			tmp.z = 0;
-			camera.position.add(tmp);
-		}
-		if (keys.containsKey(UP)) {
-			tmp.set(camera.up).nor().scl(deltaTime * velocity);
-			tmp.z = 0;
-			camera.position.add(tmp);
-		}
-		if (keys.containsKey(DOWN)) {
-			tmp.set(camera.up).nor().scl(-deltaTime * velocity);
-			tmp.z = 0;
-			camera.position.add(tmp);
+	public void update(float deltaTime) {
+		if (!lockedPosition) {
+			if (keys.containsKey(FORWARD)) {
+				tmp.set(camera.direction).nor().scl(deltaTime * velocity);
+				tmp.z = 0;
+				camera.position.add(tmp);
+			}
+			if (keys.containsKey(BACKWARD)) {
+				tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
+				tmp.z = 0;
+				camera.position.add(tmp);
+			}
+			if (keys.containsKey(STRAFE_LEFT)) {
+				tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
+				tmp.z = 0;
+				camera.position.add(tmp);
+			}
+			if (keys.containsKey(STRAFE_RIGHT)) {
+				tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
+				tmp.z = 0;
+				camera.position.add(tmp);
+			}
+			if (keys.containsKey(UP)) {
+				tmp.set(camera.up).nor().scl(deltaTime * velocity);
+				tmp.z = 0;
+				camera.position.add(tmp);
+			}
+			if (keys.containsKey(DOWN)) {
+				tmp.set(camera.up).nor().scl(-deltaTime * velocity);
+				tmp.z = 0;
+				camera.position.add(tmp);
+			}
 		}
 		camera.update(true);
 	}
-}
 
+	public float getXYAngle() {
+		float x = camera.direction.x;
+		float y = camera.direction.y;
+		float z = camera.direction.z;
+		float hypotenuse = (float) Math.sqrt((x * x) + (y * y));
+		//System.out.println("(" + x + ", " + y + ", " + z + ") " + hypotenuse);
+		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.x);
+	}
+
+	public float getYZAngle() {
+		float x = camera.direction.x;
+		float y = camera.direction.y;
+		float z = camera.direction.z;
+		float hypotenuse = (float) Math.sqrt((z * z) + (y * y));
+		//System.out.println("(" + x + ", " + y + ", " + z + ") " + hypotenuse);
+		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.z);
+	}
+}

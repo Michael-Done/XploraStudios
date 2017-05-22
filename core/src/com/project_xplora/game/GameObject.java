@@ -18,28 +18,36 @@ public class GameObject extends ModelInstance implements Disposable{
         body = new btCollisionObject();
         body.setCollisionShape(shape);
     }
+    
+    public GameObject(Model model){
+    	super(model);
+    	this.transform.rotate(1, 0, 0, 90);
+    	body = new btCollisionObject();
+    }
 
     @Override
     public void dispose () {
         body.dispose();
     }
-    static class Constructor implements Disposable {
-        public final Model model;
-        public final String node;
-        public final btCollisionShape shape;
-        public Constructor(Model model, String node, btCollisionShape shape) {
-            this.model = model;
-            this.node = node;
-            this.shape = shape;
-        }
-
-        public GameObject construct() {
-            return new GameObject(model, node, shape);
-        }
-
-        @Override
-        public void dispose () {
-            shape.dispose();
-        }
-    }
+    
+    // Factory class (not exactly sure how it works so i'm leaving it out for now)
+//    static class Constructor implements Disposable {
+//        public final Model model;
+//        public final String node;
+//        public final btCollisionShape shape;
+//        public Constructor(Model model, String node, btCollisionShape shape) {
+//            this.model = model;
+//            this.node = node;
+//            this.shape = shape;
+//        }
+//
+//        public GameObject construct() {
+//            return new GameObject(model, node, shape);
+//        }
+//
+//        @Override
+//        public void dispose () {
+//            shape.dispose();
+//        }
+//    }
 }
