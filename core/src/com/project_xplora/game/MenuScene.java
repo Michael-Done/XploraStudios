@@ -124,6 +124,10 @@ public class MenuScene extends GameObjectController {
 		assets.load("SettingsText.g3db", Model.class);
 		assets.load("PlaySign.g3db", Model.class);
 		assets.load("Trophy.g3db", Model.class);
+		assets.load("Gear.g3db", Model.class);
+		assets.load("Instructions.g3db", Model.class);
+		assets.load("ArtefactText.g3db", Model.class);
+		assets.load("Artefact.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -137,11 +141,11 @@ public class MenuScene extends GameObjectController {
 	public void loadModelInstances() {
 		// The locations of all the signs
 		Vector3 playLocation = new Vector3(0, 0, -5f);
-		Vector3 instructionLocation = new Vector3(-4.330f, 0, -2.5f);
+		Vector3 instructionLocation = new Vector3(4.330f, 0, -2.5f);
 		Vector3 artifactLocation = new Vector3(4.330f, 0, 2.5f);
 		Vector3 exitLocation = new Vector3(0, 0, 5f);
 		Vector3 highscoresLocation = new Vector3(-4.330f, 0, 2.5f);
-		Vector3 settingsLocation = new Vector3(4.330f, 0, -2.5f);
+		Vector3 settingsLocation = new Vector3(-4.330f, 0, -2.5f);
 
 		// The locations of all the text signs
 		Vector3 playTextLocation = new Vector3(0, 0, -4f);
@@ -168,7 +172,7 @@ public class MenuScene extends GameObjectController {
 		highscoresText_inst = new GameObject(highscoresText);
 		highscoresText_inst.transform.translate(highscoresTextLocation).rotate(0, 1f, 0, 120);
 
-		Model artifactText = assets.get("ExitButton.g3db", Model.class);
+		Model artifactText = assets.get("ArtefactText.g3db", Model.class);
 		artifactText_inst = new GameObject(artifactText);
 		artifactText_inst.transform.translate(artifactTextLocation).rotate(0, 1f, 0, -120);
 
@@ -205,6 +209,21 @@ public class MenuScene extends GameObjectController {
 		ModelInstance highscores_inst = new GameObject(highscores);
 		highscores_inst.transform.translate(highscoresLocation).rotate(0, 1f, 0, 120f);
 		objects.add(highscores_inst);
+		
+		Model settings = assets.get("Gear.g3db", Model.class);
+		ModelInstance settings_inst = new GameObject(settings);
+		settings_inst.transform.translate(settingsLocation).rotate(0, 1f, 0, 60f);
+		objects.add(settings_inst);
+		
+		Model instructions = assets.get("Instructions.g3db", Model.class);
+		ModelInstance instructions_inst = new GameObject(instructions);
+		instructions_inst.transform.translate(instructionLocation).rotate(0, 1f, 0, -60f);
+		objects.add(instructions_inst);
+		
+		Model artefact = assets.get("Artefact.g3db", Model.class);
+		ModelInstance artefact_inst = new GameObject(artefact);
+		artefact_inst.transform.translate(artifactLocation).rotate(0, 1f, 0, -60f);
+		objects.add(artefact_inst);
 
 	}
 
@@ -219,7 +238,7 @@ public class MenuScene extends GameObjectController {
 		ProjectXploraGame.camera.far = 110f;
 		ProjectXploraGame.camera.update();
 		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
-		// cameraController.lockPosition();
+		cameraController.unlockPosition();
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
 	}

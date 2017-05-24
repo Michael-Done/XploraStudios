@@ -75,14 +75,18 @@ public class ProjectXploraGame implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		// Update current scene
 		scenes.get(currentScene).update();
+
+		// Draw all model instances using the camera
+		modelBatch.begin(camera);
+		modelBatch.render(scenes.get(currentScene).objects, scenes.get(currentScene).getEnvironment());
+		modelBatch.end();
 		// Check for scene changes, especially relating to the menu
 		switch (currentScene) {
 		case MENU:
 			if (((MenuScene) scenes.get(currentScene)).getChoice() == 3) {
 				currentScene = Level.EXIT;
 				Gdx.app.exit();
-			}
-			if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
+			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
 				currentScene = Level.LEVEL_SELECT;
 			}
 			break;
@@ -91,10 +95,6 @@ public class ProjectXploraGame implements ApplicationListener {
 		default:
 			break;
 		}
-		// Draw all model instances using the camera
-		modelBatch.begin(camera);
-		modelBatch.render(scenes.get(currentScene).objects, scenes.get(currentScene).getEnvironment());
-		modelBatch.end();
 	}
 
 	@Override

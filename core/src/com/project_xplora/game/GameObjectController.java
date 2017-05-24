@@ -132,7 +132,7 @@ public class GameObjectController {
 			environment.add(new DirectionalLight().set(0.1f, 0.1f, 0.1f, -0.8f, i, -1f));
 		}
 	}
-	/** initalizes the entire scene */
+	/** initializes the entire scene */
 	public void initalize() {
 		camSetup();
 		loadAssets();
