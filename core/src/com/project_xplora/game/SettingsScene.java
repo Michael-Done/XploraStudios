@@ -35,25 +35,29 @@ public class SettingsScene extends GameObjectController {
 	Skin skin;
 	Table table;
 	Settings tempSettings;
-	
-	/** the choice made when exiting the settings menu. -1 for cancel, 1 for apply. */
+
+	/**
+	 * the choice made when exiting the settings menu. -1 for cancel, 1 for
+	 * apply.
+	 */
 	private int choice = 0;
-	
+
 	final TextButton forward;
 	final TextButton backward;
 	final TextButton left;
 	final TextButton right;
 	final TextButton interact;
 	final TextButton pause;
-	
+
 	TextButton apply;
 	TextButton cancel;
 
 	Slider volume;
 	Slider mouseSens;
-	
-	ApplyCancelListener applyListener; 
-	ApplyCancelListener cancelListener; 
+
+	ApplyCancelListener applyListener;
+	ApplyCancelListener cancelListener;
+
 	/**
 	 * @param settings
 	 */
@@ -70,141 +74,156 @@ public class SettingsScene extends GameObjectController {
 		right = new KeyField(skin, tempSettings.getStrafe_right());
 		interact = new KeyField(skin, tempSettings.getInteract());
 		pause = new KeyField(skin, tempSettings.getPause());
-		//loadModelInstances();
+		// loadModelInstances();
 
 	}
+
 	@Override
-	public void loadModelInstances(){
+	public void loadModelInstances() {
 		table.clear();
-		skin.getFont("font-button").getData().setScale(Gdx.graphics.getWidth()/1280, Gdx.graphics.getHeight()/720);
-		skin.getFont("font-label").getData().setScale(3f, 3f);
-		
+		skin.getFont("font-label").getData().setScale(Gdx.graphics.getWidth()/6400.0f, Gdx.graphics.getHeight()/3600.0f);
+		skin.getFont("font-button").getData().setScale(Gdx.graphics.getWidth()/6400.0f, Gdx.graphics.getHeight()/3600.0f);
+
+
+
 		volume = new Slider(0, 100, 1, false, skin);
 		volume.setValue(tempSettings.getMasterVolume());
 		mouseSens = new Slider(0, 100, 1, false, skin);
 		mouseSens.setValue(tempSettings.getMouseSens());
-		
+
 		applyListener = new ApplyCancelListener(true);
 		cancelListener = new ApplyCancelListener(false);
-		
+
 		apply = new TextButton("Apply", skin);
 		cancel = new TextButton("Cancel", skin);
-		
+
 		apply.addListener(applyListener);
 		cancel.addListener(cancelListener);
-		
+
 		forward.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((KeyField)(forward)).setToWaiting();
+				((KeyField) (forward)).setToWaiting();
 			}
 		});
 		backward.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((KeyField)(backward)).setToWaiting();
+				((KeyField) (backward)).setToWaiting();
 			}
 		});
 		left.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((KeyField)(left)).setToWaiting();
+				((KeyField) (left)).setToWaiting();
 			}
 		});
 		right.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((KeyField)(right)).setToWaiting();
+				((KeyField) (right)).setToWaiting();
 			}
 		});
 		interact.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((KeyField)(interact)).setToWaiting();
+				((KeyField) (interact)).setToWaiting();
 			}
 		});
 		pause.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((KeyField)(pause)).setToWaiting();
+				((KeyField) (pause)).setToWaiting();
 			}
 		});
-		
+
 		Label header1 = new Label("KEYBINDINGS", skin);
-	    header1.setFontScale(5);
-	    
-	    Label header2 = new Label("CONTROLS", skin);
-	    header2.setFontScale(5);
-	    
-	    Label header3 = new Label("AUDIO", skin);
-	    header3.setFontScale(5);
-	    
-	    // Keybinding settings
-	    table.add(header1);
-	    table.row();
-	    table.add(new Label("Forward", skin)).width(300).padTop(30);
-	    table.add(forward).width(600);
-	    table.row();
-	    table.add(new Label("Backward", skin)).width(300).padTop(30);
-	    table.add(backward).width(600);
-	    table.row();
-	    table.add(new Label("Left", skin)).width(300).padTop(30);
-	    table.add(left).width(600);
-	    table.row();
-	    table.add(new Label("Right", skin)).width(300).padTop(30);
-	    table.add(right).width(600);
-	    table.row();
-	    table.add(new Label("Interact", skin)).width(300).padTop(30);
-	    table.add(interact).width(600);
-	    table.row();
-	    table.add(new Label("Pause", skin)).width(300).padTop(30);
-	    table.add(pause).width(600);
-	    table.row();
-	    // Control settings
-	    table.add(header2).padTop(50);
-	    table.row();
-	    table.add(new Label("Mouse Sensitivity", skin)).width(300).padTop(30);
-	    table.add(mouseSens).width(600);
-	    table.row();
-	    // Audio Settings
-	    table.add(header3).padTop(50);
-	    table.row();
-	    table.add(new Label("Volume", skin)).width(300).padTop(30);
-	    table.add(volume).width(600);
-	    table.row();
-	    // Apply/cancel buttons
-	    table.add(apply).width(200).padTop(40);
-	    table.add(cancel).width(200).padTop(40);
-	    //table.setDebug(true);
-	    table.setX(Gdx.graphics.getWidth()/2 - 500);
-	    table.setY(Gdx.graphics.getHeight()/2 - 500);
+		header1.setFontScale(1.1f);
+
+		Label header2 = new Label("CONTROLS", skin);
+		header2.setFontScale(1.1f);
+
+		Label header3 = new Label("AUDIO", skin);
+		header3.setFontScale(1.1f);
+
+		Label text = new Label("Forward", skin);
+		// Keybinding settings
+		table.add(header1);
+		table.row();
+		table.add(new Label("Forward", skin)).width(300).padTop(30);
+		table.add(forward).width(600);
+		table.row();
+		text = new Label("Backward", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(backward).width(600);
+		table.row();
+		text = new Label("Left", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(left).width(600);
+		table.row();
+		text = new Label("Right", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(right).width(600);
+		table.row();
+		text = new Label("Interact", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(interact).width(600);
+		table.row();
+		text = new Label("Pause", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(pause).width(600);
+		table.row();
+		// Control settings
+		table.add(header2).padTop(50);
+		table.row();
+		text = new Label("Mouse Sensitivity", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(mouseSens).width(600);
+		table.row();
+		// Audio Settings
+		table.add(header3).padTop(50);
+		table.row();
+		text = new Label("Volume", skin);
+		table.add(text).width(300).padTop(30);
+		table.add(volume).width(600);
+		table.row();
+		// Apply/cancel buttons
+		table.add(apply).width(200).padTop(40);
+		table.add(cancel).width(200).padTop(40);
+		// table.setDebug(true);
+		table.setX(Gdx.graphics.getWidth() / 2 - 500);
+		table.setY(Gdx.graphics.getHeight() / 2 - 500);
 		table.pack();
 		table.center();
 		stage.addActor(table);
 	}
+
 	public void update() {
 		batch.begin();
 		stage.draw();
 		batch.end();
-		
-		choice = -((int)(Math.signum(cancelListener.getChoice())));
-		if(applyListener.getChoice() != 0){
+
+		choice = -((int) (Math.signum(cancelListener.getChoice())));
+		if (applyListener.getChoice() != 0) {
 			choice = applyListener.getChoice();
 		}
-		
+
 	}
 
 	public void setInputProccessor() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(stage);
 	}
-	public void resetChoice(){
+
+	public void resetChoice() {
 		choice = 0;
 	}
-	public int getChoice(){
+
+	public int getChoice() {
 		return choice;
 	}
-	public Settings getNewSettings(){
+
+	public Settings getNewSettings() {
 		tempSettings.setForward(((KeyField) forward).getKey());
 		tempSettings.setBackward(((KeyField) backward).getKey());
 		tempSettings.setStrafe_left(((KeyField) left).getKey());
@@ -215,24 +234,29 @@ public class SettingsScene extends GameObjectController {
 		tempSettings.setMasterVolume((int) volume.getValue());
 		return tempSettings;
 	}
+
 	@Override
-	public void disposeAll(){
+	public void disposeAll() {
 		batch.dispose();
 		stage.dispose();
 		skin.dispose();
 		table = null;
 	}
-	class ApplyCancelListener extends ClickListener{
+
+	class ApplyCancelListener extends ClickListener {
 		private boolean apply;
 		private int choice;
-		public ApplyCancelListener (boolean apply){
+
+		public ApplyCancelListener(boolean apply) {
 			this.apply = apply;
 		}
+
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
 			choice = apply ? 1 : -1;
 		}
-		public int getChoice(){
+
+		public int getChoice() {
 			return choice;
 		}
 	}
