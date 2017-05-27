@@ -40,6 +40,10 @@ public class PlayerCameraController extends InputAdapter {
 
 	public PlayerCameraController(Camera camera, Settings settings) {
 		this.camera = camera;
+		updateSettings(settings);
+	}
+
+	public void updateSettings(Settings settings) {
 		FORWARD = settings.getForward();
 		BACKWARD = settings.getBackward();
 		STRAFE_LEFT = settings.getStrafe_left();
@@ -143,7 +147,8 @@ public class PlayerCameraController extends InputAdapter {
 		float y = camera.direction.y;
 		float z = camera.direction.z;
 		float hypotenuse = (float) Math.sqrt((x * x) + (y * y));
-		//System.out.println("(" + x + ", " + y + ", " + z + ") " + hypotenuse);
+		// System.out.println("(" + x + ", " + y + ", " + z + ") " +
+		// hypotenuse);
 		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.x);
 	}
 
@@ -152,7 +157,8 @@ public class PlayerCameraController extends InputAdapter {
 		float y = camera.direction.y;
 		float z = camera.direction.z;
 		float hypotenuse = (float) Math.sqrt((z * z) + (y * y));
-		//System.out.println("(" + x + ", " + y + ", " + z + ") " + hypotenuse);
+		// System.out.println("(" + x + ", " + y + ", " + z + ") " +
+		// hypotenuse);
 		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.z);
 	}
 }

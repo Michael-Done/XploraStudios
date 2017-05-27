@@ -23,7 +23,6 @@ public class MenuScene extends GameObjectController {
 	public MenuScene(Settings settings) {
 		super(settings);
 		initalize();
-
 		// TODO Auto-generated constructor stub
 	}
 
@@ -238,7 +237,7 @@ public class MenuScene extends GameObjectController {
 		ProjectXploraGame.camera.far = 110f;
 		ProjectXploraGame.camera.update();
 		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
-		cameraController.unlockPosition();
+		//cameraController.unlockPosition();
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
 	}
@@ -248,5 +247,8 @@ public class MenuScene extends GameObjectController {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 2f, 2f, 2f, 1f));
 		environment.add(new DirectionalLight().set(0.01f, 0.01f, 0.01f, 0.1f, 0.1f, -1f));
+	}
+	public void resetMenuChoice(){
+		menuChoice = -1;
 	}
 }

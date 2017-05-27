@@ -1,6 +1,7 @@
 package com.project_xplora.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -22,7 +23,9 @@ public class LevelSelect extends GameObjectController {
 	ModelInstance exitText_inst;
 
 	private int levelChoice = -1;
-
+	public void resetLevelChoice(){
+		levelChoice = -1;
+	}
 	public int getLevelChoice() {
 		return levelChoice;
 	}
@@ -35,6 +38,7 @@ public class LevelSelect extends GameObjectController {
 		 * 
 		 */
 		updateCamera();
+		boolean lookingAtExit = cameraController.getXYAngle() > 150 || cameraController.getXYAngle() < -150;
 		// System.out.println(cameraController.getXYAngle());
 		// boolean lookingAtRome = cameraController.getXYAngle() > -30 &&
 		// cameraController.getXYAngle() < 30;
@@ -72,6 +76,11 @@ public class LevelSelect extends GameObjectController {
 		// while (objects.contains(europeText_inst, true))
 		// objects.removeValue(europeText_inst, true);
 		// }
+		if (lookingAtExit) {
+			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				levelChoice = 3;
+			}
+		}
 	}
 
 	@Override
@@ -173,7 +182,7 @@ public class LevelSelect extends GameObjectController {
 		ProjectXploraGame.camera.far = 110f;
 		ProjectXploraGame.camera.update();
 		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
-		// cameraController.lockPosition();
+		cameraController.lockPosition();
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
 	}

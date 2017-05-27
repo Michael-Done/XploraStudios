@@ -7,6 +7,8 @@
  */
 package com.project_xplora.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,12 +18,14 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.project_xplora.game.highscore.PlayerData;
 
 public class ProjectXploraGame implements ApplicationListener {
 	static PerspectiveCamera camera;
 	ModelBatch modelBatch;
 	ObjectMap<Level, GameObjectController> scenes;
 	Settings settings;
+	public ArrayList<PlayerData> players;
 
 	public enum Level {
 		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP
@@ -47,6 +51,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		// scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.MENU, new MenuScene(settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
+		scenes.put(Level.SETTINGS, new SettingsScene(settings));
 		// For testing purposes
 		currentScene = Level.MENU;
 		// Get screen dimensions
@@ -60,13 +65,12 @@ public class ProjectXploraGame implements ApplicationListener {
 
 	@Override
 	public void dispose() {
+
 		// Release all resources
 		modelBatch.dispose();
 		instances.clear();
 
 	}
-
-	boolean collision;
 
 	@Override
 	public void render() {
@@ -75,11 +79,15 @@ public class ProjectXploraGame implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		// Update current scene
 		scenes.get(currentScene).update();
-
-		// Draw all model instances using the camera
-		modelBatch.begin(camera);
-		modelBatch.render(scenes.get(currentScene).objects, scenes.get(currentScene).getEnvironment());
-		modelBatch.end();
+		if (currentScene == Level.SETTINGS) {
+			Gdx.gl.glClearColor(0.449f, 0.645f, 0.739f, 1);
+		} else {
+			// Draw all model instances using the camera
+			modelBatch.begin(camera);
+			modelBatch.render(scenes.get(currentScene).objects, scenes.get(currentScene).getEnvironment());
+			modelBatch.end();
+		}
+		// System.out.println(currentScene);
 		// Check for scene changes, especially relating to the menu
 		switch (currentScene) {
 		case MENU:
@@ -87,11 +95,39 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentScene = Level.EXIT;
 				Gdx.app.exit();
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
+				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.LEVEL_SELECT;
+			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 5) {
+				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
+				currentScene = Level.SETTINGS;
+				scenes.get(currentScene).loadModelInstances();
+				((SettingsScene) scenes.get(currentScene)).setInputProccessor();
 			}
 			break;
 		case LEVEL_SELECT:
+			if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 3) {
+				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
+				currentScene = Level.MENU;
+				camera.lookAt(0f, 1f, 1f);
+				// scenes.get(currentScene).initalize();
+			}
 			break;
+		case SETTINGS:
+			if (((SettingsScene) scenes.get(currentScene)).getChoice() != 0) {
+				if (((SettingsScene) scenes.get(currentScene)).getChoice() == 1) {
+					settings = ((SettingsScene) scenes.get(currentScene)).getNewSettings();
+				}
+				((SettingsScene) scenes.get(currentScene)).resetChoice();
+//				for (Level i : Level.values()) {
+//					if (scenes.get(i) != null) {
+//						scenes.get(i).updateSettings(settings);
+//					}
+//				}
+				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+			}
 		default:
 			break;
 		}

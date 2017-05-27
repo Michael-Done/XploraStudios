@@ -31,9 +31,9 @@ public class GameObjectController {
 	/** The list of user settings */
 	Settings settings;
 	/** the width of the screen */
-	int screenWidth;
+	public int screenWidth;
 	/** The height of the screen */
-	int screenHeight;
+	public int screenHeight;
 	/** Class constructor used to initalize settings and objects */
 	public GameObjectController(Settings settings) {
 		objects = new Array<ModelInstance>();
@@ -58,6 +58,10 @@ public class GameObjectController {
 	/** unlocks the position of the camera */
 	public void unlockCamPosition() {
 		cameraController.unlockPosition();
+	}
+	/** Updates the settings and controls */
+	public void updateSettings(Settings settings){
+		cameraController.updateSettings(settings);
 	}
 	/** loads all model instances into objects */
 	public void loadModelInstances() {

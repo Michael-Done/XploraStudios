@@ -7,9 +7,12 @@
  */
 package com.project_xplora.game;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Input.Keys;
 
-public class Settings {
+public class Settings implements Serializable{
+	private static final long serialVersionUID = 5955953593712911600L;
 	private int masterVolume;
 	private int forward;
 	private int backward;
