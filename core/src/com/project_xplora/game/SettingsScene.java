@@ -67,7 +67,7 @@ public class SettingsScene extends GameObjectController {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new KeyHandlerStage();
 		table = new Table();
-		tempSettings = currentSettings;
+		tempSettings = new Settings(currentSettings);
 		forward = new KeyField(skin, tempSettings.getForward());
 		backward = new KeyField(skin, tempSettings.getBackward());
 		left = new KeyField(skin, tempSettings.getStrafe_left());
@@ -203,7 +203,7 @@ public class SettingsScene extends GameObjectController {
 		stage.draw();
 		batch.end();
 
-		choice = -((int) (Math.signum(cancelListener.getChoice())));
+		choice = cancelListener.getChoice();
 		if (applyListener.getChoice() != 0) {
 			choice = applyListener.getChoice();
 		}

@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 import com.badlogic.gdx.Input.Keys;
 
-public class Settings implements Serializable{
+public class Settings implements Serializable {
 	private static final long serialVersionUID = 5955953593712911600L;
 	private int masterVolume;
 	private int forward;
@@ -24,6 +24,11 @@ public class Settings implements Serializable{
 
 	public Settings() {
 		this(100, Keys.W, Keys.S, Keys.A, Keys.D, Keys.E, Keys.ESCAPE, 50);
+	}
+
+	public Settings(Settings settings) {
+		this(settings.getMasterVolume(), settings.getForward(), settings.getBackward(), settings.getStrafe_left(),
+				settings.getStrafe_right(), settings.getInteract(), settings.getPause(), settings.getMouseSens());
 	}
 
 	public Settings(int masterVolume, int forward, int backward, int strafe_left, int strafe_right, int interact,

@@ -115,6 +115,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		case SETTINGS:
 			if (((SettingsScene) scenes.get(currentScene)).getChoice() != 0) {
 				if (((SettingsScene) scenes.get(currentScene)).getChoice() == 1) {
+					System.out.println("Settings reset!");
 					settings = ((SettingsScene) scenes.get(currentScene)).getNewSettings();
 				}
 				((SettingsScene) scenes.get(currentScene)).resetChoice();
