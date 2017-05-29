@@ -51,9 +51,10 @@ public class ProjectXploraGame implements ApplicationListener {
 		// scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.MENU, new MenuScene(settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
+		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
 		// For testing purposes
-		currentScene = Level.MENU;
+		currentScene = Level.BC;
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();

@@ -19,6 +19,13 @@ public class GameObject extends ModelInstance implements Disposable{
         body.setCollisionShape(shape);
     }
     
+    public GameObject(Model model, Vector3 loc){
+    	super(model);
+    	this.transform.translate(loc);
+    	this.transform.rotate(1, 0, 0, 90);
+    	body = new btCollisionObject();
+    }
+    
     public GameObject(Model model){
     	super(model);
     	this.transform.rotate(1, 0, 0, 90);

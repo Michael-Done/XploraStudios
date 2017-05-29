@@ -108,6 +108,11 @@ public class PlayerCameraController extends InputAdapter {
 
 	public void update(float deltaTime) {
 		if (!lockedPosition) {
+			if(keys.containsKey(Keys.SHIFT_LEFT)){
+				velocity = 50;
+			} else {
+				velocity = 5;
+			}
 			if (keys.containsKey(FORWARD)) {
 				tmp.set(camera.direction).nor().scl(deltaTime * velocity);
 				tmp.z = 0;
@@ -160,5 +165,8 @@ public class PlayerCameraController extends InputAdapter {
 		// System.out.println("(" + x + ", " + y + ", " + z + ") " +
 		// hypotenuse);
 		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.z);
+	}
+	public void setZ(float z){
+		camera.position.z = z;
 	}
 }
