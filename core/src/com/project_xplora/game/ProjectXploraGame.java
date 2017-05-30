@@ -79,17 +79,15 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes = new ObjectMap<Level, GameObjectController>();
 
 		// scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
-		scenes.put(Level.MENU, new MenuScene(settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
+		scenes.put(Level.MENU, new MenuScene(settings));
 		// For testing purposes
-		currentScene = Level.BC;
+		currentScene = Level.MENU;
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
-		
-		System.out.println ("(create - width = " + screenWidth + " height = " + screenHeight);
 
 		// Create ModelBatch that will render all models using a camera
 		modelBatch = new ModelBatch();

@@ -88,7 +88,7 @@ public class SettingsScene extends GameObjectController {
 
 		volume = new Slider(0, 100, 1, false, skin);
 		volume.setValue(tempSettings.getMasterVolume());
-		mouseSens = new Slider(0, 100, 1, false, skin);
+		mouseSens = new Slider(1, 100, 1, false, skin);
 		mouseSens.setValue(tempSettings.getMouseSens());
 
 		applyListener = new ApplyCancelListener(true);
@@ -199,9 +199,9 @@ public class SettingsScene extends GameObjectController {
 	}
 
 	public void update() {
-		batch.begin();
+		//batch.begin();
 		stage.draw();
-		batch.end();
+		//batch.end();
 
 		choice = cancelListener.getChoice();
 		if (applyListener.getChoice() != 0) {
