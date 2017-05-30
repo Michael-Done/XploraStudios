@@ -44,7 +44,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	public int screenHeight;
 
 	Array<ModelInstance> instances = new Array<ModelInstance>();
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void create() {
@@ -52,7 +52,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		// Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),
 		// true);
 		try {
-			FileInputStream fileIn = new FileInputStream("C:/Users/Public/Documents/highscores.ser");
+			FileInputStream fileIn = new FileInputStream(System.getProperty("user.home") + "/highscores.ser");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			highscores = TreeSet.class.cast(in.readObject());
 			in.close();
@@ -65,10 +65,10 @@ public class ProjectXploraGame implements ApplicationListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(highscores == null ){
+		if (highscores == null) {
 			highscores = new TreeSet<PlayerData>();
 		}
-		for(PlayerData i : highscores){
+		for (PlayerData i : highscores) {
 			System.out.println(i.getPlayerName());
 		}
 		camera = new PerspectiveCamera();
@@ -84,7 +84,8 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
 		scenes.put(Level.MENU, new MenuScene(settings));
 		// For testing purposes
-		currentScene = Level.MENU;
+		currentScene = Level.BC;
+		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
@@ -96,7 +97,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	@Override
 	public void dispose() {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("C:/Users/Public/Documents/highscores.ser");
+			FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/highscores.ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(highscores);
 			out.close();
