@@ -44,6 +44,8 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.load("TreeHighPoly.g3db", Model.class);
 		assets.load("RomanStatue.g3db", Model.class);
 		assets.load("Water.g3db", Model.class);
+		assets.load("Tower.g3db", Model.class);
+		assets.load("House.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -58,6 +60,7 @@ public class BritishColombiaScene extends GameObjectController {
 		Model boardwalk = assets.get("Boardwalk.g3db", Model.class);
 		ModelInstance boardwalk_inst = new GameObject(boardwalk);
 		objects.add(boardwalk_inst);
+
 		Model boardwalkSupports = assets.get("BoardwalkSupports.g3db", Model.class);
 		ModelInstance boardwalkSupports_inst = new GameObject(boardwalkSupports);
 		objects.add(boardwalkSupports_inst);
@@ -67,29 +70,28 @@ public class BritishColombiaScene extends GameObjectController {
 		sky_inst.transform.scale(50, 50, 50);
 		objects.add(sky_inst);
 
-		Model statue = assets.get("RomanStatue.g3db", Model.class);
-		ModelInstance statue_inst = new GameObject(statue, new Vector3(-124.4480f, 47.9108f, 30.36f));
-		objects.add(statue_inst);
-		
 		Model water = assets.get("Water.g3db", Model.class);
 		ModelInstance water_inst = new GameObject(water);
 		objects.add(water_inst);
 
-		Vector3 camLoc = ProjectXploraGame.camera.position;
-		for (Vector3 i : treeLocations) {
-			ModelInstance tree = new GameObject(treeHighPoly);
-			// if (camLoc.dst(i) < 75 && !objects.contains(tree, false)) {
-			 objects.add(new GameObject(treeHighPoly, i));
-			// }
-		}
-		for (int x = -100; x < 100; x++) {
-			for (int y = -100; y < 100; y++) {
-				if (inSection11(new Vector2(x, y))) {
-					objects.add(new GameObject(statue, new Vector3(x, y, 30.36f)));
-				}
-			}
-		}
+		Model tower1 = assets.get("Tower.g3db", Model.class);
+		ModelInstance tower1_inst = new GameObject(tower1);
+		tower1_inst.transform.translate(6.2923f, 55.9242f, -73.2825f).rotate(0, 1, 0, 95.795f);
+		objects.add(tower1_inst);
 
+		Model tower2 = assets.get("Tower.g3db", Model.class);
+		ModelInstance tower2_inst = new GameObject(tower2);
+		tower2_inst.transform.translate(133.3986f, 57.3891f, -109.3361f).rotate(0, 1, 0, 180f);
+		objects.add(tower2_inst);
+		
+		Model house = assets.get("House.g3db", Model.class);
+		ModelInstance house_inst = new GameObject(house);
+		house_inst.transform.translate(-136.7401f, 81.7682f, -110.3048f).rotate(0, 1, 0, -161.472f);
+		objects.add(house_inst);
+
+		for (Vector3 i : treeLocations) {
+			objects.add(new GameObject(treeHighPoly, new Vector3(i.x, i.y, (float) (i.z + Math.random() * 0.5f))));
+		}
 	}
 
 	@Override
@@ -113,7 +115,8 @@ public class BritishColombiaScene extends GameObjectController {
 		super.update();
 		Vector3 camLoc = ProjectXploraGame.camera.position;
 		if (inSection11(new Vector2(camLoc.x, camLoc.y))) {
-			cameraController.setZ(xOnLine(new Vector2(47.9108f, 42.8112f), new Vector2(90.4606f, 31.5414f), camLoc.y) + 1);
+			cameraController
+					.setZ(xOnLine(new Vector2(47.9108f, 42.8112f), new Vector2(90.4606f, 31.5414f), camLoc.y) + 1);
 		}
 	}
 
@@ -127,10 +130,11 @@ public class BritishColombiaScene extends GameObjectController {
 		return (float) ((Math.abs(((y2 - y1) * x0) - ((x2 - x1) * y0) + (x2 * y1) - (y2 * x1)))
 				/ Math.sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))));
 	}
-	private float xOnLine(Vector2 lineStart, Vector2 lineEnd, float x){
-		float m = (lineEnd.y - lineStart.y)/(lineEnd.x - lineStart.x);
-		float b = -m*lineStart.x + lineStart.y;
-		return m*x + b;
+
+	private float xOnLine(Vector2 lineStart, Vector2 lineEnd, float x) {
+		float m = (lineEnd.y - lineStart.y) / (lineEnd.x - lineStart.x);
+		float b = -m * lineStart.x + lineStart.y;
+		return m * x + b;
 	}
 
 	private boolean inSection11(Vector2 point) {

@@ -43,6 +43,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		// Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),
 		// true);
 		camera = new PerspectiveCamera();
+		camera.fieldOfView = 60;
 		currentScene = Level.STARTUP;
 		settings = new Settings();
 		settings.setMouseSens(10);
