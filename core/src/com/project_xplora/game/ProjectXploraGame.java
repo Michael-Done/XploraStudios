@@ -7,7 +7,14 @@
  */
 package com.project_xplora.game;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -21,6 +28,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
 
 public class ProjectXploraGame implements ApplicationListener {
+	TreeSet<PlayerData> highscores;
 	static PerspectiveCamera camera;
 	ModelBatch modelBatch;
 	ObjectMap<Level, GameObjectController> scenes;
@@ -36,12 +44,33 @@ public class ProjectXploraGame implements ApplicationListener {
 	public int screenHeight;
 
 	Array<ModelInstance> instances = new Array<ModelInstance>();
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void create() {
 		Bullet.init();
 		// Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),
 		// true);
+		try {
+			FileInputStream fileIn = new FileInputStream("C:/Users/Public/Documents/highscores.ser");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			highscores = TreeSet.class.cast(in.readObject());
+			in.close();
+			fileIn.close();
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			highscores = null;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(highscores == null ){
+			highscores = new TreeSet<PlayerData>();
+		}
+		for(PlayerData i : highscores){
+			System.out.println(i.getPlayerName());
+		}
 		camera = new PerspectiveCamera();
 		camera.fieldOfView = 60;
 		currentScene = Level.STARTUP;
@@ -67,7 +96,16 @@ public class ProjectXploraGame implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-
+		try {
+			FileOutputStream fileOut = new FileOutputStream("C:/Users/Public/Documents/highscores.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(highscores);
+			out.close();
+			fileOut.close();
+			System.out.println("file saved");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// Release all resources
 		modelBatch.dispose();
 		instances.clear();
@@ -121,11 +159,11 @@ public class ProjectXploraGame implements ApplicationListener {
 					settings = ((SettingsScene) scenes.get(currentScene)).getNewSettings();
 				}
 				((SettingsScene) scenes.get(currentScene)).resetChoice();
-//				for (Level i : Level.values()) {
-//					if (scenes.get(i) != null) {
-//						scenes.get(i).updateSettings(settings);
-//					}
-//				}
+				// for (Level i : Level.values()) {
+				// if (scenes.get(i) != null) {
+				// scenes.get(i).updateSettings(settings);
+				// }
+				// }
 				currentScene = Level.MENU;
 				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
