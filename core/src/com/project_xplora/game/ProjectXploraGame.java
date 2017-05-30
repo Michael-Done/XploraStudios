@@ -60,7 +60,6 @@ public class ProjectXploraGame implements ApplicationListener {
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
 
-		System.out.println("(create - width = " + screenWidth + " height = " + screenHeight);
 		// Create ModelBatch that will render all models using a camera
 		modelBatch = new ModelBatch();
 	}
