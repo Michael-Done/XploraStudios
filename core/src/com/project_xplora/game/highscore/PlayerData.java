@@ -150,5 +150,4 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
-
 }
