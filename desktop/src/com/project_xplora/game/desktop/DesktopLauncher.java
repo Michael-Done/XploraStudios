@@ -1,10 +1,15 @@
-/**
- *  XploraStudios
- *  Ms. Krasteva
- *  DesktopLauncher.java
- *  @author Michael Done, CyrusGandevia
- *  @Version 1.0 | 12/05/2017
- */
+/*
+ * [Authors]: Cyrus Gandevia and Michael Done.
+ * [Date]: Friday, May 12th, 2017.
+ * [Program Name]: DesktopLauncher.java
+ * [Description]: The DesktopLauncher application is the Project Xplorer game's launcher. The purpose of 
+ * this application is to set the preliminary settings of the game such as the game client's resolution,
+ * whether the screen is full-screen or windowed, and whether the user would like to have VSync 
+ * enabled or not, before the game begins. The launcher is displayed on a small, centered JFrame and has 
+ * drop-down boxes for the user to select their choices. Once they are ready to begin the game, the user can
+ * press the "Start Game" button which will then create the game client according to their chosen settings.
+ * The JFrame disposes before the game begins.
+ * */
 
 package com.project_xplora.game.desktop;
 
@@ -22,8 +27,53 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.project_xplora.game.ProjectXploraGame;
 
+/**
+ * The DesktopLauncher application is the Project Xplorer game launcher. The
+ * purpose of this application is to set the preliminary settings of the game
+ * such as the game client's resolution, whether the screen is full-screen or
+ * windowed, and whether the user would like to have VSync enabled or not,
+ * before the game begins. The launcher is displayed on a small, centered JFrame
+ * and has drop-down boxes for the user to select their choices. Once they are
+ * ready to begin the game, the user can press the "Start Game" button which
+ * will then create the game client according to their chosen settings. The
+ * JFrame disposes before the game begins.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * Resolution [ ] <b> resolutions </b> - Stores the different resolution options
+ * that the game launcher will have.
+ * <p>
+ * JFrame <b> setup </b> - Stores the instance of the JFrame that is being used
+ * to display the desktop launcher.
+ * <p>
+ * int <b> width </b> - Stores the user's desired width for the game client
+ * window.
+ * <p>
+ * int <b> height </b> - Stores the user's desired height for the game client
+ * window.
+ * <p>
+ * boolean <b> vsync </b> - Stores the user's choice for the VSync setting.
+ * <p>
+ * boolean <b> fullscreen </b> - Stores the user's choice for the fullscreen
+ * setting.
+ * <p>
+ * JComboBox &lt;Resolution&gt; <b> resolutionSelection </b> - Creates a
+ * drop-down list for the resolution options.
+ * <p>
+ * JComboBox &lt;String&gt; <b> vSyncSelection </b> - Creates a drop-down list
+ * for the VSync options.
+ * <p>
+ * JComboBox &lt;String&gt; <b> fullscreenSelection </b> - Creates a drop-down
+ * list for the screen mode options.
+ * <p>
+ * <h2>Course Info:</h2> ICS4U0 with Krasteva, V.
+ * <p>
+ * 
+ * @version 1.0 | 12.05.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
+
 public class DesktopLauncher implements ActionListener {
-	//=== Fields ===
 	private static Resolution[] resolutions = { new Resolution(320, 240), new Resolution(640, 480),
 			new Resolution(800, 600), new Resolution(1024, 600), new Resolution(1024, 768), new Resolution(1152, 864),
 			new Resolution(1280, 720), new Resolution(1280, 768), new Resolution(1280, 800), new Resolution(1280, 1024),
@@ -41,20 +91,76 @@ public class DesktopLauncher implements ActionListener {
 	private static JComboBox<String> fullscreenSelection = new JComboBox<String>(
 			new String[] { "Fullscreen", "Windowed" });
 
-	//=== Screen Resolution Class ===
+	/**
+	 * The Resolution class is a custom-made helper class that is used for
+	 * storing resolution options. It extends the Point class, which is a
+	 * pre-built Java class that represents a location on the screen based on
+	 * it's (x,y) coordinate. There is also an overriden toString method which
+	 * is helpful for displaying the value of the resolution objects. For
+	 * example, an object that has been declared using: <i>new Resolution
+	 * (1920,1080)</i>, will display "1920 x 1080" on the JComboBox.
+	 * <p>
+	 * <b> Class Fields: </b>
+	 * <p>
+	 * final long <b> serialVersionUID </b> - Used to prevent serializable class
+	 * warnings.
+	 */
 	private static class Resolution extends Point {
-		//Constructor
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Constructor of the Resolution class. Calls the superclass constructor
+		 * with the given values provided for <b> x </b> and <b> y</b>.
+		 * <p>
+		 * 
+		 * @param x
+		 *            - Stores the x-value (the width) of the screen size in
+		 *            pixels.
+		 * @param y
+		 *            - Stores the y-value (the height) of the screen size in
+		 *            pixels.
+		 */
 		public Resolution(int x, int y) {
 			super(x, y);
 		}
 
-		//Overridden toString method
+		/**
+		 * The toString method in this class is used so that the screen
+		 * dimensions can be appropriately displayed on the drop-down list in
+		 * the desktop launcher's frame. For example, an object that has been
+		 * declared using: <i>new Resolution (1920,1080)</i>, will display "1920
+		 * x 1080" on the JComboBox.
+		 */
 		public String toString() {
 			return "" + (int) this.getX() + " x " + (int) this.getY();
 		}
 	}
 
-	//=== Game Launcher Method Setup ===
+	/**
+	 * The gameLauncher ( ) method sets up the JFrame for the desktop launcher.
+	 * This method creates a 450 by 300 pixel JFrame that is centered on the
+	 * screen. It has three drop-down menus and one start button on the frame.
+	 * <p>
+	 * <b> Class Fields: </b>
+	 * <p>
+	 * JButton <b> start </b> - Creates an instance of the JButton class called
+	 * "Start Game".
+	 * <p>
+	 * Font <b> settingFonts </b> - Stores the instance of the custom font used
+	 * for the drop-down menu labels.
+	 * <p>
+	 * JLabel <b> title </b> - Creates a JLabel that stores the title of the
+	 * JFrame.
+	 * <p>
+	 * JLabel <b> resoLabel </b> - Creates a JLabel that stores the label of the
+	 * resolution option.
+	 * <p>
+	 * JLabel <b> vSync</b> - Creates a JLabel that stores the label of the
+	 * VSync option.
+	 * <p>
+	 * JLabel <b> fullScreenLabel </b> - Creates a JLabel that stores the label
+	 * of the fullscreen option.
+	 */
 	private static void gameLauncher() {
 		//Local Variables
 		JButton start = new JButton("Start Game");
@@ -96,15 +202,29 @@ public class DesktopLauncher implements ActionListener {
 		setup.setLocationRelativeTo(null);
 	}
 
-	//=== Action Performed Method ===
+	/**
+	 * This method provides a specific set of instructions to be executed if the
+	 * listener interface detects that the "Start Game" button on the frame has
+	 * been clicked. The set of instructions are to create the game client based
+	 * on the initial configuration settings chosen by the user. Once the game
+	 * is launched, the desktop launcher frame is disposed.
+	 * 
+	 * <p>
+	 * <b> Class Fields: </b>
+	 * <p>
+	 * LwjglApplicationConfiguration <b> config </b> - Stores the game's
+	 * configurations.
+	 * <p>
+	 * ProjectXploraGame <b> game </b> - Creates a new instance of the
+	 * ProjectXploraGame.
+	 * <p>
+	 * @param e - Stores the event detected by the actionListener.
+	 */
 	public void actionPerformed(ActionEvent e) {
-		//Assign Values to Fields
 		width = (int) (((Resolution) (resolutionSelection.getSelectedItem())).getX());
 		height = (int) (((Resolution) (resolutionSelection.getSelectedItem())).getY());
 		fullscreen = fullscreenSelection.getSelectedItem().equals("Fullscreen");
 		vsync = vSyncSelection.getSelectedItem().equals("ON");
-		
-		//Setup Game Application
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		ProjectXploraGame game = new ProjectXploraGame();
 		config.title = "ProjectXplora 1.0";
@@ -115,13 +235,17 @@ public class DesktopLauncher implements ActionListener {
 		config.x = -1;
 		config.y = -1;
 		new LwjglApplication(game, config);
-
-		//Close Setup Menu
 		setup.dispose();
 	}
 
-	//=== Main Method ===
-	public static void main(String[] arg) {
+	/**
+	 * The main method creates the driver class for the application.
+	 * <p>
+	 * 
+	 * @param args
+	 *            - The arguments passed from the command line.
+	 */
+	public static void main(String[] args) {
 		gameLauncher();
 	}
 }
