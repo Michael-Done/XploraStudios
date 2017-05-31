@@ -28,19 +28,17 @@ import com.badlogic.gdx.utils.IntIntMap;
  */
 public class PlayerCameraController extends InputAdapter {
 	final Camera camera;
-	private final IntIntMap keys = new IntIntMap();
-	private int STRAFE_LEFT = Keys.A;
-	private int STRAFE_RIGHT = Keys.D;
-	private int FORWARD = Keys.W;
-	private int BACKWARD = Keys.S;
-	private int UP = Keys.Q;
-	private int DOWN = Keys.E;
-	private float velocity = 5;
-	private float degreesPerPixel = 0.5f;
-	private final Vector3 tmp = new Vector3();
-	private boolean lockedPosition = false;
-
-	
+	final IntIntMap keys = new IntIntMap();
+	int STRAFE_LEFT = Keys.A;
+	int STRAFE_RIGHT = Keys.D;
+	int FORWARD = Keys.W;
+	int BACKWARD = Keys.S;
+	int UP = Keys.Q;
+	int DOWN = Keys.E;
+	float velocity = 5;
+	float degreesPerPixel = 0.5f;
+	final Vector3 tmp = new Vector3();
+	boolean lockedPosition = false;
 
 	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
@@ -49,7 +47,7 @@ public class PlayerCameraController extends InputAdapter {
 	public PlayerCameraController(Camera camera, Settings settings) {
 		this.camera = camera;
 		updateSettings(settings);
-		
+
 	}
 
 	public void updateSettings(Settings settings) {
