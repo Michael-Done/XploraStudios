@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
@@ -36,7 +37,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	public ArrayList<PlayerData> players;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS
 	}
 
 	Level currentScene;
@@ -83,9 +84,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
 		scenes.put(Level.MENU, new MenuScene(settings));
+		scenes.put(Level.CREDITS, new CreditsScene (settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		// For testing purposes
-		currentScene = Level.ROME;
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
