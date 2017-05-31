@@ -87,6 +87,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.CREDITS, new CreditsScene (settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		// For testing purposes
+		currentScene = Level.ROME;
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
