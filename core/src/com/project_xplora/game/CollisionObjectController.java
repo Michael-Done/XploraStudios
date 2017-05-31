@@ -75,20 +75,20 @@ public class CollisionObjectController extends GameObjectController {
 		dynamicsWorld.setGravity(new Vector3(0, 0, -10f));
 
 		// Create the physics representation of the character
-		ghostObject = new btPairCachingGhostObject();
-		ghostObject.setWorldTransform(characterTransform);
-		ghostShape = new btCapsuleShape(2f, 2f);
-		ghostObject.setCollisionShape(ghostShape);
-		ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
-		characterController = new btKinematicCharacterController(ghostObject, ghostShape, .35f);
-
-		// Add it to the collisiosn world
-		collisionWorld.addCollisionObject(ghostObject, (short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
-				(short) (btBroadphaseProxy.CollisionFilterGroups.StaticFilter
-						| btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
-		((btDiscreteDynamicsWorld) (collisionWorld)).addAction(characterController);
-		
-		characterTransform = ghostObject.getWorldTransform();
+//		ghostObject = new btPairCachingGhostObject();
+//		ghostObject.setWorldTransform(characterTransform);
+//		ghostShape = new btCapsuleShape(2f, 2f);
+//		ghostObject.setCollisionShape(ghostShape);
+//		ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
+//		characterController = new btKinematicCharacterController(ghostObject, ghostShape, .35f);
+//
+//		// Add it to the collisiosn world
+//		collisionWorld.addCollisionObject(ghostObject, (short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
+//				(short) (btBroadphaseProxy.CollisionFilterGroups.StaticFilter
+//						| btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
+//		((btDiscreteDynamicsWorld) (collisionWorld)).addAction(characterController);
+//		
+//		characterTransform = ghostObject.getWorldTransform();
 	}
 
 	@Override

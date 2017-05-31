@@ -57,7 +57,7 @@ public class RomeScene extends CollisionObjectController {
 				obj.body.setCollisionFlags(
 						obj.body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 				objects.add(obj);
-				dynamicsWorld.addRigidBody(obj.body, OBJECT_FLAG, GROUND_FLAG);
+				dynamicsWorld.addRigidBody(obj.body, OBJECT_FLAG, ALL_FLAG);
 			}
 		}
 
