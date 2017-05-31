@@ -11,7 +11,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
+import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
+import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
 import com.badlogic.gdx.utils.IntIntMap;
 
 /**
@@ -34,6 +40,8 @@ public class PlayerCameraController extends InputAdapter {
 	private final Vector3 tmp = new Vector3();
 	private boolean lockedPosition = false;
 
+	
+
 	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
 	}
@@ -41,6 +49,7 @@ public class PlayerCameraController extends InputAdapter {
 	public PlayerCameraController(Camera camera, Settings settings) {
 		this.camera = camera;
 		updateSettings(settings);
+		
 	}
 
 	public void updateSettings(Settings settings) {
@@ -108,39 +117,39 @@ public class PlayerCameraController extends InputAdapter {
 
 	public void update(float deltaTime) {
 		if (!lockedPosition) {
-			if(keys.containsKey(Keys.SHIFT_LEFT)){
+			if (keys.containsKey(Keys.SHIFT_LEFT)) {
 				velocity = 50;
 			} else {
 				velocity = 5;
 			}
 			if (keys.containsKey(FORWARD)) {
 				tmp.set(camera.direction).nor().scl(deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(BACKWARD)) {
 				tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(STRAFE_LEFT)) {
 				tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(STRAFE_RIGHT)) {
 				tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(UP)) {
 				tmp.set(camera.up).nor().scl(deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(DOWN)) {
 				tmp.set(camera.up).nor().scl(-deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 		}
@@ -166,7 +175,8 @@ public class PlayerCameraController extends InputAdapter {
 		// hypotenuse);
 		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.z);
 	}
-	public void setZ(float z){
+
+	public void setZ(float z) {
 		camera.position.z = z;
 	}
 }

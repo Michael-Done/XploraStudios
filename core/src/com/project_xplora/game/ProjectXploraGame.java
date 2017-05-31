@@ -87,7 +87,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.CREDITS, new CreditsScene (settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		// For testing purposes
-		currentScene = Level.ROME;
+		currentScene = Level.CREDITS;
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
@@ -105,7 +105,6 @@ public class ProjectXploraGame implements ApplicationListener {
 			out.writeObject(highscores);
 			out.close();
 			fileOut.close();
-			System.out.println("file saved");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

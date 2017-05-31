@@ -45,11 +45,6 @@ public class CollisionObjectController extends GameObjectController {
 	btConstraintSolver constraintSolver;
 	btGhostPairCallback ghostPairCallback;
 
-	btPairCachingGhostObject ghostObject;
-	btConvexShape ghostShape;
-	btKinematicCharacterController characterController;
-	Matrix4 characterTransform;
-
 	/**
 	 * @param settings
 	 */
@@ -60,8 +55,8 @@ public class CollisionObjectController extends GameObjectController {
 
 	@Override
 	public void initalize() {
-		initalizeDynamics();
 		super.initalize();
+		initalizeDynamics();		
 	}
 
 	public void initalizeDynamics() {
@@ -74,36 +69,45 @@ public class CollisionObjectController extends GameObjectController {
 		dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, constraintSolver, collisionConfig);
 		dynamicsWorld.setGravity(new Vector3(0, 0, -10f));
 
-		// Create the physics representation of the character
-//		ghostObject = new btPairCachingGhostObject();
-//		ghostObject.setWorldTransform(characterTransform);
-//		ghostShape = new btCapsuleShape(2f, 2f);
-//		ghostObject.setCollisionShape(ghostShape);
-//		ghostObject.setCollisionFlags(btCollisionObject.CollisionFlags.CF_CHARACTER_OBJECT);
-//		characterController = new btKinematicCharacterController(ghostObject, ghostShape, .35f);
-//
-//		// Add it to the collisiosn world
-//		collisionWorld.addCollisionObject(ghostObject, (short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
-//				(short) (btBroadphaseProxy.CollisionFilterGroups.StaticFilter
-//						| btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
-//		((btDiscreteDynamicsWorld) (collisionWorld)).addAction(characterController);
-//		
-//		characterTransform = ghostObject.getWorldTransform();
+		// Add it to the collision world
+		dynamicsWorld.addCollisionObject(((DynamicCameraController)cameraController).ghostObject,
+				(short) btBroadphaseProxy.CollisionFilterGroups.CharacterFilter,
+				(short) (btBroadphaseProxy.CollisionFilterGroups.StaticFilter
+						| btBroadphaseProxy.CollisionFilterGroups.DefaultFilter));
+		dynamicsWorld.addAction(((DynamicCameraController)cameraController).characterController);
+
 	}
 
 	@Override
 	public void update() {
+		cameraController.update();
 		final float delta = Math.min(1f / 30f, Gdx.graphics.getDeltaTime());
 		dynamicsWorld.stepSimulation(delta, 5, 1f / 60f);
 
-		for (ModelInstance obj : objects)
+		for (ModelInstance obj : objects){
 			try {
 				((GameObject) obj).body.getWorldTransform(obj.transform);
 			} catch (ClassCastException e) {
 				e.printStackTrace();
 			}
-
+		}
 		super.update();
+		((DynamicCameraController)cameraController).ghostObjectGetWorldTransform();
+	}
+
+	public void camSetup() {
+		// Create a camera and point it to our model
+		Gdx.input.setCursorCatched(true);
+		// camera = new PerspectiveCamera(70, screenWidth, screenHeight);
+		float playerHeight = 3f;
+		ProjectXploraGame.camera.position.set(0f, 0f, playerHeight);
+		ProjectXploraGame.camera.lookAt(0f, 1f, playerHeight);
+		ProjectXploraGame.camera.near = 0.1f;
+		ProjectXploraGame.camera.far = 3000f;
+		ProjectXploraGame.camera.update();
+		cameraController = new DynamicCameraController(ProjectXploraGame.camera, settings);
+		Gdx.input.setInputProcessor(cameraController);
+		cameraResize(screenWidth, screenHeight);
 	}
 
 }
