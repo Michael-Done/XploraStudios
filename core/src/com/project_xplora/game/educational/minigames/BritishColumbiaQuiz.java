@@ -26,10 +26,12 @@ public class BritishColumbiaQuiz extends GameObjectController{
 
 	public BritishColumbiaQuiz(Settings currentSettings) {
 		super (currentSettings);
-		quizStage = new KeyHandlerStage ();
-		quizTable = new Table ();
-		quizSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		
+		quizStage = new KeyHandlerStage ();
+		
+		quizSkin = new Skin(Gdx.files.internal("uiskin.json"));
+		quizTable = new Table (quizSkin);
+		loadModelInstances();
 		
 		//questionsAsked = new boolean [9];
 		//quizScreen = new Texture(Gdx.files.internal("ChestUnlockScreen.jpg"));
@@ -50,7 +52,10 @@ public class BritishColumbiaQuiz extends GameObjectController{
 		
 		Label header1 = new Label("KEYBINDINGS", quizSkin);
 		header1.setFontScale(1.1f);
+		quizTable.setDebug(true);
 		quizTable.add(header1);
+		quizTable.add(new Label("hello", quizSkin));
+		quizTable.row();
 		quizTable.setX(Gdx.graphics.getWidth() / 2 - 500);
 		quizTable.setY(Gdx.graphics.getHeight() / 2 - 500);
 		quizTable.pack();
