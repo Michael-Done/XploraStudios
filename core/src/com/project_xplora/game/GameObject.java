@@ -22,11 +22,10 @@ public class GameObject extends ModelInstance implements Disposable {
 		body.setWorldTransform(this.transform);
 		this.transform.rotate(1, 0, 0, 90);
 	}
-
+	
 	public GameObject(Model model, btCollisionShape shape) {
 		this(model, shape, new Vector3(0, 0, 0));
 	}
-
 	public GameObject(Model model, Vector3 loc) {
 		super(model);
 		this.transform.translate(loc);

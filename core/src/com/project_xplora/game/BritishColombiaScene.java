@@ -9,8 +9,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
+import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -22,23 +32,44 @@ public class BritishColombiaScene extends GameObjectController {
 	Model treeHighPoly;
 	Model treeLowPoly;
 	private Array<GroundObjectData> groundObjDataList;
-	class GroundObjectData{
+
+	btCollisionConfiguration collisionConfig;
+	btDispatcher dispatcher;
+	btBroadphaseInterface broadphase;
+	btCollisionWorld collisionWorld;
+
+	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
-		/** The axis that it is meant to rotate around will be set to 1. The others will be set to 0 */
+		/**
+		 * The axis that it is meant to rotate around will be set to 1. The
+		 * others will be set to 0
+		 */
 		public Vector3 rotateAround;
 		/** The rotation around the axis in degrees */
 		public float rotation;
 		/** The dimensions of the box */
 		public Vector3 dimensions;
-		
-		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions){
+
+		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions) {
 			this.location = location;
 			this.rotateAround = rotateAround;
 			this.rotation = rotation;
 			this.dimensions = dimensions;
 		}
+
+		public btCollisionObject construct() {
+			btCollisionObject out = new btCollisionObject();
+			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x/2, dimensions.y/2, dimensions.z/2));
+			out.setCollisionShape(shape);
+			Matrix4 transform = new Matrix4();
+			transform.setTranslation(location);
+			transform.rotate(rotateAround.x, rotateAround.y, rotateAround.z, rotation);
+			out.setWorldTransform(transform);
+			return out;
+		}
 	}
+
 	/**
 	 * @param settings
 	 */
@@ -48,6 +79,7 @@ public class BritishColombiaScene extends GameObjectController {
 		treeLocations = new Array<Vector3>();
 		initalizeGroundObjectData();
 		initalizeTreeLocations();
+		initalizeCollisionWorld();
 		initalize();
 		// TODO Auto-generated constructor stub
 	}
@@ -66,6 +98,17 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.load("Tower.g3db", Model.class);
 		assets.load("House.g3db", Model.class);
 		assets.finishLoading();
+	}
+
+	public void initalizeCollisionWorld() {
+		collisionConfig = new btDefaultCollisionConfiguration();
+		dispatcher = new btCollisionDispatcher(collisionConfig);
+		broadphase = new btDbvtBroadphase();
+		collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
+
+		for (GroundObjectData i : groundObjDataList) {
+			collisionWorld.addCollisionObject(i.construct());
+		}
 	}
 
 	@Override
@@ -102,7 +145,7 @@ public class BritishColombiaScene extends GameObjectController {
 		ModelInstance tower2_inst = new GameObject(tower2);
 		tower2_inst.transform.translate(133.3986f, 57.3891f, -109.3361f).rotate(0, 1, 0, 180f);
 		objects.add(tower2_inst);
-		
+
 		Model house = assets.get("House.g3db", Model.class);
 		ModelInstance house_inst = new GameObject(house);
 		house_inst.transform.translate(-136.7401f, 81.7682f, -110.3048f).rotate(0, 1, 0, -161.472f);
@@ -132,10 +175,15 @@ public class BritishColombiaScene extends GameObjectController {
 	@Override
 	public void update() {
 		super.update();
-		Vector3 camLoc = ProjectXploraGame.camera.position;
-		if (inSection11(new Vector2(camLoc.x, camLoc.y))) {
-			cameraController
-					.setZ(xOnLine(new Vector2(47.9108f, 42.8112f), new Vector2(90.4606f, 31.5414f), camLoc.y) + 1);
+	}
+
+	@Override
+	public void updateCamera() {
+		super.updateCamera();
+		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld,
+				cameraController.getVerticalSpring());
+		if (intersectLocation != null) {
+			cameraController.setZ(intersectLocation.z + 1);
 		}
 	}
 
@@ -160,12 +208,124 @@ public class BritishColombiaScene extends GameObjectController {
 		return (/* point.y < 90.7594 && point.y > 47.0755 && */ pointLineDistance(new Vector2(-124.4480f, 47.9108f),
 				new Vector2(-90.7187f, 90.4606f), point) < 1.24878);
 	}
-	private void initalizeGroundObjectData(){
-		groundObjDataList.add(new GroundObjectData(new Vector3(-90.57474136352539f, 79.83270645141602f, 44.14041519165039f), new Vector3(1, 0, 0), 26.445655750463672f, new Vector3(4.000000059604645f, 56.22746729981598f, 0.1f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(-140.55505752563477f, 78.13718795776367f, 72.86617279052734f), new Vector3(1, 0, 0), 25.527814497793166f, new Vector3(4.000000059604645f, 35.948121602959354f, 0.1f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(-116.60064697265625f, -13.32534909248352f, 20.30721426010132f), new Vector3(1, 0, 0), 18.980708272603348f, new Vector3(4.000000059604645f, 36.75827297590803f, 0.1f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(-90.57474136352539f, 29.35767412185669f, 28.952512741088867f), new Vector3(1, 0, 0), 7.137170707423063f, new Vector3(4.000000059604645f, 42.93909892336672f, 0.1f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(105.8681583404541f, 36.117708683013916f, 16.579017639160156f), new Vector3(1, 0, 0), 6.9858768271571865f, new Vector3(4.000000059604645f, 70.3142388155523f, 0.1f)));	}
+
+	private void initalizeGroundObjectData() {
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-90.57474136352539f, 79.83270645141602f, 44.14041519165039f), new Vector3(1, 0, 0),
+				26.445655750463672f, new Vector3(4.000000059604645f, 56.22746729981598f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-140.55505752563477f, 78.13718795776367f, 72.86617279052734f), new Vector3(1, 0, 0),
+				25.527814497793166f, new Vector3(4.000000059604645f, 35.948121602959354f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-116.60064697265625f, -13.32534909248352f, 20.30721426010132f), new Vector3(1, 0, 0),
+				18.980708272603348f, new Vector3(4.000000059604645f, 36.75827297590803f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-90.57474136352539f, 29.35767412185669f, 28.952512741088867f), new Vector3(1, 0, 0),
+				7.137170707423063f, new Vector3(4.000000059604645f, 42.93909892336672f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(105.8681583404541f, 36.117708683013916f, 16.579017639160156f), new Vector3(1, 0, 0),
+				6.9858768271571865f, new Vector3(4.000000059604645f, 70.3142388155523f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(84.45240020751953f, 73.00661087036133f, 28.736438751220703f), new Vector3(0, 1, 0),
+				22.09372480510053f, new Vector3(41.90890525120255f, 3.985562324523926f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(36.762564182281494f, 73.00661087036133f, 46.49491310119629f), new Vector3(0, 1, 0),
+				21.902713776137414f, new Vector3(52.955436799257264f, 3.985562324523926f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(13.760716915130615f, 106.98049545288086f, 34.08492565155029f), new Vector3(0, 1, 0),
+				3.0480533342780034f, new Vector3(95.271519398826f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-57.31091499328613f, 106.98049545288086f, 30.765011310577393f), new Vector3(0, 1, 0),
+				19.843569599489747f, new Vector3(4.636622116629835f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-63.283348083496094f, 106.98049545288086f, 29.22511339187622f), new Vector3(0, 1, 0),
+				11.231261544292732f, new Vector3(7.731594489151341f, 4.028406143188477f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-70.40708541870117f, 106.98050498962402f, 28.52463722229004f), new Vector3(0, 1, 0),
+				0.902080125631737f, new Vector3(6.664796971752482f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-76.5721321105957f, 106.98050498962402f, 29.122724533081055f), new Vector3(0, 1, 0),
+				10.90123123324936f, new Vector3(5.770233422924673f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-81.90244674682617f, 106.98050498962402f, 30.644173622131348f), new Vector3(0, 1, 0),
+				21.3434551739629f, new Vector3(5.362309048456149f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-125.06488800048828f, 59.91782188415527f, 60.89055061340332f), new Vector3(0, 1, 0),
+				17.408345103720652f, new Vector3(28.27542251062869f, 4.000000953674316f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(84.48987007141113f, 106.98049545288086f, 43.619747161865234f), new Vector3(0, 1, 0),
+				19.795466219023897f, new Vector3(41.34994777020991f, 4.028406143188477f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(119.92803573608398f, 117.2661018371582f, 54.23365592956543f), new Vector3(0, 1, 0),
+				16.67353071023783f, new Vector3(25.178297772374822f, 3.9999961853027344f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(63.182854652404785f, 89.98284339904785f, 36.61788463592529f),
+						new Vector3(0, 0, 0), 0f, new Vector3(3.707546293735504f, 29.966905117034912f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(105.8681583404541f, 73.00661087036133f, 20.854992866516113f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 3.985562324523926f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(63.182854652404785f, 106.98049545288086f, 36.61788463592529f),
+						new Vector3(0, 0, 0), 0f, new Vector3(3.707546293735504f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(63.182854652404785f, 73.00661087036133f, 36.61788463592529f),
+						new Vector3(0, 0, 0), 0f, new Vector3(3.707546293735504f, 3.985562324523926f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-44.46896553039551f, 106.98049545288086f, 31.551969051361084f),
+						new Vector3(0, 0, 0), 0f, new Vector3(21.322617530822754f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-44.46896553039551f, 123.89877319335938f, 31.551969051361084f),
+						new Vector3(0, 0, 0), 0f, new Vector3(21.322617530822754f, 29.80815887451172f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-86.48723602294922f, 106.98050498962402f, 31.620001792907715f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.17501837015152f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-86.48723602294922f, 52.660865783691406f, 31.620001792907715f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.17501837015152f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-86.48723602294922f, 79.81358528137207f, 31.620001792907715f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.17501837015152f, 50.30543327331543f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-90.57474136352539f, 52.660865783691406f, 31.620001792907715f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-109.57473754882812f, 106.99687957763672f, 56.66083335876465f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 3.984689712524414f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-100.0747299194336f, 106.99687957763672f, 56.66083335876465f),
+						new Vector3(0, 0, 0), 0f, new Vector3(15.0f, 3.984689712524414f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-90.57474136352539f, 106.99687957763672f, 56.66083335876465f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 3.984689712524414f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-109.57473754882812f, 59.91782188415527f, 56.66083335876465f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-140.55505752563477f, 59.91782188415527f, 65.12026786804199f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(105.90564727783203f, 112.13040351867676f, 50.621604919433594f),
+						new Vector3(0, 0, 0), 0f, new Vector3(3.925078809261322f, 6.271400451660156f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(105.90564727783203f, 106.98050498962402f, 50.621604919433594f),
+						new Vector3(0, 0, 0), 0f, new Vector3(3.925078809261322f, 4.0283966064453125f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(105.90564727783203f, 117.2661018371582f, 50.621604919433594f),
+						new Vector3(0, 0, 0), 0f, new Vector3(3.925078809261322f, 3.9999961853027344f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(133.39404106140137f, 117.2661018371582f, 57.845706939697266f),
+						new Vector3(0, 0, 0), 0f, new Vector3(2.812337875366211f, 3.9999961853027344f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-90.57474136352539f, 6.054480075836182f, 26.28502368927002f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-116.60064697265625f, 6.054480075836182f, 26.28502368927002f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-103.58768463134766f, 6.054480075836182f, 26.28502368927002f),
+						new Vector3(0, 0, 0), 0f, new Vector3(22.025909423828125f, 4.000000953674316f, 0.1f)));
+	}
+
 	private void initalizeTreeLocations() {
 		treeLocations.add(new Vector3(-158.50319862365723f, -151.54881477355957f, 15.269314050674438f));
 		treeLocations.add(new Vector3(-165.73089599609375f, -143.62805366516113f, 15.269314050674438f));
