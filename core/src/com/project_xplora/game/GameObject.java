@@ -14,15 +14,17 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameObject extends ModelInstance implements Disposable {
 	public final btCollisionObject body;
 
-	public GameObject(Model model, btCollisionShape shape, float mass, Vector3 loc) {
+	public GameObject(Model model, btCollisionShape shape, Vector3 loc) {
 		super(model);
 		this.transform.translate(loc);
 		body = new btCollisionObject();
+		body.setCollisionShape(shape);
+		body.setWorldTransform(this.transform);
 		this.transform.rotate(1, 0, 0, 90);
 	}
 
-	public GameObject(Model model, btCollisionShape shape, float mass) {
-		this(model, shape, mass, new Vector3(0, 0, 0));
+	public GameObject(Model model, btCollisionShape shape) {
+		this(model, shape, new Vector3(0, 0, 0));
 	}
 
 	public GameObject(Model model, Vector3 loc) {

@@ -13,6 +13,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
@@ -27,18 +28,19 @@ import com.badlogic.gdx.utils.IntIntMap;
  * @author Michael Done, CyrusGandevia
  */
 public class PlayerCameraController extends InputAdapter {
-	final Camera camera;
-	final IntIntMap keys = new IntIntMap();
-	int STRAFE_LEFT = Keys.A;
-	int STRAFE_RIGHT = Keys.D;
-	int FORWARD = Keys.W;
-	int BACKWARD = Keys.S;
-	int UP = Keys.Q;
-	int DOWN = Keys.E;
-	float velocity = 5;
-	float degreesPerPixel = 0.5f;
-	final Vector3 tmp = new Vector3();
-	boolean lockedPosition = false;
+	private final Camera camera;
+	private final IntIntMap keys = new IntIntMap();
+	private int STRAFE_LEFT = Keys.A;
+	private int STRAFE_RIGHT = Keys.D;
+	private int FORWARD = Keys.W;
+	private int BACKWARD = Keys.S;
+	private int UP = Keys.Q;
+	private int DOWN = Keys.E;
+	private float velocity = 5;
+	private float degreesPerPixel = 0.5f;
+	private final Vector3 tmp = new Vector3();
+	private boolean lockedPosition = false;
+	private Ray verticalSpring; // The ray used to keep the camera at a constant distance above ground
 
 	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
@@ -114,6 +116,7 @@ public class PlayerCameraController extends InputAdapter {
 	}
 
 	public void update(float deltaTime) {
+		setVerticalSpring(new Ray(camera.position, new Vector3(camera.position.x, camera.position.y, -20)));
 		if (!lockedPosition) {
 			if (keys.containsKey(Keys.SHIFT_LEFT)) {
 				velocity = 50;
@@ -176,5 +179,13 @@ public class PlayerCameraController extends InputAdapter {
 
 	public void setZ(float z) {
 		camera.position.z = z;
+	}
+
+	public Ray getVerticalSpring() {
+		return verticalSpring;
+	}
+
+	public void setVerticalSpring(Ray verticalSpring) {
+		this.verticalSpring = verticalSpring;
 	}
 }

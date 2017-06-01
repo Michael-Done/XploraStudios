@@ -21,13 +21,32 @@ public class BritishColombiaScene extends GameObjectController {
 	Array<Vector3> treeLocations;
 	Model treeHighPoly;
 	Model treeLowPoly;
-
+	private Array<GroundObjectData> groundObjDataList;
+	class GroundObjectData{
+		/** The location of the groundObject */
+		public Vector3 location;
+		/** The axis that it is meant to rotate around will be set to 1. The others will be set to 0 */
+		public Vector3 rotateAround;
+		/** The rotation around the axis in degrees */
+		public float rotation;
+		/** The dimensions of the box */
+		public Vector3 dimensions;
+		
+		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions){
+			this.location = location;
+			this.rotateAround = rotateAround;
+			this.rotation = rotation;
+			this.dimensions = dimensions;
+		}
+	}
 	/**
 	 * @param settings
 	 */
 	public BritishColombiaScene(Settings settings) {
 		super(settings);
+		groundObjDataList = new Array<GroundObjectData>();
 		treeLocations = new Array<Vector3>();
+		initalizeGroundObjectData();
 		initalizeTreeLocations();
 		initalize();
 		// TODO Auto-generated constructor stub
@@ -141,7 +160,12 @@ public class BritishColombiaScene extends GameObjectController {
 		return (/* point.y < 90.7594 && point.y > 47.0755 && */ pointLineDistance(new Vector2(-124.4480f, 47.9108f),
 				new Vector2(-90.7187f, 90.4606f), point) < 1.24878);
 	}
-
+	private void initalizeGroundObjectData(){
+		groundObjDataList.add(new GroundObjectData(new Vector3(-90.57474136352539f, 79.83270645141602f, 44.14041519165039f), new Vector3(1, 0, 0), 26.445655750463672f, new Vector3(4.000000059604645f, 56.22746729981598f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(-140.55505752563477f, 78.13718795776367f, 72.86617279052734f), new Vector3(1, 0, 0), 25.527814497793166f, new Vector3(4.000000059604645f, 35.948121602959354f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(-116.60064697265625f, -13.32534909248352f, 20.30721426010132f), new Vector3(1, 0, 0), 18.980708272603348f, new Vector3(4.000000059604645f, 36.75827297590803f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(-90.57474136352539f, 29.35767412185669f, 28.952512741088867f), new Vector3(1, 0, 0), 7.137170707423063f, new Vector3(4.000000059604645f, 42.93909892336672f, 0.1f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(105.8681583404541f, 36.117708683013916f, 16.579017639160156f), new Vector3(1, 0, 0), 6.9858768271571865f, new Vector3(4.000000059604645f, 70.3142388155523f, 0.1f)));	}
 	private void initalizeTreeLocations() {
 		treeLocations.add(new Vector3(-158.50319862365723f, -151.54881477355957f, 15.269314050674438f));
 		treeLocations.add(new Vector3(-165.73089599609375f, -143.62805366516113f, 15.269314050674438f));
