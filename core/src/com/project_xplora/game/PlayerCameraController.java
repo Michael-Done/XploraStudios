@@ -40,7 +40,8 @@ public class PlayerCameraController extends InputAdapter {
 	private float degreesPerPixel = 0.5f;
 	private final Vector3 tmp = new Vector3();
 	private boolean lockedPosition = false;
-	private Ray verticalSpring; // The ray used to keep the camera at a constant distance above ground
+	private Vector3 rayFrom = new Vector3();
+	private Vector3 rayTo = new Vector3();
 
 	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
@@ -116,7 +117,8 @@ public class PlayerCameraController extends InputAdapter {
 	}
 
 	public void update(float deltaTime) {
-		setVerticalSpring(new Ray(camera.position, new Vector3(camera.position.x, camera.position.y, -20)));
+		rayFrom.set(camera.position);
+		rayTo.set(camera.position.x, camera.position.y, -20f);
 		if (!lockedPosition) {
 			if (keys.containsKey(Keys.SHIFT_LEFT)) {
 				velocity = 50;
@@ -125,32 +127,32 @@ public class PlayerCameraController extends InputAdapter {
 			}
 			if (keys.containsKey(FORWARD)) {
 				tmp.set(camera.direction).nor().scl(deltaTime * velocity);
-				tmp.z = 0;
+				//tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(BACKWARD)) {
 				tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
-				tmp.z = 0;
+				//tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(STRAFE_LEFT)) {
 				tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
-				tmp.z = 0;
+				//tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(STRAFE_RIGHT)) {
 				tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
-				tmp.z = 0;
+				//tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(UP)) {
 				tmp.set(camera.up).nor().scl(deltaTime * velocity);
-				tmp.z = 0;
+				//tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(DOWN)) {
 				tmp.set(camera.up).nor().scl(-deltaTime * velocity);
-				tmp.z = 0;
+				//tmp.z = 0;
 				camera.position.add(tmp);
 			}
 		}
@@ -181,11 +183,10 @@ public class PlayerCameraController extends InputAdapter {
 		camera.position.z = z;
 	}
 
-	public Ray getVerticalSpring() {
-		return verticalSpring;
+	public Vector3 getRayFrom() {
+		return rayFrom;
 	}
-
-	public void setVerticalSpring(Ray verticalSpring) {
-		this.verticalSpring = verticalSpring;
+	public Vector3 getRayTo() {
+		return rayTo;
 	}
 }

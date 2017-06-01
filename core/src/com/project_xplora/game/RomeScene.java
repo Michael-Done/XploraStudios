@@ -75,10 +75,10 @@ public class RomeScene extends GameObjectController {
 	@Override
 	public void updateCamera() {
 		super.updateCamera();
-		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld,
-				cameraController.getVerticalSpring());
-		if (intersectLocation != null) {
-			cameraController.setZ(intersectLocation.z + 1);
-		}
+//		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld,
+//				//cameraController.getVerticalSpring());
+//		if (intersectLocation != null) {
+//			cameraController.setZ(intersectLocation.z + 1);
+//		}
 	}
 }

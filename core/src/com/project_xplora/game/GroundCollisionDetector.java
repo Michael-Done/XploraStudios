@@ -23,15 +23,15 @@ public class GroundCollisionDetector {
 	public GroundCollisionDetector() {
 		// TODO Auto-generated constructor stub
 	}
-	public static Vector3 rayTest(btCollisionWorld collisionWorld, Ray ray) {
-	    rayFrom.set(ray.origin);
+	public static Vector3 rayTest(btCollisionWorld collisionWorld, Vector3 start, Vector3 end) {
+	    rayFrom.set(start);
 	    // 50 meters max from the origin
-	    rayTo.set(ray.direction).scl(50f).add(rayFrom);
+	    rayTo.set(end);
 
 	    // we reuse the ClosestRayResultCallback, thus we need to reset its
 	    // values
 	    callback.setCollisionObject(null);
-	    callback.setClosestHitFraction(1f);
+	    callback.setClosestHitFraction(0.1f);
 	    callback.setRayFromWorld(rayFrom);
 	    callback.setRayToWorld(rayTo);
 

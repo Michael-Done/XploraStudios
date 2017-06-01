@@ -7,8 +7,14 @@ import java.awt.Point;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -38,6 +44,8 @@ public class BritishColombiaScene extends GameObjectController {
 	btBroadphaseInterface broadphase;
 	btCollisionWorld collisionWorld;
 
+	ModelInstance collisionLocation;
+
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -60,13 +68,27 @@ public class BritishColombiaScene extends GameObjectController {
 
 		public btCollisionObject construct() {
 			btCollisionObject out = new btCollisionObject();
-			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x/2, dimensions.y/2, dimensions.z/2));
+			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x / 2, dimensions.y / 2, dimensions.z / 2));
 			out.setCollisionShape(shape);
 			Matrix4 transform = new Matrix4();
 			transform.setTranslation(location);
 			transform.rotate(rotateAround.x, rotateAround.y, rotateAround.z, rotation);
 			out.setWorldTransform(transform);
 			return out;
+		}
+
+		public ModelInstance constructModel() {
+			ModelBuilder mb = new ModelBuilder();
+			mb.begin();
+			mb.node().id = "ground";
+			mb.part("box", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal,
+					new Material(ColorAttribute.createDiffuse(Color.RED)))
+					.box(dimensions.x, dimensions.y, dimensions.z);
+			Model a = mb.end();
+			ModelInstance testObj = new ModelInstance(a);
+			testObj.transform.translate(location);
+			testObj.transform.rotate(rotateAround, rotation);
+			return testObj;
 		}
 	}
 
@@ -154,6 +176,17 @@ public class BritishColombiaScene extends GameObjectController {
 		for (Vector3 i : treeLocations) {
 			objects.add(new GameObject(treeHighPoly, new Vector3(i.x, i.y, (float) (i.z + Math.random() * 0.5f))));
 		}
+//		for (GroundObjectData i : groundObjDataList) {
+//			objects.add(i.constructModel());
+//		}
+		ModelBuilder mb = new ModelBuilder();
+		mb.begin();
+		mb.node().id = "ball";
+		mb.part("sphere", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal,
+				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(1f, 1f, 1f, 10, 10);
+		Model a = mb.end();
+		collisionLocation = new ModelInstance(a);
+		//objects.add(collisionLocation);
 	}
 
 	@Override
@@ -180,36 +213,50 @@ public class BritishColombiaScene extends GameObjectController {
 	@Override
 	public void updateCamera() {
 		super.updateCamera();
-		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld,
-				cameraController.getVerticalSpring());
+		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld, cameraController.getRayFrom(),
+				cameraController.getRayTo());
 		if (intersectLocation != null) {
 			cameraController.setZ(intersectLocation.z + 1);
+			collisionLocation.transform.setTranslation(intersectLocation);
 		}
+
 	}
 
-	private float pointLineDistance(Vector2 lineStart, Vector2 lineEnd, Vector2 point) {
-		float x1 = lineStart.x;
-		float x2 = lineEnd.x;
-		float x0 = point.x;
-		float y1 = lineStart.y;
-		float y2 = lineEnd.y;
-		float y0 = point.y;
-		return (float) ((Math.abs(((y2 - y1) * x0) - ((x2 - x1) * y0) + (x2 * y1) - (y2 * x1)))
-				/ Math.sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))));
-	}
-
-	private float xOnLine(Vector2 lineStart, Vector2 lineEnd, float x) {
-		float m = (lineEnd.y - lineStart.y) / (lineEnd.x - lineStart.x);
-		float b = -m * lineStart.x + lineStart.y;
-		return m * x + b;
-	}
-
-	private boolean inSection11(Vector2 point) {
-		return (/* point.y < 90.7594 && point.y > 47.0755 && */ pointLineDistance(new Vector2(-124.4480f, 47.9108f),
-				new Vector2(-90.7187f, 90.4606f), point) < 1.24878);
-	}
+	// private float pointLineDistance(Vector2 lineStart, Vector2 lineEnd,
+	// Vector2 point) {
+	// float x1 = lineStart.x;
+	// float x2 = lineEnd.x;
+	// float x0 = point.x;
+	// float y1 = lineStart.y;
+	// float y2 = lineEnd.y;
+	// float y0 = point.y;
+	// return (float) ((Math.abs(((y2 - y1) * x0) - ((x2 - x1) * y0) + (x2 * y1)
+	// - (y2 * x1)))
+	// / Math.sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))));
+	// }
+	//
+	// private float xOnLine(Vector2 lineStart, Vector2 lineEnd, float x) {
+	// float m = (lineEnd.y - lineStart.y) / (lineEnd.x - lineStart.x);
+	// float b = -m * lineStart.x + lineStart.y;
+	// return m * x + b;
+	// }
+	//
+	// private boolean inSection11(Vector2 point) {
+	// return (/* point.y < 90.7594 && point.y > 47.0755 && */
+	// pointLineDistance(new Vector2(-124.4480f, 47.9108f), new
+	// Vector2(-90.7187f, 90.4606f), point) < 1.24878);
+	// }
 
 	private void initalizeGroundObjectData() {
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-119.27326202392578f, 22.249927520751953f, 20.606400966644287f), new Vector3(0, 0, 0), 0f,
+				new Vector3(108.82850646972656f, 66.30624771118164f, 5.000000596046448f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(-125.45814514160156f, -96.67216300964355f, 12.769299745559692f), new Vector3(0, 0, 0), 0f,
+				new Vector3(108.82850646972656f, 156.4835262298584f, 5.000000596046448f)));
+		groundObjDataList.add(new GroundObjectData(
+				new Vector3(118.28474998474121f, -75.0916862487793f, 9.8649001121521f), new Vector3(0, 0, 0), 0f,
+				new Vector3(108.82850646972656f, 204.33692932128906f, 5.000000596046448f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(-90.57474136352539f, 79.83270645141602f, 44.14041519165039f), new Vector3(1, 0, 0),
 				26.445655750463672f, new Vector3(4.000000059604645f, 56.22746729981598f, 0.1f)));
@@ -233,13 +280,13 @@ public class BritishColombiaScene extends GameObjectController {
 				21.902713776137414f, new Vector3(52.955436799257264f, 3.985562324523926f, 0.1f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(13.760716915130615f, 106.98049545288086f, 34.08492565155029f), new Vector3(0, 1, 0),
-				3.0480533342780034f, new Vector3(95.271519398826f, 4.0283966064453125f, 0.1f)));
+				-3.0480533342780034f, new Vector3(95.271519398826f, 4.0283966064453125f, 0.1f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(-57.31091499328613f, 106.98049545288086f, 30.765011310577393f), new Vector3(0, 1, 0),
-				19.843569599489747f, new Vector3(4.636622116629835f, 4.0283966064453125f, 0.1f)));
+				-19.843569599489747f, new Vector3(4.636622116629835f, 4.0283966064453125f, 0.1f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(-63.283348083496094f, 106.98049545288086f, 29.22511339187622f), new Vector3(0, 1, 0),
-				11.231261544292732f, new Vector3(7.731594489151341f, 4.028406143188477f, 0.1f)));
+				-11.231261544292732f, new Vector3(7.731594489151341f, 4.028406143188477f, 0.1f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(-70.40708541870117f, 106.98050498962402f, 28.52463722229004f), new Vector3(0, 1, 0),
 				0.902080125631737f, new Vector3(6.664796971752482f, 4.0283966064453125f, 0.1f)));
@@ -254,10 +301,10 @@ public class BritishColombiaScene extends GameObjectController {
 				17.408345103720652f, new Vector3(28.27542251062869f, 4.000000953674316f, 0.1f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(84.48987007141113f, 106.98049545288086f, 43.619747161865234f), new Vector3(0, 1, 0),
-				19.795466219023897f, new Vector3(41.34994777020991f, 4.028406143188477f, 0.1f)));
+				-19.795466219023897f, new Vector3(41.34994777020991f, 4.028406143188477f, 0.1f)));
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(119.92803573608398f, 117.2661018371582f, 54.23365592956543f), new Vector3(0, 1, 0),
-				16.67353071023783f, new Vector3(25.178297772374822f, 3.9999961853027344f, 0.1f)));
+				-16.67353071023783f, new Vector3(25.178297772374822f, 3.9999961853027344f, 0.1f)));
 		groundObjDataList
 				.add(new GroundObjectData(new Vector3(63.182854652404785f, 89.98284339904785f, 36.61788463592529f),
 						new Vector3(0, 0, 0), 0f, new Vector3(3.707546293735504f, 29.966905117034912f, 0.1f)));
@@ -324,6 +371,9 @@ public class BritishColombiaScene extends GameObjectController {
 		groundObjDataList
 				.add(new GroundObjectData(new Vector3(-103.58768463134766f, 6.054480075836182f, 26.28502368927002f),
 						new Vector3(0, 0, 0), 0f, new Vector3(22.025909423828125f, 4.000000953674316f, 0.1f)));
+		groundObjDataList
+				.add(new GroundObjectData(new Vector3(-109.57473754882812f, 83.46117973327637f, 56.66083335876465f),
+						new Vector3(0, 0, 0), 0f, new Vector3(4.000000059604645f, 43.08670997619629f, 0.1f)));
 	}
 
 	private void initalizeTreeLocations() {

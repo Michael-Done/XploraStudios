@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class GameObject extends ModelInstance implements Disposable {
 	public final btCollisionObject body;
-
+	
 	public GameObject(Model model, btCollisionShape shape, Vector3 loc) {
 		super(model);
 		this.transform.translate(loc);
