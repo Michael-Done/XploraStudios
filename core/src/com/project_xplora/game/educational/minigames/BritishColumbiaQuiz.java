@@ -3,6 +3,7 @@ package com.project_xplora.game.educational.minigames;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,7 +15,7 @@ public class BritishColumbiaQuiz extends GameObjectController{
 
 	private Stage quizStage;
 	private Skin quizSkin;
-	private Table quizTable; //Don't know how to implement
+	private Table quizTable; 
 	private TextButton option1, option2, option3;
 	
 	
@@ -46,6 +47,15 @@ public class BritishColumbiaQuiz extends GameObjectController{
 		quizTable.clear();
 		quizSkin.getFont("font-label").getData().setScale(Gdx.graphics.getWidth()/6400.0f, Gdx.graphics.getHeight()/3600.0f);
 		quizSkin.getFont("font-button").getData().setScale(Gdx.graphics.getWidth()/6400.0f, Gdx.graphics.getHeight()/3600.0f);
+		
+		Label header1 = new Label("KEYBINDINGS", quizSkin);
+		header1.setFontScale(1.1f);
+		quizTable.add(header1);
+		quizTable.setX(Gdx.graphics.getWidth() / 2 - 500);
+		quizTable.setY(Gdx.graphics.getHeight() / 2 - 500);
+		quizTable.pack();
+		quizTable.center();
+		quizStage.addActor(quizTable);
 	}
 	
 	public void setInputProccessor() {
@@ -57,10 +67,5 @@ public class BritishColumbiaQuiz extends GameObjectController{
 		quizStage.dispose();
 		quizSkin.dispose();
 		quizTable = null;
-	}
-
-	
-	public static void main(String[] args) {
-
 	}
 }
