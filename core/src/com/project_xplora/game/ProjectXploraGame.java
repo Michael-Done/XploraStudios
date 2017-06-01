@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
+import com.project_xplora.game.educational.minigames.BritishColumbiaQuiz;
 
 public class ProjectXploraGame implements ApplicationListener {
 	TreeSet<PlayerData> highscores;
@@ -37,7 +38,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	public ArrayList<PlayerData> players;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME
 	}
 
 	Level currentScene;
@@ -86,8 +87,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MENU, new MenuScene(settings));
 		scenes.put(Level.CREDITS, new CreditsScene (settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
+		scenes.put(Level.MINIGAME, new BritishColumbiaQuiz(settings));
 		// For testing purposes
-		currentScene = Level.BC;
+		currentScene = Level.MENU;
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();

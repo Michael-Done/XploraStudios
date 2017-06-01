@@ -1,5 +1,7 @@
 package com.project_xplora.game.educational.minigames;
 
+
+//CLASS NOT NEEDED
 public abstract class EducationalQuiz {
 
 	//Will be implemented afterwards, once the treasure chests are finally created (down below)
