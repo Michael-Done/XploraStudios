@@ -170,6 +170,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.ROME;
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				camera.far = 3000f;
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 1) {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.BC;

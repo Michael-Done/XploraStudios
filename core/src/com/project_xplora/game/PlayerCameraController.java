@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
@@ -19,7 +20,9 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btConvexShape;
 import com.badlogic.gdx.physics.bullet.collision.btPairCachingGhostObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btKinematicCharacterController;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.project_xplora.collision_util.CollisionShape;
 
 /**
  * Takes a {@link Camera} instance and controls it via w,a,s,d and mouse
@@ -43,12 +46,15 @@ public class PlayerCameraController extends InputAdapter {
 	private Vector3 rayFrom = new Vector3();
 	private Vector3 rayTo = new Vector3();
 
+	private Array<CollisionShape> collisions;
+
 	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
+		collisions = new Array<CollisionShape>();
 	}
 
 	public PlayerCameraController(Camera camera, Settings settings) {
-		this.camera = camera;
+		this(camera);
 		updateSettings(settings);
 
 	}
@@ -119,6 +125,7 @@ public class PlayerCameraController extends InputAdapter {
 	public void update(float deltaTime) {
 		rayFrom.set(camera.position);
 		rayTo.set(camera.position.x, camera.position.y, -20f);
+		Vector2 old = new Vector2(camera.position.x, camera.position.y);
 		if (!lockedPosition) {
 			if (keys.containsKey(Keys.SHIFT_LEFT)) {
 				velocity = 50;
@@ -156,6 +163,15 @@ public class PlayerCameraController extends InputAdapter {
 				camera.position.add(tmp);
 			}
 		}
+		Vector2 current = new Vector2(camera.position.x, camera.position.y);
+		Vector2 newPos = new Vector2(current);
+		for(CollisionShape i : collisions){
+			if(i.isInside(current)){
+				newPos = i.newPointCaclulation(current, old);
+			}
+		}
+		System.out.println("Final: " + newPos + " | Old: " + old + " | Current: " + current);
+		camera.position.set(newPos, camera.position.z);
 		camera.update(true);
 	}
 
@@ -186,7 +202,12 @@ public class PlayerCameraController extends InputAdapter {
 	public Vector3 getRayFrom() {
 		return rayFrom;
 	}
+
 	public Vector3 getRayTo() {
 		return rayTo;
+	}
+	
+	public void addCollision(CollisionShape c){
+		collisions.add(c);
 	}
 }

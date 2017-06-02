@@ -3,8 +3,20 @@
  */
 package com.project_xplora.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.bullet.collision.ClosestRayResultCallback;
@@ -20,6 +32,9 @@ import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.project_xplora.collision_util.CollisionCircle;
+import com.project_xplora.collision_util.CollisionRect;
+import com.project_xplora.collision_util.CollisionShape;
 
 /**
  * @author Michael
@@ -53,6 +68,8 @@ public class RomeScene extends GameObjectController {
 		assets.load("LongBuilding.g3db", Model.class);
 		assets.load("Fountain.g3db", Model.class);
 		assets.load("ColosseumLayer.g3db", Model.class);
+		assets.load("SkyDome.g3db", Model.class);
+		assets.load("Box.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -65,6 +82,28 @@ public class RomeScene extends GameObjectController {
 		Model longBuilding = assets.get("LongBuilding.g3db", Model.class);
 		Model fountain = assets.get("Fountain.g3db", Model.class);
 		Model colosseum = assets.get("ColosseumLayer.g3db", Model.class);
+		Model sky = assets.get("SkyDome.g3db", Model.class);
+		Model box = assets.get("Box.g3db", Model.class);
+
+		ModelBuilder mb = new ModelBuilder();
+		mb.begin();
+		mb.node().id = "ball";
+		mb.part("sphere", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal,
+				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(1f, 1f, 1f, 10, 10);
+		Model a = mb.end();
+		CollisionShape c = new CollisionRect(new Vector2(-1, 3), new Vector2(1, 5));
+		for (float i = -10; i <= 10; i += 0.2) {
+			for (float z = -10; z <= 10; z += 0.2) {
+				if (c.isInside(i, z)) {
+					objects.add(new GameObject(a, new Vector3(i, z, 0.5f)));
+				}
+			}
+		}
+		// objects.add(new GameObject(box, new Vector3(0, 4, 0)));
+		// Sky dome
+		GameObject sky_inst = new GameObject(sky);
+		sky_inst.transform.scale(10, 10, 10);
+		objects.add(sky_inst);
 		// Ground
 		objects.add(new GameObject(ground));
 		// Gardens
@@ -186,7 +225,6 @@ public class RomeScene extends GameObjectController {
 	@Override
 	public void update() {
 		super.update();
-
 	}
 
 	@Override
@@ -197,5 +235,32 @@ public class RomeScene extends GameObjectController {
 		if (intersectLocation != null) {
 			cameraController.setZ(intersectLocation.z + 1);
 		}
+	}
+
+	@Override
+	public void environmentSetup() {
+		environment = new Environment();
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 2f, 2f, 2f, 1f));
+		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.8f, -1f, -0.8f));
+		environment.add(new DirectionalLight().set(0.1f, 0.1f, 0.05f, 0.8f, 1f, 0.8f));
+		// environment.add(new PointLight().set(1f, 1f, 1f, new Vector3(0, 10,
+		// 1), 1000f));
+	}
+
+	@Override
+	public void camSetup() {
+		// Create a camera and point it to our model
+		Gdx.input.setCursorCatched(true);
+		// camera = new PerspectiveCamera(70, screenWidth, screenHeight);
+		float playerHeight = 3f;
+		ProjectXploraGame.camera.position.set(0f, -30f, playerHeight);
+		ProjectXploraGame.camera.lookAt(0f, 0f, playerHeight);
+		ProjectXploraGame.camera.near = 0.1f;
+		ProjectXploraGame.camera.far = 3000f;
+		ProjectXploraGame.camera.update();
+		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
+		cameraController.addCollision( new CollisionRect(new Vector2(-1, 3), new Vector2(1, 5)));
+		Gdx.input.setInputProcessor(cameraController);
+		cameraResize(screenWidth, screenHeight);
 	}
 }
