@@ -85,11 +85,11 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
 		scenes.put(Level.MENU, new MenuScene(settings));
-		scenes.put(Level.CREDITS, new CreditsScene (settings));
+		scenes.put(Level.CREDITS, new CreditsScene(settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		scenes.put(Level.MINIGAME, new BritishColumbiaQuiz(settings));
 		// For testing purposes
-		currentScene = Level.MINIGAME;
+		currentScene = Level.MENU;
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
@@ -141,6 +141,12 @@ public class ProjectXploraGame implements ApplicationListener {
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.LEVEL_SELECT;
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 5) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.SETTINGS;
@@ -151,9 +157,25 @@ public class ProjectXploraGame implements ApplicationListener {
 		case LEVEL_SELECT:
 			if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 3) {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				currentScene = Level.MENU;
 				camera.lookAt(0f, 1f, 1f);
-				// scenes.get(currentScene).initalize();
+				
+			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 0) {
+				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
+				currentScene = Level.ROME;
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 1) {
+				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
+				currentScene = Level.BC;
+				camera.position.set(149f, -50f, 1 + 12.36f);
+				camera.far = 3000f;
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 			}
 			break;
 		case SETTINGS:
@@ -163,11 +185,11 @@ public class ProjectXploraGame implements ApplicationListener {
 					settings = ((SettingsScene) scenes.get(currentScene)).getNewSettings();
 				}
 				((SettingsScene) scenes.get(currentScene)).resetChoice();
-				// for (Level i : Level.values()) {
-				// if (scenes.get(i) != null) {
-				// scenes.get(i).updateSettings(settings);
-				// }
-				// }
+				for (Level i : Level.values()) {
+					if (scenes.get(i) != null && scenes.get(i).settings != null) {
+						scenes.get(i).updateSettings(settings);
+					}
+				}
 				currentScene = Level.MENU;
 				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);

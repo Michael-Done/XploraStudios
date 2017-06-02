@@ -145,9 +145,9 @@ public class BritishColombiaScene extends GameObjectController {
 		ModelInstance boardwalk_inst = new GameObject(boardwalk);
 		objects.add(boardwalk_inst);
 
-		Model boardwalkSupports = assets.get("BoardwalkSupports.g3db", Model.class);
-		ModelInstance boardwalkSupports_inst = new GameObject(boardwalkSupports);
-		objects.add(boardwalkSupports_inst);
+		//Model boardwalkSupports = assets.get("BoardwalkSupports.g3db", Model.class);
+		//ModelInstance boardwalkSupports_inst = new GameObject(boardwalkSupports);
+		//objects.add(boardwalkSupports_inst);
 
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		ModelInstance sky_inst = new GameObject(sky);
@@ -221,31 +221,6 @@ public class BritishColombiaScene extends GameObjectController {
 		}
 
 	}
-
-	// private float pointLineDistance(Vector2 lineStart, Vector2 lineEnd,
-	// Vector2 point) {
-	// float x1 = lineStart.x;
-	// float x2 = lineEnd.x;
-	// float x0 = point.x;
-	// float y1 = lineStart.y;
-	// float y2 = lineEnd.y;
-	// float y0 = point.y;
-	// return (float) ((Math.abs(((y2 - y1) * x0) - ((x2 - x1) * y0) + (x2 * y1)
-	// - (y2 * x1)))
-	// / Math.sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1))));
-	// }
-	//
-	// private float xOnLine(Vector2 lineStart, Vector2 lineEnd, float x) {
-	// float m = (lineEnd.y - lineStart.y) / (lineEnd.x - lineStart.x);
-	// float b = -m * lineStart.x + lineStart.y;
-	// return m * x + b;
-	// }
-	//
-	// private boolean inSection11(Vector2 point) {
-	// return (/* point.y < 90.7594 && point.y > 47.0755 && */
-	// pointLineDistance(new Vector2(-124.4480f, 47.9108f), new
-	// Vector2(-90.7187f, 90.4606f), point) < 1.24878);
-	// }
 
 	private void initalizeGroundObjectData() {
 		groundObjDataList.add(new GroundObjectData(
