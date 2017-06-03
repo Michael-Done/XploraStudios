@@ -41,6 +41,12 @@ public class GameObject extends ModelInstance implements Disposable {
 		this.transform.rotate(1, 0, 0, 90);
 		body = null;
 	}
+	public GameObject(Model model, Vector3 loc, Vector3 axis, float angle){
+		super(model);
+		this.transform.translate(loc);
+		this.transform.rotate(axis, angle);
+		body = null;
+	}
 	public GameObject(Model model) {
 		super(model);
 		this.transform.rotate(1, 0, 0, 90);

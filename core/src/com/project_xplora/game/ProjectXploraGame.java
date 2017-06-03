@@ -87,6 +87,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MENU, new MenuScene(settings));
 		scenes.put(Level.CREDITS, new CreditsScene(settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
+		scenes.put(Level.EUROPE, new EuropeScene(settings));
 		scenes.put(Level.MINIGAME, new BritishColumbiaQuiz(settings));
 		// For testing purposes
 		currentScene = Level.MENU;
@@ -165,10 +166,15 @@ public class ProjectXploraGame implements ApplicationListener {
 				}
 				currentScene = Level.MENU;
 				camera.lookAt(0f, 1f, 1f);
-				
+
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 0) {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.ROME;
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				camera.far = 3000f;
+			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 2) {
+				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
+				currentScene = Level.EUROPE;
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				camera.far = 3000f;
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 1) {

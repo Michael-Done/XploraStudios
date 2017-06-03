@@ -170,7 +170,6 @@ public class PlayerCameraController extends InputAdapter {
 				newPos = i.newPointCaclulation(current, old);
 			}
 		}
-		System.out.println("Final: " + newPos + " | Old: " + old + " | Current: " + current);
 		camera.position.set(newPos, camera.position.z);
 		camera.update(true);
 	}

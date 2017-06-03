@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
@@ -32,9 +33,11 @@ import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
 import com.project_xplora.collision_util.CollisionShape;
+import com.project_xplora.game.BritishColombiaScene.GroundObjectData;
 
 /**
  * @author Michael
@@ -52,10 +55,60 @@ public class RomeScene extends GameObjectController {
 	btBroadphaseInterface broadphase;
 	btCollisionWorld collisionWorld;
 
+	private Array<GroundObjectData> groundObjDataList;
+
 	public RomeScene(Settings settings) {
 		super(settings);
+		groundObjDataList = new Array<GroundObjectData>();
+		initalizeGroundObjectData();
 		initalizeCollisionWorld();
 		initalize();
+	}
+
+	class GroundObjectData {
+		/** The location of the groundObject */
+		public Vector3 location;
+		/**
+		 * The axis that it is meant to rotate around will be set to 1. The
+		 * others will be set to 0
+		 */
+		public Vector3 rotateAround;
+		/** The rotation around the axis in degrees */
+		public float rotation;
+		/** The dimensions of the box */
+		public Vector3 dimensions;
+
+		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions) {
+			this.location = location;
+			this.rotateAround = rotateAround;
+			this.rotation = rotation;
+			this.dimensions = dimensions;
+		}
+
+		public btCollisionObject construct() {
+			btCollisionObject out = new btCollisionObject();
+			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x / 2, dimensions.y / 2, dimensions.z / 2));
+			out.setCollisionShape(shape);
+			Matrix4 transform = new Matrix4();
+			transform.setTranslation(location);
+			transform.rotate(rotateAround.x, rotateAround.y, rotateAround.z, rotation);
+			out.setWorldTransform(transform);
+			return out;
+		}
+
+		public ModelInstance constructModel() {
+			ModelBuilder mb = new ModelBuilder();
+			mb.begin();
+			mb.node().id = "ground";
+			mb.part("box", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal,
+					new Material(ColorAttribute.createDiffuse(Color.RED)))
+					.box(dimensions.x, dimensions.y, dimensions.z);
+			Model a = mb.end();
+			ModelInstance testObj = new ModelInstance(a);
+			testObj.transform.translate(location);
+			testObj.transform.rotate(rotateAround, rotation);
+			return testObj;
+		}
 	}
 
 	@Override
@@ -220,6 +273,10 @@ public class RomeScene extends GameObjectController {
 		dispatcher = new btCollisionDispatcher(collisionConfig);
 		broadphase = new btDbvtBroadphase();
 		collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
+
+		for (GroundObjectData i : groundObjDataList) {
+			collisionWorld.addCollisionObject(i.construct());
+		}
 	}
 
 	@Override
@@ -240,7 +297,7 @@ public class RomeScene extends GameObjectController {
 	@Override
 	public void environmentSetup() {
 		environment = new Environment();
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 2f, 2f, 2f, 1f));
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.7f, 0.7f, 0.7f, 1f));
 		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.8f, -1f, -0.8f));
 		environment.add(new DirectionalLight().set(0.1f, 0.1f, 0.05f, 0.8f, 1f, 0.8f));
 		// environment.add(new PointLight().set(1f, 1f, 1f, new Vector3(0, 10,
@@ -259,8 +316,21 @@ public class RomeScene extends GameObjectController {
 		ProjectXploraGame.camera.far = 3000f;
 		ProjectXploraGame.camera.update();
 		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
-		cameraController.addCollision( new CollisionRect(new Vector2(-1, 3), new Vector2(1, 5)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-1, 3), new Vector2(1, 5)));
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
+	}
+
+	private void initalizeGroundObjectData() {
+		groundObjDataList.add(new GroundObjectData(new Vector3(35.57417f, 0f, 1.1453f), new Vector3(0, 0, 0), 0f,
+				new Vector3(3.757f, 5.173f, 0.17f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(-35.57417f, 0f, 1.1453f), new Vector3(0, 0, 0), 0f,
+				new Vector3(3.757f, 5.173f, 0.17f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(32.42646f, 0f, 0.62864f), new Vector3(0, 1, 0), -21.721f,
+				new Vector3(2.745f, 3.225f, 0.17f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(-32.42646f, 0f, 0.62864f), new Vector3(0, 1, 0), 21.721f,
+				new Vector3(2.745f, 3.225f, 0.17f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f,
+				new Vector3(145.056f, 104.201f, 0.242f)));
 	}
 }

@@ -34,11 +34,17 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class BritishColombiaScene extends GameObjectController {
+
+	// For testing
+	Array<Vector3> grassLocations = new Array<Vector3>();
+	Array<Vector3> activeGrass = new Array<Vector3>();
+	Array<Vector3> sleepingGrass = new Array<Vector3>();
+
 	Array<Vector3> treeLocations;
 	Model treeHighPoly;
 	Model treeLowPoly;
 	private Array<GroundObjectData> groundObjDataList;
-
+	private int counter = 0;
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
@@ -145,9 +151,11 @@ public class BritishColombiaScene extends GameObjectController {
 		ModelInstance boardwalk_inst = new GameObject(boardwalk);
 		objects.add(boardwalk_inst);
 
-		//Model boardwalkSupports = assets.get("BoardwalkSupports.g3db", Model.class);
-		//ModelInstance boardwalkSupports_inst = new GameObject(boardwalkSupports);
-		//objects.add(boardwalkSupports_inst);
+		// Model boardwalkSupports = assets.get("BoardwalkSupports.g3db",
+		// Model.class);
+		// ModelInstance boardwalkSupports_inst = new
+		// GameObject(boardwalkSupports);
+		// objects.add(boardwalkSupports_inst);
 
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		ModelInstance sky_inst = new GameObject(sky);
@@ -176,9 +184,9 @@ public class BritishColombiaScene extends GameObjectController {
 		for (Vector3 i : treeLocations) {
 			objects.add(new GameObject(treeHighPoly, new Vector3(i.x, i.y, (float) (i.z + Math.random() * 0.5f))));
 		}
-//		for (GroundObjectData i : groundObjDataList) {
-//			objects.add(i.constructModel());
-//		}
+		// for (GroundObjectData i : groundObjDataList) {
+		// objects.add(i.constructModel());
+		// }
 		ModelBuilder mb = new ModelBuilder();
 		mb.begin();
 		mb.node().id = "ball";
@@ -186,7 +194,19 @@ public class BritishColombiaScene extends GameObjectController {
 				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(1f, 1f, 1f, 10, 10);
 		Model a = mb.end();
 		collisionLocation = new ModelInstance(a);
-		//objects.add(collisionLocation);
+		// objects.add(collisionLocation);
+
+		for (int i = 0; i < 100000; i++) {
+			grassLocations.add(new Vector3((float) ((Math.random() * 305f) + 152.5f),
+					(float) ((Math.random() * 305f) + 152.5f), 0f));
+		}
+		for (Vector3 i : grassLocations) {
+			if (i.dst(new Vector3(0, 0, 0)) < 50) {
+				activeGrass.add(i);
+			} else {
+				sleepingGrass.add(i);
+			}
+		}
 	}
 
 	@Override
@@ -208,6 +228,7 @@ public class BritishColombiaScene extends GameObjectController {
 	@Override
 	public void update() {
 		super.update();
+		System.out.println(1 / Gdx.graphics.getDeltaTime() + " FPS");
 	}
 
 	@Override
