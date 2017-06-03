@@ -44,7 +44,7 @@ public class BritishColombiaScene extends GameObjectController {
 	Model treeHighPoly;
 	Model treeLowPoly;
 	private Array<GroundObjectData> groundObjDataList;
-	private int counter = 0;
+	
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
