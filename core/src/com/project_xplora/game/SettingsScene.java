@@ -77,7 +77,10 @@ public class SettingsScene extends GameObjectController {
 		// loadModelInstances();
 
 	}
-
+	@Override
+	public void updateSettings(Settings settings){
+		tempSettings = settings;
+	}
 	@Override
 	public void loadModelInstances() {
 		table.clear();

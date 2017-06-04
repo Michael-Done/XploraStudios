@@ -88,9 +88,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.CREDITS, new CreditsScene(settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		scenes.put(Level.EUROPE, new EuropeScene(settings));
-		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
+		//scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		// For testing purposes
-		currentScene = Level.MINIGAME1;
+		currentScene = Level.MENU;
 		//currentScene = Level.EUROPE;
 
 		scenes.get(currentScene).camSetup();
@@ -140,10 +140,12 @@ public class ProjectXploraGame implements ApplicationListener {
 		case MENU:
 			if (((MenuScene) scenes.get(currentScene)).getChoice() == 3) {
 				currentScene = Level.EXIT;
+				scenes.get(currentScene).updateSettings(settings);
 				Gdx.app.exit();
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.LEVEL_SELECT;
+				scenes.get(currentScene).updateSettings(settings);
 				try {
 					Thread.sleep(300);
 				} catch (InterruptedException e) {
@@ -153,6 +155,7 @@ public class ProjectXploraGame implements ApplicationListener {
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 5) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.SETTINGS;
+				scenes.get(currentScene).updateSettings(settings);
 				scenes.get(currentScene).loadModelInstances();
 				((SettingsScene) scenes.get(currentScene)).setInputProccessor();
 			}
@@ -167,21 +170,25 @@ public class ProjectXploraGame implements ApplicationListener {
 					e.printStackTrace();
 				}
 				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
 				camera.lookAt(0f, 1f, 1f);
 
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 0) {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.ROME;
+				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				camera.far = 3000f;
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 2) {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.EUROPE;
+				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				camera.far = 3000f;
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 1) {
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.BC;
+				scenes.get(currentScene).updateSettings(settings);
 				camera.position.set(149f, -50f, 1 + 12.36f);
 				camera.far = 3000f;
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
@@ -194,11 +201,7 @@ public class ProjectXploraGame implements ApplicationListener {
 					settings = ((SettingsScene) scenes.get(currentScene)).getNewSettings();
 				}
 				((SettingsScene) scenes.get(currentScene)).resetChoice();
-				for (Level i : Level.values()) {
-					if (scenes.get(i) != null && scenes.get(i).settings != null) {
-						scenes.get(i).updateSettings(settings);
-					}
-				}
+				
 				currentScene = Level.MENU;
 				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);

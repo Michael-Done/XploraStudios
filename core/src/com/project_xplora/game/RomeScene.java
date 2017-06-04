@@ -138,7 +138,7 @@ public class RomeScene extends GameObjectController {
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		Model colosseumCenter = assets.get("ColosseumMiddle.g3db", Model.class);
 
-        objects.add(new GameObject(colosseumCenter));
+		objects.add(new GameObject(colosseumCenter));
 		// objects.add(new GameObject(box, new Vector3(0, 4, 0)));
 		// Sky dome
 		GameObject sky_inst = new GameObject(sky);
@@ -464,5 +464,70 @@ public class RomeScene extends GameObjectController {
 				new CollisionCircle(new Vector2(-49.673484802246094f, -23.829975128173828f), 4.645557880401611f));
 		cameraController.addCollision(
 				new CollisionCircle(new Vector2(7.38139192435483e-07f, 4.3903237383347005e-06f), 13.983842086791992f));
+
+		cameraController.addCollision(new CollisionRect(new Vector2(-36.075860023498535f, 26.06398057937622f),
+				new Vector2(-30.209036827087402f, 27.97468137741089f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-35.0759482383728f, 27.62836456298828f),
+				new Vector2(-31.208948612213135f, 39.938560485839844f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-35.0759482383728f, -39.938560485839844f),
+				new Vector2(-31.208948612213135f, -27.62836456298828f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-36.075860023498535f, -27.97468137741089f),
+				new Vector2(-30.209036827087402f, -26.06398057937622f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-36.075860023498535f, -21.547523736953735f),
+				new Vector2(-30.209036827087402f, -19.663848638534546f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-35.0759482383728f, -21.036745071411133f),
+				new Vector2(-31.208948612213135f, -8.72654914855957f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-68.64632797241211f, -9.29045569896698f),
+				new Vector2(-31.21017074584961f, -5.706010937690735f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-70.9070680141449f, -44.00794792175293f),
+				new Vector2(-64.0094358921051f, -5.796358108520508f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-68.64632797241211f, -45.311421155929565f),
+				new Vector2(-30.434741973876953f, -38.4137909412384f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(30.434741973876953f, -45.311421155929565f),
+				new Vector2(68.64632797241211f, -38.4137909412384f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(64.0094358921051f, -44.00794792175293f),
+				new Vector2(70.9070680141449f, -5.796358108520508f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.21017074584961f, -9.29045569896698f),
+				new Vector2(68.64632797241211f, -5.706010937690735f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.208948612213135f, -21.036745071411133f),
+				new Vector2(35.0759482383728f, -8.72654914855957f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(30.209036827087402f, -21.547523736953735f),
+				new Vector2(36.075860023498535f, -19.663848638534546f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(30.209036827087402f, -27.97468137741089f),
+				new Vector2(36.075860023498535f, -26.06398057937622f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.208948612213135f, -39.938560485839844f),
+				new Vector2(35.0759482383728f, -27.62836456298828f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-47.90429353713989f, -4.228699207305908f),
+				new Vector2(-37.23379850387573f, 4.055261135101318f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-41.73331165313721f, 1.5761438608169556f),
+				new Vector2(-31.06281566619873f, 2.851507544517517f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-41.73331165313721f, -2.8050135374069214f),
+				new Vector2(-31.06281566619873f, -1.5296498537063599f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.06281566619873f, -2.8050135374069214f),
+				new Vector2(41.73331165313721f, -1.5296498537063599f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.06281566619873f, 1.5761438608169556f),
+				new Vector2(41.73331165313721f, 2.851507544517517f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(37.233798027038574f, -4.228700160980225f),
+				new Vector2(47.90429401397705f, 4.055262088775635f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(33.76571184396744f, -0.362667977809906f),
+				new Vector2(34.49104779958725f, 0.362667977809906f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-34.491043984889984f, -0.362667977809906f),
+				new Vector2(-33.76570802927017f, 0.362667977809906f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.208948612213135f, 27.62836456298828f),
+				new Vector2(35.0759482383728f, 39.938560485839844f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(30.209036827087402f, 26.06398057937622f),
+				new Vector2(36.075860023498535f, 27.97468137741089f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(30.209036827087402f, 19.663848638534546f),
+				new Vector2(36.075860023498535f, 21.547523736953735f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.208948612213135f, 8.72654914855957f),
+				new Vector2(35.0759482383728f, 21.036745071411133f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.21017074584961f, 5.706010937690735f),
+				new Vector2(68.64632797241211f, 9.29045569896698f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(64.0094358921051f, 5.796358108520508f),
+				new Vector2(70.9070680141449f, 44.00794792175293f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(30.434741973876953f, 38.4137909412384f),
+				new Vector2(68.64632797241211f, 45.311421155929565f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-32.03529739379883f, 34.659098863601685f),
+				new Vector2(32.03529739379883f, 41.55672907829285f)));
 	}
 }
