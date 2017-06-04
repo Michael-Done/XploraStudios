@@ -21,15 +21,15 @@ public class EducationalQuiz extends GameObjectController {
 	private Skin quizSkin;
 	private Table quizTable;
 	private Stage quizStage;
-	private Texture quizScreen, lineSeparator, checkMark, crossMark;
+	private Texture quizScreen, lineSeparator, checkMark, crossMark, samplePicture;
 	private BitmapFont quizFont;
 	private TextButton option1, option2, option3, continueButton;
 	private List<Boolean> questionsAsked;
-	private List<Texture> quizGraphics;
 	private List<String> questions, choices, answers;
 	private String userChosenAnswer;
 	private int questionNumber;
 	private boolean generateQuestion, isCorrect;
+	private ClickListener listener1, listener2, listener3;
 
 	private float screenWidth;
 	private float screenHeight;
@@ -50,7 +50,6 @@ public class EducationalQuiz extends GameObjectController {
 		userChosenAnswer = "";
 		generateQuestion = true;
 		questionsAsked = new ArrayList<Boolean>();
-		quizGraphics = new ArrayList<Texture>();
 		questions = new ArrayList<String>();
 		choices = new ArrayList<String>();
 		answers = new ArrayList<String>();
@@ -61,25 +60,31 @@ public class EducationalQuiz extends GameObjectController {
 		option1 = new TextButton("A", quizSkin);
 		option2 = new TextButton("B", quizSkin);
 		option3 = new TextButton("C", quizSkin);
-		continueButton = new TextButton("Continue", quizSkin);
-		option1.addListener(new ClickListener() {
+		listener1 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "a";
 			}
-		});
-		option2.addListener(new ClickListener() {
+		};
+		listener2 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "b";
 			}
-		});
-
-		option3.addListener(new ClickListener() {
+		};
+		listener3 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "c";
 			}
-		});
+		};
+
+		continueButton = new TextButton("Continue", quizSkin);
+		option1.addListener(listener1);
+		option2.addListener(listener2);
+		option3.addListener(listener3);
 		continueButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
+				option1.addListener(listener1);
+				option2.addListener(listener2);
+				option3.addListener(listener3);
 				if (isCorrect) {
 					//Quit (should just return back to the current world)
 					Gdx.app.exit();
@@ -103,15 +108,18 @@ public class EducationalQuiz extends GameObjectController {
 	}
 
 	//Modifier Method
-	public void addElements(Texture graphic, String question, String choice1, String choice2, String choice3,
-			String answer) {
-		quizGraphics.add(graphic);
+	public void addElements(String question, String choice1, String choice2, String choice3, String answer) {
 		questions.add(question);
 		choices.add(choice1);
 		choices.add(choice2);
 		choices.add(choice3);
 		answers.add(answer);
 		questionsAsked.add(false);
+	}
+
+	//Modifier Method #2
+	public void addQuestionTexture(Texture passedTexture) {
+		samplePicture = passedTexture;
 	}
 
 	//Checks if all the questions have been answered
@@ -165,18 +173,29 @@ public class EducationalQuiz extends GameObjectController {
 	public void regularUpdates(int questionNumber) {
 		quizBackground.draw(quizScreen, 0, 0, screenWidth, screenHeight);
 		quizBackground.draw(lineSeparator, 850, 250);
+		quizBackground.draw(lineSeparator, 850, 150);
+		quizBackground.draw(samplePicture, 140, 190, 800, 450);
 		quizFont.draw(quizBackground, "Question: " + questions.get(questionNumber), 90, 750);
-		quizFont.draw(quizBackground, "(Click on one of the multiple choice boxes)", 90, 705);
+		quizFont.draw(quizBackground, "(Click on one of the multiple choice boxes)", 90, 695);
 		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 1100, 585);
 		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 1100, 470);
 		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 1100, 355);
 		if (!userChosenAnswer.equals("")) {
-			int markLocation = setMarkLocation ();
+			option1.removeListener(listener1);
+			option2.removeListener(listener2);
+			option3.removeListener(listener3);
+			int markLocation = setMarkLocation();
 			if (userChosenAnswer.equals(answers.get(questionNumber))) {
 				quizBackground.draw(checkMark, 1800, 545 - (markLocation * 115), 50, 50);
+				quizFont.draw(quizBackground, "Correct!", 1100, 240);
+				quizFont.draw(quizBackground, "Your chest is now unlocked! Press <Continue> to resume the game.", 140, 100);
 				isCorrect = true;
 			} else {
 				quizBackground.draw(crossMark, 1800, 545 - (markLocation * 115), 50, 50);
+				quizFont.draw(quizBackground, "Incorrect!", 1100, 260);
+				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 1100, 220);
+				quizFont.draw(quizBackground, "A time penalty of 30 seconds will be added.", 140, 125);
+				quizFont.draw(quizBackground, "Press <Continue> to try answering another question.", 140, 85);
 				isCorrect = false;
 			}
 		}
