@@ -28,6 +28,7 @@ import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.utils.Array;
+import com.project_xplora.collision_util.CollisionRect;
 
 /**
  * @author Michael
@@ -44,7 +45,7 @@ public class BritishColombiaScene extends GameObjectController {
 	Model treeHighPoly;
 	Model treeLowPoly;
 	private Array<GroundObjectData> groundObjDataList;
-	
+
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
@@ -177,8 +178,7 @@ public class BritishColombiaScene extends GameObjectController {
 		objects.add(tower2_inst);
 
 		Model house = assets.get("House.g3db", Model.class);
-		ModelInstance house_inst = new GameObject(house);
-		house_inst.transform.translate(-136.7401f, 81.7682f, -110.3048f).rotate(0, 1, 0, -161.472f);
+		ModelInstance house_inst = new GameObject(house, new Vector3(-136.7401f, 110.3048f, 82.4468f));
 		objects.add(house_inst);
 
 		for (Vector3 i : treeLocations) {
@@ -220,9 +220,99 @@ public class BritishColombiaScene extends GameObjectController {
 		ProjectXploraGame.camera.far = 1000f;
 		ProjectXploraGame.camera.update();
 		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
+		initalizeCollisionShapes();
 		// cameraController.unlockPosition();
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
+	}
+
+	private void initalizeCollisionShapes() {
+		// cameraController.addCollision(new CollisionRect(new Vector2(-150f,
+		// 8f), new Vector2(-92.5f, 58f)));
+		// cameraController.addCollision(new CollisionRect(new Vector2(-107.6f,
+		// 57.8f), new Vector2(-92.5747f, 105.01f)));
+		// cameraController.addCollision(new CollisionRect(new Vector2(-138.6f,
+		// 61.8f), new Vector2(-111.4f, 94.4f)));
+		// cameraController.addCollision(new CollisionRect(new Vector2(-150.6f,
+		// 57.8f), new Vector2(-142.6f, 94.4f)));
+		// cameraController.addCollision(new CollisionRect(new Vector2(-151f,
+		// 94f), new Vector2(-150.4f, 121f)));
+		// cameraController.addCollision(new CollisionRect(new Vector2(-151f,
+		// 94f), new Vector2(-150.4f, 121f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-137.98783361911774f, 114.8446736484766f),
+				new Vector2(-134.45952355861664f, 116.84577129781246f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-135.9876924753189f, 101.64572574198246f),
+				new Vector2(-132.4593824148178f, 103.64682339131832f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-141.31417334079742f, 103.08030545711517f),
+				new Vector2(-131.13909661769867f, 115.60232698917389f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(0.04222393035888672f, -5.5783772468566895f),
+				new Vector2(12.45469331741333f, 67.93929815292358f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(154.4150948524475f, -160.55537700653076f),
+				new Vector2(185.5892539024353f, 2.8989267349243164f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(89.31862592697144f, -182.9452645778656f),
+				new Vector2(158.02403688430786f, -157.5610601902008f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(70.56520104408264f, -159.88481521606445f),
+				new Vector2(91.2093198299408f, 1.9711112976074219f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(107.50589370727539f, 1.5654397010803223f),
+				new Vector2(156.98833465576172f, 75.0831151008606f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(103.9190137386322f, 119.16249990463257f),
+				new Vector2(135.08880257606506f, 124.02336359024048f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(127.35429540276527f, 114.81724545359612f),
+				new Vector2(132.042867988348f, 115.444805175066f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(134.78045418858528f, 114.77835416793823f),
+				new Vector2(139.59044501185417f, 119.63921785354614f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(138.837880641222f, 103.47116708755493f),
+				new Vector2(143.6478714644909f, 115.37275075912476f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(127.37725496292114f, 103.22064377367496f),
+				new Vector2(139.55471754074097f, 103.87862227857113f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(107.74365663528442f, 103.14402520656586f),
+				new Vector2(128.022563457489f, 115.44482290744781f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(64.75916624069214f, 74.66835379600525f),
+				new Vector2(108.7635350227356f, 105.33715844154358f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(11.759467124938965f, 1.5654373168945312f),
+				new Vector2(104.14308071136475f, 71.92264080047607f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(11.759469509124756f, 74.62890058755875f),
+				new Vector2(61.50050401687622f, 79.25555795431137f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(0.36410093307495117f, 78.76856327056885f),
+				new Vector2(61.50048494338989f, 105.25779247283936f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-163.5484367609024f, -46.687615513801575f),
+				new Vector2(-151.8335098028183f, -27.750069499015808f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-168.4709495306015f, -159.4420337677002f),
+				new Vector2(-163.42213213443756f, -27.5991153717041f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-165.60160160064697f, -163.82354527711868f),
+				new Vector2(-114.36257839202881f, -158.77472132444382f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-114.87668454647064f, -159.4420337677002f),
+				new Vector2(-109.8278671503067f, -27.5991153717041f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-169.5159101486206f, -27.920445203781128f),
+				new Vector2(-118.41286182403564f, 8.081303834915161f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-114.87671375274658f, -27.940891981124878f),
+				new Vector2(-88.04564952850342f, 4.267534017562866f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-88.75124841928482f, 3.590989112854004f),
+				new Vector2(-83.72342199087143f, 50.79911708831787f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-84.60538864135742f, 50.056984424591064f),
+				new Vector2(0.8111953735351562f, 105.25779485702515f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-55.09624123573303f, 137.16913133859634f),
+				new Vector2(-33.53801131248474f, 143.292256295681f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-34.08017635345459f, 108.78418803215027f),
+				new Vector2(104.19849872589111f, 143.76811146736145f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-111.6797423362732f, 108.78418803215027f),
+				new Vector2(-54.74622964859009f, 143.76811146736145f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-124.96147453784943f, 94.39419150352478f),
+				new Vector2(-111.33960425853729f, 131.2423288822174f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-150.5501902103424f, 120.69405496120453f),
+				new Vector2(-122.96797156333923f, 135.29666006565094f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-177.77828812599182f, 94.39419150352478f),
+				new Vector2(-150.19606947898865f, 131.2423288822174f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-169.76149201393127f, 57.82462954521179f),
+				new Vector2(-142.1792733669281f, 94.67276692390442f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-158.3502173423767f, 7.694408893585205f),
+				new Vector2(-92.0298981666565f, 58.07585954666138f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-107.76008784770966f, 57.62707471847534f),
+				new Vector2(-92.02989399433136f, 105.26759386062622f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-138.92181038856506f, 61.505534648895264f),
+				new Vector2(-111.33959174156189f, 94.67278718948364f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-89.0821472927928f, 54.18705224990845f),
+				new Vector2(-88.14071495085955f, 108.70761632919312f)));
 	}
 
 	@Override

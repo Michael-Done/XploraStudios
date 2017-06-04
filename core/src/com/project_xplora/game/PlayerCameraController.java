@@ -45,6 +45,7 @@ public class PlayerCameraController extends InputAdapter {
 	private boolean lockedPosition = false;
 	private Vector3 rayFrom = new Vector3();
 	private Vector3 rayTo = new Vector3();
+	private Vector2 lastUnstuckPosition;
 
 	private Array<CollisionShape> collisions;
 
@@ -170,7 +171,12 @@ public class PlayerCameraController extends InputAdapter {
 				newPos = i.newPointCaclulation(current, old);
 			}
 		}
-		camera.position.set(newPos, camera.position.z);
+		if(newPos == null){
+			camera.position.set(lastUnstuckPosition, camera.position.z);
+		} else {
+			camera.position.set(newPos, camera.position.z);
+			lastUnstuckPosition = old;
+		}
 		camera.update(true);
 	}
 

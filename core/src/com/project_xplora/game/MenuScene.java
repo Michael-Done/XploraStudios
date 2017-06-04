@@ -237,7 +237,7 @@ public class MenuScene extends GameObjectController {
 		ProjectXploraGame.camera.far = 110f;
 		ProjectXploraGame.camera.update();
 		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
-		//cameraController.unlockPosition();
+		cameraController.lockPosition();
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
 	}
