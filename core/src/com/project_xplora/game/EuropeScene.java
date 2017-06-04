@@ -162,18 +162,8 @@ public class EuropeScene extends GameObjectController {
 	}
 
 	private void initalizeGroundObjectData() {
-		groundObjDataList.add(new GroundObjectData(new Vector3(0.7808113098144531f, 103.54530334472656f, 0f),
-				new Vector3(0, 0, 0), 0f, new Vector3(305.8158874511719f, 2.9371660947799683f, 0.8604385703802109f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(0.7808113098144531f, -12.949378490447998f, 0f),
-				new Vector3(0, 0, 0), 0f, new Vector3(305.8158874511719f, 5.040378570556641f, 0.8604385703802109f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(-62.8731107711792f, 0.0f, 0f), new Vector3(0, 0, 0), 0f,
-				new Vector3(4.537916779518127f, 305.8158493041992f, 0.8604381233453751f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(103.48421096801758f, 0.0f, 0f), new Vector3(0, 0, 0), 0f,
-				new Vector3(4.242778122425079f, 305.8158493041992f, 0.8604381233453751f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(7.559417486190796f, 0.0f, 0f), new Vector3(0, 0, 0), 0f,
-				new Vector3(3.8240551948547363f, 305.8158493041992f, 0.8604381233453751f)));
-		groundObjDataList.add(new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f,
-				new Vector3(305f, 305f, 0.05f)));
+		groundObjDataList.add(
+                new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f, new Vector3(305f, 305f, 1f)));
 	}
 
 	private void initalizeGrassLocations() {
@@ -289,7 +279,7 @@ public class EuropeScene extends GameObjectController {
 		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld, cameraController.getRayFrom(),
 				cameraController.getRayTo());
 		if (intersectLocation != null) {
-			cameraController.setZ(intersectLocation.z + 1);
+			cameraController.setZ(intersectLocation.z + 1.4f);
 		}
 	}
 	@Override
