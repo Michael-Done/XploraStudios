@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.project_xplora.game.GameObjectController;
 import com.project_xplora.game.Settings;
 
-public abstract class EducationalQuiz extends GameObjectController {
+public class EducationalQuiz extends GameObjectController {
 
 	private SpriteBatch quizBackground;
 	private Skin quizSkin;
@@ -29,7 +29,10 @@ public abstract class EducationalQuiz extends GameObjectController {
 	private List<String> questions, choices, answers;
 	private String userChosenAnswer;
 	private boolean generateQuestion;
-
+	private float screenWidth;
+	private float screenHeight;
+	private float relativeLocation; 
+	
 	//Constructor
 	public EducationalQuiz(Settings settings) {
 		super(settings);
@@ -50,6 +53,9 @@ public abstract class EducationalQuiz extends GameObjectController {
 		questions = new ArrayList<String>();
 		choices = new ArrayList<String>();
 		answers = new ArrayList<String>();
+		screenWidth = Gdx.graphics.getWidth();
+		screenHeight = Gdx.graphics.getHeight();
+		relativeLocation = screenWidth / screenHeight;
 	}
 
 	//Modifier Method
@@ -79,12 +85,40 @@ public abstract class EducationalQuiz extends GameObjectController {
 			questionsAsked.set(i, false);
 		}
 	}
+	
+	//Generates a question to be asked
+	private int generateQuestionNumber() {
+		int questionNumber;
+		if (isCycleFinished()) {
+			resetCycle();
+		}
+		while (true) {
+			questionNumber = (int) (10 * Math.random());
+			if (!questionsAsked.get(questionNumber))
+				break;
+		}
+		questionsAsked.set(questionNumber, true);
+		return questionNumber;
+	}
+	
+	//@Override - Overrides camera setup method
+	public void camSetup() {
+		Gdx.input.setCursorCatched(false);
+		Gdx.input.setInputProcessor(quizStage);
+	}
 
-	//Draws onto the screen
+	//Draws onto the screen every update
+	public void regularUpdates () {
+		
+	}
+	
+	//Draws onto the screen every time a question changes
+	public void updatePerQuestion () {
+		
+	}
+	
 	public void drawScreen() {
-		float screenWidth = Gdx.graphics.getWidth();
-		float screenHeight = Gdx.graphics.getHeight();
-		float relativeLocation = screenWidth / screenHeight;
+		
 		int questionNumber = generateQuestionNumber();
 
 		//Screen Setup
@@ -129,27 +163,6 @@ public abstract class EducationalQuiz extends GameObjectController {
 		quizTable.pack();
 		quizTable.center();
 		quizStage.addActor(quizTable);
-	}
-
-	//Generates a question to be asked
-	private int generateQuestionNumber() {
-		int questionNumber;
-		if (isCycleFinished()) {
-			resetCycle();
-		}
-		while (true) {
-			questionNumber = (int) (10 * Math.random());
-			if (!questionsAsked.get(questionNumber))
-				break;
-		}
-		questionsAsked.set(questionNumber, true);
-		return questionNumber;
-	}
-
-	//@Override - Overrides camera setup method
-	public void camSetup() {
-		Gdx.input.setCursorCatched(false);
-		Gdx.input.setInputProcessor(quizStage);
 	}
 
 	//Updates screen
