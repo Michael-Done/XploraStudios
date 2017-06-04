@@ -28,11 +28,12 @@ public class EducationalQuiz extends GameObjectController {
 	private List<Texture> quizGraphics;
 	private List<String> questions, choices, answers;
 	private String userChosenAnswer;
+	private int questionNumber;
 	private boolean generateQuestion;
 	private float screenWidth;
 	private float screenHeight;
-	private float relativeLocation; 
-	
+	private float relativeLocation;
+
 	//Constructor
 	public EducationalQuiz(Settings settings) {
 		super(settings);
@@ -43,9 +44,6 @@ public class EducationalQuiz extends GameObjectController {
 		quizScreen = new Texture(Gdx.files.internal("ChestUnlockScreen.jpg"));
 		lineSeparator = new Texture(Gdx.files.internal("LineSeparator.png"));
 		quizFont = new BitmapFont(Gdx.files.internal("quizFont.fnt"));
-		option1 = new TextButton("A", quizSkin);
-		option2 = new TextButton("B", quizSkin);
-		option3 = new TextButton("C", quizSkin);
 		userChosenAnswer = "";
 		generateQuestion = true;
 		questionsAsked = new ArrayList<Boolean>();
@@ -56,6 +54,39 @@ public class EducationalQuiz extends GameObjectController {
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
 		relativeLocation = screenWidth / screenHeight;
+
+		option1 = new TextButton("A", quizSkin);
+		option2 = new TextButton("B", quizSkin);
+		option3 = new TextButton("C", quizSkin);
+		option1.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				userChosenAnswer = "a";
+				generateQuestion = true;
+			}
+		});
+		option2.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				userChosenAnswer = "b";
+				generateQuestion = true;
+			}
+		});
+
+		option3.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				userChosenAnswer = "c";
+				generateQuestion = true;
+			}
+		});
+		quizTable.add(option1);
+		quizTable.row();
+		quizTable.add(option2);
+		quizTable.row();
+		quizTable.add(option3);
+		quizTable.setX(1300f);
+		quizTable.setY(500f);
+		quizTable.pack();
+		quizTable.center();
+		quizStage.addActor(quizTable);
 	}
 
 	//Modifier Method
@@ -72,7 +103,7 @@ public class EducationalQuiz extends GameObjectController {
 
 	//Checks if all the questions have been answered
 	private boolean isCycleFinished() {
-		for (boolean sweeper : questionsAsked) {
+		for (Boolean sweeper : questionsAsked) {
 			if (!sweeper)
 				return false;
 		}
@@ -85,7 +116,7 @@ public class EducationalQuiz extends GameObjectController {
 			questionsAsked.set(i, false);
 		}
 	}
-	
+
 	//Generates a question to be asked
 	private int generateQuestionNumber() {
 		int questionNumber;
@@ -100,7 +131,7 @@ public class EducationalQuiz extends GameObjectController {
 		questionsAsked.set(questionNumber, true);
 		return questionNumber;
 	}
-	
+
 	//@Override - Overrides camera setup method
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
@@ -108,67 +139,23 @@ public class EducationalQuiz extends GameObjectController {
 	}
 
 	//Draws onto the screen every update
-	public void regularUpdates () {
-		
-	}
-	
-	//Draws onto the screen every time a question changes
-	public void updatePerQuestion () {
-		
-	}
-	
-	public void drawScreen() {
-		
-		int questionNumber = generateQuestionNumber();
-
-		//Screen Setup
+	public void regularUpdates(int questionNumber) {
 		quizBackground.draw(quizScreen, 0, 0, screenWidth, screenHeight);
 		quizBackground.draw(lineSeparator, 850, 250);
 		quizFont.draw(quizBackground, "Question: " + questions.get(questionNumber), 90, 750);
 		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 1100, 550);
 		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 1100, 475);
 		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 1100, 400);
-		//generateQuestion = false;
-		
-		//Add Listeners to Buttons 
-		option1.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				userChosenAnswer = "a";
-			}
-		});
-
-		option2.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				userChosenAnswer = "b";
-			}
-		});
-
-		option3.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				userChosenAnswer = "c";
-			}
-		});
-
-		//Add Buttons to Stage
-		quizTable.add(option1);
-		quizTable.row();
-		quizTable.add(option2);
-		quizTable.row();
-		quizTable.add(option3);
-		quizTable.setX(1300f);
-		quizTable.setY(500f);
-		quizTable.pack();
-		quizTable.center();
-		quizStage.addActor(quizTable);
 	}
 
 	//Updates screen
 	public void update() {
+		if (generateQuestion) {
+			questionNumber = generateQuestionNumber();
+			generateQuestion = false;
+		}
 		quizBackground.begin();
-		drawScreen ();
+		regularUpdates(questionNumber);
 		quizBackground.end();
 		quizStage.draw();
 	}
