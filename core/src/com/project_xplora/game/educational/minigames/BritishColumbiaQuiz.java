@@ -18,7 +18,7 @@ public class BritishColumbiaQuiz extends EducationalQuiz {
 
 	public BritishColumbiaQuiz(Settings currentSettings) {
 		super(currentSettings);
-		placeHolder = new Texture (Gdx.files.internal(""));
+		placeHolder = new Texture (Gdx.files.internal("BoardwalkTexture.png"));
 		
 		super.addElements(placeHolder, "Which landform region is British Columbia situated in?",
 				"Western Cordillera Region", "Interior Plains", "Hudson Bay Lowlands", "a");

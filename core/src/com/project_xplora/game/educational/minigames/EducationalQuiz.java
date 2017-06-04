@@ -1,5 +1,6 @@
 package com.project_xplora.game.educational.minigames;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +16,7 @@ import com.project_xplora.game.GameObjectController;
 import com.project_xplora.game.Settings;
 
 public abstract class EducationalQuiz extends GameObjectController {
-	
+
 	private SpriteBatch quizBackground;
 	private Skin quizSkin;
 	private Table quizTable;
@@ -44,6 +45,11 @@ public abstract class EducationalQuiz extends GameObjectController {
 		option3 = new TextButton("C", quizSkin);
 		userChosenAnswer = "";
 		generateQuestion = true;
+		questionsAsked = new ArrayList<Boolean>();
+		quizGraphics = new ArrayList<Texture>();
+		questions = new ArrayList<String>();
+		choices = new ArrayList<String>();
+		answers = new ArrayList<String>();
 	}
 
 	//Modifier Method
@@ -57,7 +63,7 @@ public abstract class EducationalQuiz extends GameObjectController {
 		answers.add(answer);
 		questionsAsked.add(false);
 	}
-	
+
 	//Checks if all the questions have been answered
 	private boolean isCycleFinished() {
 		for (boolean sweeper : questionsAsked) {
@@ -66,18 +72,19 @@ public abstract class EducationalQuiz extends GameObjectController {
 		}
 		return true;
 	}
-	
+
 	//Resets the question tracker, allowing all questions to be asked again
 	private void resetCycle() {
-		for (int i = 0; i < questionsAsked.size (); i++) {
+		for (int i = 0; i < questionsAsked.size(); i++) {
 			questionsAsked.set(i, false);
 		}
 	}
-	
+
 	//Draws onto the screen
 	public void drawScreen() {
-		int screenWidth = Gdx.graphics.getWidth();
-		int screenHeight = Gdx.graphics.getHeight();
+		float screenWidth = Gdx.graphics.getWidth();
+		float screenHeight = Gdx.graphics.getHeight();
+		float relativeLocation = screenWidth / screenHeight;
 		int questionNumber = generateQuestionNumber();
 
 		//Screen Setup
@@ -87,29 +94,30 @@ public abstract class EducationalQuiz extends GameObjectController {
 		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 1100, 550);
 		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 1100, 475);
 		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 1100, 400);
-
+		//generateQuestion = false;
+		
 		//Add Listeners to Buttons 
-		option1.addListener (new ClickListener() {
+		option1.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "a";
 			}
 		});
-		
-		option2.addListener (new ClickListener() {
+
+		option2.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "b";
 			}
 		});
-		
+
 		option3.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "c";
 			}
 		});
-		
+
 		//Add Buttons to Stage
 		quizTable.add(option1);
 		quizTable.row();
@@ -120,12 +128,11 @@ public abstract class EducationalQuiz extends GameObjectController {
 		quizTable.setY(500f);
 		quizTable.pack();
 		quizTable.center();
-		quizStage.addActor (quizTable);
+		quizStage.addActor(quizTable);
 	}
 
-	
 	//Generates a question to be asked
-	private int generateQuestionNumber () {
+	private int generateQuestionNumber() {
 		int questionNumber;
 		if (isCycleFinished()) {
 			resetCycle();
@@ -138,21 +145,21 @@ public abstract class EducationalQuiz extends GameObjectController {
 		questionsAsked.set(questionNumber, true);
 		return questionNumber;
 	}
-	
+
 	//@Override - Overrides camera setup method
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(quizStage);
 	}
-	
+
 	//Updates screen
 	public void update() {
 		quizBackground.begin();
-		drawScreen();
+		drawScreen ();
 		quizBackground.end();
 		quizStage.draw();
-	}	
-	
+	}
+
 	//Dispose of all resources
 	public void disposeAll() {
 		quizBackground.dispose();
