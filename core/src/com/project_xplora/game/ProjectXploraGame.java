@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
+import com.project_xplora.game.PauseMenu.PauseStage;
 import com.project_xplora.game.educational.minigames.BritishColumbiaQuiz;
 
 public class ProjectXploraGame implements ApplicationListener {
@@ -36,11 +37,11 @@ public class ProjectXploraGame implements ApplicationListener {
 	ObjectMap<Level, GameObjectController> scenes;
 	Settings settings;
 	public ArrayList<PlayerData> players;
-
+	public boolean paused = false;
 	public enum Level {
 		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1
 	}
-
+	PauseMenu pauseMenu;
 	Level currentScene;
 	public int screenWidth;
 	public int screenHeight;
@@ -51,6 +52,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	@Override
 	public void create() {
 		Bullet.init();
+		pauseMenu = new PauseMenu();
 		// Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),
 		// true);
 		try {
@@ -90,8 +92,8 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.EUROPE, new EuropeScene(settings));
 		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		// For testing purposes
-		currentScene = Level.MINIGAME1;
-		//currentScene = Level.EUROPE;
+		//currentScene = Level.MINIGAME1;
+		currentScene = Level.MENU;
 
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
@@ -127,7 +129,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		// Update current scene
 		scenes.get(currentScene).update();
 		if (currentScene == Level.SETTINGS) {
-			Gdx.gl.glClearColor(0.449f, 0.645f, 0.739f, 1);
+			Gdx.gl.glClearColor(0.449f, 0.645f, 0.739f, 1f);
 		} else {
 			// Draw all model instances using the camera
 			modelBatch.begin(camera);
@@ -209,6 +211,21 @@ public class ProjectXploraGame implements ApplicationListener {
 			}
 		default:
 			break;
+		}
+		if(scenes.get(currentScene).paused && !paused){
+			paused = true;
+			pauseMenu.setPrevious();
+			Gdx.input.setCursorCatched(false);
+			((PauseStage)pauseMenu.stage).paused = true;
+			Gdx.input.setInputProcessor(pauseMenu.stage);
+		} else if(!((PauseStage)pauseMenu.stage).paused && paused){
+			paused = false;
+			pauseMenu.restorePrevious();
+			scenes.get(currentScene).unPause();
+			
+		}
+		if(paused){
+			pauseMenu.update();
 		}
 	}
 

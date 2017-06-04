@@ -36,6 +36,8 @@ public class GameObjectController {
 	public int screenWidth;
 	/** The height of the screen */
 	public int screenHeight;
+	/** true if the game is paused */
+	public boolean paused = false;
 	/** Class constructor used to initalize settings and objects */
 	public GameObjectController(Settings settings) {
 		objects = new Array<ModelInstance>();
@@ -170,7 +172,18 @@ public class GameObjectController {
 	/** updates all aspects of the scene */
 	public void update() {
 		updateCamera();
+		if(cameraController != null && cameraController.paused){
+			pause();
+		} 
 	}
-	
+	public void pause(){
+		paused = true;
+	}
+	public void unPause(){
+		paused = false;
+		if(cameraController != null){
+			cameraController.unPause();
+		}
+	}
 	
 }

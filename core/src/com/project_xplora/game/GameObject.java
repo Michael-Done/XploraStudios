@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class GameObject extends ModelInstance implements Disposable {
 	public final btCollisionObject body;
-	
+
 	public GameObject(Model model, btCollisionShape shape, Vector3 loc) {
 		super(model);
 		this.transform.translate(loc);
@@ -22,16 +22,18 @@ public class GameObject extends ModelInstance implements Disposable {
 		body.setWorldTransform(this.transform);
 		this.transform.rotate(1, 0, 0, 90);
 	}
-	
+
 	public GameObject(Model model, btCollisionShape shape) {
 		this(model, shape, new Vector3(0, 0, 0));
 	}
+
 	public GameObject(Model model, Vector3 loc) {
 		super(model);
 		this.transform.translate(loc);
 		this.transform.rotate(1, 0, 0, 90);
 		body = null;
 	}
+
 	public GameObject(Model model, Vector3 loc, Vector3 rot) {
 		super(model);
 		this.transform.translate(loc);
@@ -41,16 +43,24 @@ public class GameObject extends ModelInstance implements Disposable {
 		this.transform.rotate(1, 0, 0, 90);
 		body = null;
 	}
-	public GameObject(Model model, Vector3 loc, Vector3 axis, float angle){
+
+	public GameObject(Model model, Vector3 loc, Vector3 axis, float angle) {
 		super(model);
 		this.transform.translate(loc);
 		this.transform.rotate(axis, angle);
 		body = null;
 	}
+
 	public GameObject(Model model) {
 		super(model);
 		this.transform.rotate(1, 0, 0, 90);
 		body = null;
+	}
+
+	public void rotate(Vector3 axis, float rot) {
+		this.transform.rotate(1, 0, 0, -90);
+		this.transform.rotate(axis, rot);
+		this.transform.rotate(1, 0, 0, 90);
 	}
 
 	@Override

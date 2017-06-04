@@ -39,6 +39,7 @@ public class PlayerCameraController extends InputAdapter {
 	private int BACKWARD = Keys.S;
 	private int UP = Keys.Q;
 	private int DOWN = Keys.E;
+	private int PAUSE = Keys.ESCAPE;
 	private float velocity = 5;
 	private float degreesPerPixel = 0.5f;
 	private final Vector3 tmp = new Vector3();
@@ -46,6 +47,7 @@ public class PlayerCameraController extends InputAdapter {
 	private Vector3 rayFrom = new Vector3();
 	private Vector3 rayTo = new Vector3();
 	private Vector2 lastUnstuckPosition;
+	public boolean paused = false;
 
 	private Array<CollisionShape> collisions;
 
@@ -66,6 +68,7 @@ public class PlayerCameraController extends InputAdapter {
 		STRAFE_LEFT = settings.getStrafe_left();
 		STRAFE_RIGHT = settings.getStrafe_right();
 		degreesPerPixel = (((float) settings.getMouseSens()) / 100) / 2;
+		PAUSE = settings.getPause();
 	}
 
 	public void lockPosition() {
@@ -124,10 +127,13 @@ public class PlayerCameraController extends InputAdapter {
 	}
 
 	public void update(float deltaTime) {
+		if (keys.containsKey(PAUSE) && !paused) {
+			pause();
+		}
 		rayFrom.set(camera.position);
 		rayTo.set(camera.position.x, camera.position.y, -20f);
 		Vector2 old = new Vector2(camera.position.x, camera.position.y);
-		if (!lockedPosition) {
+		if (!lockedPosition && !paused) {
 			if (keys.containsKey(Keys.SHIFT_LEFT)) {
 				velocity = 50;
 			} else {
@@ -135,43 +141,43 @@ public class PlayerCameraController extends InputAdapter {
 			}
 			if (keys.containsKey(FORWARD)) {
 				tmp.set(camera.direction).nor().scl(deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(BACKWARD)) {
 				tmp.set(camera.direction).nor().scl(-deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(STRAFE_LEFT)) {
 				tmp.set(camera.direction).crs(camera.up).nor().scl(-deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(STRAFE_RIGHT)) {
 				tmp.set(camera.direction).crs(camera.up).nor().scl(deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(UP)) {
 				tmp.set(camera.up).nor().scl(deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 			if (keys.containsKey(DOWN)) {
 				tmp.set(camera.up).nor().scl(-deltaTime * velocity);
-				//tmp.z = 0;
+				// tmp.z = 0;
 				camera.position.add(tmp);
 			}
 		}
 		Vector2 current = new Vector2(camera.position.x, camera.position.y);
 		Vector2 newPos = new Vector2(current);
-		for(CollisionShape i : collisions){
-			if(i.isInside(current)){
+		for (CollisionShape i : collisions) {
+			if (i.isInside(current)) {
 				newPos = i.newPointCaclulation(newPos, old);
 			}
 		}
-		if(newPos == null){
+		if (newPos == null) {
 			camera.position.set(lastUnstuckPosition, camera.position.z);
 		} else {
 			camera.position.set(newPos, camera.position.z);
@@ -211,8 +217,22 @@ public class PlayerCameraController extends InputAdapter {
 	public Vector3 getRayTo() {
 		return rayTo;
 	}
-	
-	public void addCollision(CollisionShape c){
+
+	public void addCollision(CollisionShape c) {
 		collisions.add(c);
+	}
+
+	public void pause() {
+		paused = true;
+	}
+
+	public void unPause() {
+		paused = false;
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
