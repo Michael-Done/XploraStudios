@@ -38,7 +38,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	public ArrayList<PlayerData> players;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1
 	}
 
 	Level currentScene;
@@ -88,9 +88,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.CREDITS, new CreditsScene(settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		scenes.put(Level.EUROPE, new EuropeScene(settings));
-		scenes.put(Level.MINIGAME, new BritishColumbiaQuiz(settings));
+		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		// For testing purposes
-		currentScene = Level.MINIGAME;
+		currentScene = Level.MINIGAME1;
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
 		screenWidth = Gdx.graphics.getWidth();
