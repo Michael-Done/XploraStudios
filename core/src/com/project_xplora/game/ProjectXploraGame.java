@@ -88,9 +88,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.CREDITS, new CreditsScene(settings));
 		scenes.put(Level.ROME, new RomeScene(settings));
 		scenes.put(Level.EUROPE, new EuropeScene(settings));
-		//scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
+		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		// For testing purposes
-		currentScene = Level.MENU;
+		currentScene = Level.MINIGAME1;
 		//currentScene = Level.EUROPE;
 
 		scenes.get(currentScene).camSetup();
