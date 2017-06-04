@@ -21,15 +21,16 @@ public class EducationalQuiz extends GameObjectController {
 	private Skin quizSkin;
 	private Table quizTable;
 	private Stage quizStage;
-	private Texture quizScreen, lineSeparator;
+	private Texture quizScreen, lineSeparator, checkMark, crossMark;
 	private BitmapFont quizFont;
-	private TextButton option1, option2, option3;
+	private TextButton option1, option2, option3, continueButton;
 	private List<Boolean> questionsAsked;
 	private List<Texture> quizGraphics;
 	private List<String> questions, choices, answers;
 	private String userChosenAnswer;
 	private int questionNumber;
-	private boolean generateQuestion;
+	private boolean generateQuestion, isCorrect;
+
 	private float screenWidth;
 	private float screenHeight;
 	private float relativeLocation;
@@ -43,6 +44,8 @@ public class EducationalQuiz extends GameObjectController {
 		quizStage = new Stage();
 		quizScreen = new Texture(Gdx.files.internal("ChestUnlockScreen.jpg"));
 		lineSeparator = new Texture(Gdx.files.internal("LineSeparator.png"));
+		checkMark = new Texture(Gdx.files.internal("Check_mark.png"));
+		crossMark = new Texture(Gdx.files.internal("Red-Cross-Mark-PNG.png"));
 		quizFont = new BitmapFont(Gdx.files.internal("quizFont.fnt"));
 		userChosenAnswer = "";
 		generateQuestion = true;
@@ -58,32 +61,42 @@ public class EducationalQuiz extends GameObjectController {
 		option1 = new TextButton("A", quizSkin);
 		option2 = new TextButton("B", quizSkin);
 		option3 = new TextButton("C", quizSkin);
+		continueButton = new TextButton("Continue", quizSkin);
 		option1.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "a";
-				generateQuestion = true;
 			}
 		});
 		option2.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "b";
-				generateQuestion = true;
 			}
 		});
 
 		option3.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "c";
-				generateQuestion = true;
 			}
 		});
-		quizTable.add(option1);
+		continueButton.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				if (isCorrect) {
+					//Quit (should just return back to the current world)
+					Gdx.app.exit();
+				} else {
+					generateQuestion = true;
+				}
+			}
+		});
+		quizTable.add(option1).width(80).padTop(30).padLeft(50);
 		quizTable.row();
-		quizTable.add(option2);
+		quizTable.add(option2).width(80).padTop(30).padLeft(50);
 		quizTable.row();
-		quizTable.add(option3);
-		quizTable.setX(1300f);
-		quizTable.setY(500f);
+		quizTable.add(option3).width(80).padTop(30).padLeft(50);
+		quizTable.row();
+		quizTable.add(continueButton).padTop(155);
+		quizTable.setX(1580f);
+		quizTable.setY(65f);
 		quizTable.pack();
 		quizTable.center();
 		quizStage.addActor(quizTable);
@@ -132,6 +145,16 @@ public class EducationalQuiz extends GameObjectController {
 		return questionNumber;
 	}
 
+	private int setMarkLocation() {
+		if (userChosenAnswer.equals("a")) {
+			return 0;
+		} else if (userChosenAnswer.equals("b")) {
+			return 1;
+		} else {
+			return 2;
+		}
+	}
+
 	//@Override - Overrides camera setup method
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
@@ -143,9 +166,20 @@ public class EducationalQuiz extends GameObjectController {
 		quizBackground.draw(quizScreen, 0, 0, screenWidth, screenHeight);
 		quizBackground.draw(lineSeparator, 850, 250);
 		quizFont.draw(quizBackground, "Question: " + questions.get(questionNumber), 90, 750);
-		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 1100, 550);
-		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 1100, 475);
-		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 1100, 400);
+		quizFont.draw(quizBackground, "(Click on one of the multiple choice boxes)", 90, 705);
+		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 1100, 585);
+		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 1100, 470);
+		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 1100, 355);
+		if (!userChosenAnswer.equals("")) {
+			int markLocation = setMarkLocation ();
+			if (userChosenAnswer.equals(answers.get(questionNumber))) {
+				quizBackground.draw(checkMark, 1800, 545 - (markLocation * 115), 50, 50);
+				isCorrect = true;
+			} else {
+				quizBackground.draw(crossMark, 1800, 545 - (markLocation * 115), 50, 50);
+				isCorrect = false;
+			}
+		}
 	}
 
 	//Updates screen
@@ -153,6 +187,7 @@ public class EducationalQuiz extends GameObjectController {
 		if (generateQuestion) {
 			questionNumber = generateQuestionNumber();
 			generateQuestion = false;
+			userChosenAnswer = "";
 		}
 		quizBackground.begin();
 		regularUpdates(questionNumber);

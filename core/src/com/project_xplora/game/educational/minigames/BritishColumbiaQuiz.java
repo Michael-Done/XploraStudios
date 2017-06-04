@@ -40,7 +40,5 @@ public class BritishColumbiaQuiz extends EducationalQuiz {
 				"c");
 		super.addElements(placeHolder, "What type of climate does British Columbia generally have?", "Maritime Climate",
 				"Continental Climate", "Polar Climate", "a");
-		drawScreen();
-
 	}
 }
