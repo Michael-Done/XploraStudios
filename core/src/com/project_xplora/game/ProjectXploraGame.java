@@ -91,7 +91,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		// For testing purposes
 		currentScene = Level.MINIGAME1;
-		currentScene = Level.EUROPE;
+		//currentScene = Level.EUROPE;
 
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions

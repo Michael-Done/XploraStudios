@@ -27,6 +27,7 @@ public abstract class EducationalQuiz extends GameObjectController {
 	private List<Texture> quizGraphics;
 	private List<String> questions, choices, answers;
 	private String userChosenAnswer;
+	private boolean generateQuestion;
 
 	//Constructor
 	public EducationalQuiz(Settings settings) {
@@ -41,6 +42,8 @@ public abstract class EducationalQuiz extends GameObjectController {
 		option1 = new TextButton("A", quizSkin);
 		option2 = new TextButton("B", quizSkin);
 		option3 = new TextButton("C", quizSkin);
+		userChosenAnswer = "";
+		generateQuestion = true;
 	}
 
 	//Modifier Method
