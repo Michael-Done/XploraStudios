@@ -36,11 +36,6 @@ import com.project_xplora.collision_util.CollisionRect;
  */
 public class BritishColombiaScene extends GameObjectController {
 
-	// For testing
-	Array<Vector3> grassLocations = new Array<Vector3>();
-	Array<Vector3> activeGrass = new Array<Vector3>();
-	Array<Vector3> sleepingGrass = new Array<Vector3>();
-
 	Array<Vector3> treeLocations;
 	Model treeHighPoly;
 	Model treeLowPoly;
@@ -129,7 +124,7 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.finishLoading();
 	}
 
-	public void initalizeCollisionWorld() {
+	private void initalizeCollisionWorld() {
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
 		broadphase = new btDbvtBroadphase();
@@ -195,18 +190,6 @@ public class BritishColombiaScene extends GameObjectController {
 		Model a = mb.end();
 		collisionLocation = new ModelInstance(a);
 		// objects.add(collisionLocation);
-
-		for (int i = 0; i < 100000; i++) {
-			grassLocations.add(new Vector3((float) ((Math.random() * 305f) + 152.5f),
-					(float) ((Math.random() * 305f) + 152.5f), 0f));
-		}
-		for (Vector3 i : grassLocations) {
-			if (i.dst(new Vector3(0, 0, 0)) < 50) {
-				activeGrass.add(i);
-			} else {
-				sleepingGrass.add(i);
-			}
-		}
 	}
 
 	@Override

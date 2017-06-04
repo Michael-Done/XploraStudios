@@ -5,11 +5,30 @@ package com.project_xplora.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
+import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.utils.Array;
+import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
+import com.project_xplora.game.BritishColombiaScene.GroundObjectData;
 
 /**
  * @author Michael
@@ -19,18 +38,73 @@ public class EuropeScene extends GameObjectController {
 	Array<Vector3> grassLocations = new Array<Vector3>();
 
 	Array<Vector3> treeLocations = new Array<Vector3>();
+	private Array<GroundObjectData> groundObjDataList;
+
+	btCollisionConfiguration collisionConfig;
+	btDispatcher dispatcher;
+	btBroadphaseInterface broadphase;
+	btCollisionWorld collisionWorld;
 
 	private int counter = 0;
 	private int grassIndexStart;
 	Model tree;
 	Model wheat;
 
+	class GroundObjectData {
+		/** The location of the groundObject */
+		public Vector3 location;
+		/**
+		 * The axis that it is meant to rotate around will be set to 1. The
+		 * others will be set to 0
+		 */
+		public Vector3 rotateAround;
+		/** The rotation around the axis in degrees */
+		public float rotation;
+		/** The dimensions of the box */
+		public Vector3 dimensions;
+
+		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions) {
+			this.location = location;
+			this.rotateAround = rotateAround;
+			this.rotation = rotation;
+			this.dimensions = dimensions;
+		}
+
+		public btCollisionObject construct() {
+			btCollisionObject out = new btCollisionObject();
+			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x / 2, dimensions.y / 2, dimensions.z / 2));
+			out.setCollisionShape(shape);
+			Matrix4 transform = new Matrix4();
+			transform.setTranslation(location);
+			transform.rotate(rotateAround.x, rotateAround.y, rotateAround.z, rotation);
+			out.setWorldTransform(transform);
+			return out;
+		}
+
+		public ModelInstance constructModel() {
+			ModelBuilder mb = new ModelBuilder();
+			mb.begin();
+			mb.node().id = "ground";
+			mb.part("box", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal,
+					new Material(ColorAttribute.createDiffuse(Color.RED)))
+					.box(dimensions.x, dimensions.y, dimensions.z);
+			Model a = mb.end();
+			ModelInstance testObj = new ModelInstance(a);
+			testObj.transform.translate(location);
+			testObj.transform.rotate(rotateAround, rotation);
+			return testObj;
+		}
+	}
+
 	/**
 	 * @param settings
 	 */
 	public EuropeScene(Settings settings) {
 		super(settings);
+		groundObjDataList = new Array<GroundObjectData>();
 		initalizeGrassLocations();
+		initalizeGroundObjectData();
+		initalizeCollisionWorld();
 		initalize();
 		// initalizeCollisionShapes();
 		// TODO Auto-generated constructor stub
@@ -76,6 +150,32 @@ public class EuropeScene extends GameObjectController {
 		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
 	}
 
+	private void initalizeCollisionWorld() {
+		collisionConfig = new btDefaultCollisionConfiguration();
+		dispatcher = new btCollisionDispatcher(collisionConfig);
+		broadphase = new btDbvtBroadphase();
+		collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
+
+		for (GroundObjectData i : groundObjDataList) {
+			collisionWorld.addCollisionObject(i.construct());
+		}
+	}
+
+	private void initalizeGroundObjectData() {
+		groundObjDataList.add(new GroundObjectData(new Vector3(0.7808113098144531f, 103.54530334472656f, 0f),
+				new Vector3(0, 0, 0), 0f, new Vector3(305.8158874511719f, 2.9371660947799683f, 0.8604385703802109f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(0.7808113098144531f, -12.949378490447998f, 0f),
+				new Vector3(0, 0, 0), 0f, new Vector3(305.8158874511719f, 5.040378570556641f, 0.8604385703802109f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(-62.8731107711792f, 0.0f, 0f), new Vector3(0, 0, 0), 0f,
+				new Vector3(4.537916779518127f, 305.8158493041992f, 0.8604381233453751f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(103.48421096801758f, 0.0f, 0f), new Vector3(0, 0, 0), 0f,
+				new Vector3(4.242778122425079f, 305.8158493041992f, 0.8604381233453751f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(7.559417486190796f, 0.0f, 0f), new Vector3(0, 0, 0), 0f,
+				new Vector3(3.8240551948547363f, 305.8158493041992f, 0.8604381233453751f)));
+		groundObjDataList.add(new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f,
+				new Vector3(305f, 305f, 0.05f)));
+	}
+
 	private void initalizeGrassLocations() {
 		for (int i = 0; i < 500; i++) {
 			float random1 = (float) Math.random();
@@ -87,6 +187,14 @@ public class EuropeScene extends GameObjectController {
 	}
 
 	private void initalizeCollisionShapes() {
+		// Circles
+		cameraController.addCollision(
+				new CollisionCircle(new Vector2(30.526680946350098f, 54.840006828308105f), 2.816077470779419f));
+		cameraController.addCollision(
+				new CollisionCircle(new Vector2(-55.17082214355469f, -1.6269731521606445f), 3.534199893474579f));
+		cameraController.addCollision(
+				new CollisionCircle(new Vector2(-47.58145332336426f, -1.6523444652557373f), 4.6844998002052305f));
+		// Fences
 		cameraController.addCollision(new CollisionRect(new Vector2(99.7129111328125f, 88.19154660949707f),
 				new Vector2(100.4299111328125f, 94.11384660949707f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(99.71290159606933f, 78.90683095703125f),
@@ -119,6 +227,44 @@ public class EuropeScene extends GameObjectController {
 				new Vector2(-31.48154895553589f, 7.673856731414795f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-28.73270113220215f, 6.956856731414795f),
 				new Vector2(-22.81040113220215f, 7.673856731414795f)));
+		// Other rectangles
+		cameraController.addCollision(new CollisionRect(new Vector2(-120.40060937404633f, -118.99113297462463f),
+				new Vector2(121.64010107517242f, -98.99112105369568f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-131.75570487976074f, -109.6879243850708f),
+				new Vector2(-111.75570487976074f, 121.3231611251831f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-120.40060937404633f, 110.83854079246521f),
+				new Vector2(121.64010107517242f, 130.83855271339417f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(108.29254150390625f, -109.6879243850708f),
+				new Vector2(128.29254150390625f, 121.3231611251831f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(32.14639276266098f, 61.36067569255829f),
+				new Vector2(38.81988912820816f, 64.5529443025589f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(33.223433792591095f, 56.29160165786743f),
+				new Vector2(36.12490624189377f, 64.22887563705444f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(31.919093430042267f, 48.6991286277771f),
+				new Vector2(35.21079033613205f, 56.63640260696411f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(33.882989287376404f, 51.2932725250721f),
+				new Vector2(44.41566526889801f, 55.72522684931755f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(22.718040347099304f, 51.89569905400276f),
+				new Vector2(33.25071632862091f, 56.327653378248215f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(54.488380029797554f, -47.124542370438576f),
+				new Vector2(55.440018102526665f, -45.527883395552635f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(52.30178602039814f, -47.124542370438576f),
+				new Vector2(53.25342409312725f, -45.527883395552635f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(52.30178602039814f, -53.94748389720917f),
+				new Vector2(53.25342409312725f, -50.455601811409f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(54.488380029797554f, -53.94748389720917f),
+				new Vector2(55.440018102526665f, -50.455601811409f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(52.95559659600258f, -53.589298725128174f),
+				new Vector2(54.65454325079918f, -44.21845197677612f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-24.412243366241455f, -75.09800285100937f),
+				new Vector2(-10.467214584350586f, -68.22482734918594f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-55.07857918739319f, -8.582870811223984f),
+				new Vector2(-50.79247832298279f, -4.307706505060196f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-55.24659901857376f, -5.161173045635223f),
+				new Vector2(-48.72824877500534f, 1.9072267413139343f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-48.95018517971039f, -6.3368600606918335f),
+				new Vector2(-29.188843369483948f, 3.032171130180359f)));
+
 	}
 
 	@Override
@@ -137,7 +283,15 @@ public class EuropeScene extends GameObjectController {
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
 	}
-
+	@Override
+	public void updateCamera(){
+		super.updateCamera();
+		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld, cameraController.getRayFrom(),
+				cameraController.getRayTo());
+		if (intersectLocation != null) {
+			cameraController.setZ(intersectLocation.z + 1);
+		}
+	}
 	@Override
 	public void loadModelInstances() {
 		initalizeTrees();
