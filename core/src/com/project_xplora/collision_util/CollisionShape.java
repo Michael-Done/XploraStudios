@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 public abstract class CollisionShape {
-	
+	protected float margin;
 	public abstract boolean isInside(Vector2 point);
 	
 	public boolean isInside(float x, float y){

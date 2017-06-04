@@ -27,6 +27,7 @@ public class CollisionRect extends CollisionShape {
 	public CollisionRect(Vector2 sw, Vector2 ne) { // Liam was here
 		this.ne = ne;
 		this.sw = sw;
+		margin = 0.15f;
 	}
 
 	/*
@@ -38,7 +39,8 @@ public class CollisionRect extends CollisionShape {
 	 */
 	@Override
 	public boolean isInside(Vector2 point) {
-		return (point.x < ne.x && point.x > sw.x && point.y < ne.y && point.y > sw.y);
+		return (point.x < ne.x + margin && point.x > sw.x + margin && point.y < ne.y + margin
+				&& point.y > sw.y + margin);
 
 	}
 
@@ -51,14 +53,14 @@ public class CollisionRect extends CollisionShape {
 	 */
 	@Override
 	public Vector2 newPointCaclulation(Vector2 currentPoint, Vector2 lastPoint) {
-		if (lastPoint.x <= sw.x) {
-			return new Vector2(sw.x, currentPoint.y);
-		} else if (lastPoint.x >= ne.x) {
-			return new Vector2(ne.x, currentPoint.y);
-		} else if (lastPoint.y <= sw.y) {
-			return new Vector2(currentPoint.x, sw.y);
-		} else if (lastPoint.y >= ne.y) {
-			return new Vector2(currentPoint.x, ne.y);
+		if (lastPoint.x <= sw.x + margin) {
+			return new Vector2(sw.x + margin, currentPoint.y);
+		} else if (lastPoint.x >= ne.x + margin) {
+			return new Vector2(ne.x + margin, currentPoint.y);
+		} else if (lastPoint.y <= sw.y + margin) {
+			return new Vector2(currentPoint.x, sw.y + margin);
+		} else if (lastPoint.y >= ne.y + margin) {
+			return new Vector2(currentPoint.x, ne.y + margin);
 		}
 		return null;
 	}

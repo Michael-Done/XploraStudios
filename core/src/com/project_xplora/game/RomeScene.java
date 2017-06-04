@@ -323,6 +323,7 @@ public class RomeScene extends GameObjectController {
 	}
 
 	private void initalizeCollisionShapes() {
+		//Gardens
 		cameraController.addCollision(new CollisionRect(new Vector2(-29.826101821899414f, 7.16373787689209f),
 				new Vector2(-26.338101821899414f, 17.14773787689209f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-29.826101821899414f, -17.14773787689209f),
@@ -371,7 +372,7 @@ public class RomeScene extends GameObjectController {
 				new Vector2(-33.604382141113284f, 6.120766204833984f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-43.58838214111328f, -6.120766204833984f),
 				new Vector2(-33.604382141113284f, -2.6327662048339846f)));
-
+		// Pillars and things
 		cameraController.addCollision(new CollisionCircle(new Vector2(34.128379821777344f, 0.0f), 0.362667977809906f));
 		cameraController.addCollision(new CollisionCircle(new Vector2(-34.12837600708008f, 0.0f), 0.362667977809906f));
 		cameraController.addCollision(
@@ -464,7 +465,19 @@ public class RomeScene extends GameObjectController {
 				new CollisionCircle(new Vector2(-49.673484802246094f, -23.829975128173828f), 4.645557880401611f));
 		cameraController.addCollision(
 				new CollisionCircle(new Vector2(7.38139192435483e-07f, 4.3903237383347005e-06f), 13.983842086791992f));
-
+		// Buildings and things
+		cameraController.addCollision(new CollisionRect(new Vector2(-32.03529739379883f, -41.55672907829285f),
+				new Vector2(32.03529739379883f, -34.659098863601685f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-68.64632797241211f, 38.4137909412384f),
+				new Vector2(-30.434741973876953f, 45.311421155929565f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-70.9070680141449f, 5.796358108520508f),
+				new Vector2(-64.0094358921051f, 44.00794792175293f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-68.64632797241211f, 5.706010937690735f),
+				new Vector2(-31.21017074584961f, 9.29045569896698f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-35.0759482383728f, 8.72654914855957f),
+				new Vector2(-31.208948612213135f, 21.036745071411133f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-36.075860023498535f, 19.663848638534546f),
+				new Vector2(-30.209036827087402f, 21.547523736953735f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-36.075860023498535f, 26.06398057937622f),
 				new Vector2(-30.209036827087402f, 27.97468137741089f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-35.0759482383728f, 27.62836456298828f),
