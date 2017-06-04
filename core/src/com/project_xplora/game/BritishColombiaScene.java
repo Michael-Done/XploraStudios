@@ -28,6 +28,7 @@ import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.utils.Array;
+import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
 
 /**
@@ -284,6 +285,10 @@ public class BritishColombiaScene extends GameObjectController {
 				new Vector2(-111.33959174156189f, 94.67278718948364f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-89.0821472927928f, 54.18705224990845f),
 				new Vector2(-88.14071495085955f, 108.70761632919312f)));
+		
+		for(Vector3 i : treeLocations){
+			cameraController.addCollision(new CollisionCircle(new Vector2(i.x, i.y), 1.5f));
+		}
 	}
 
 	@Override
@@ -836,14 +841,12 @@ public class BritishColombiaScene extends GameObjectController {
 		treeLocations.add(new Vector3(-125.64295768737793f, 7.688775062561035f, 23.106443881988525f));
 		treeLocations.add(new Vector3(-122.39365577697754f, 7.760891318321228f, 23.106446266174316f));
 		treeLocations.add(new Vector3(-112.19704627990723f, 1.168757677078247f, 22.788336277008057f));
-		treeLocations.add(new Vector3(-106.88112258911133f, 3.2711201906204224f, 20.650131702423096f));
 		treeLocations.add(new Vector3(-125.3188705444336f, 29.602198600769043f, 23.106441497802734f));
 		treeLocations.add(new Vector3(-123.42514991760254f, 20.318758487701416f, 23.106441497802734f));
 		treeLocations.add(new Vector3(-118.86388778686523f, 18.426204919815063f, 23.106443881988525f));
 		treeLocations.add(new Vector3(-116.83226585388184f, 15.598435401916504f, 23.106441497802734f));
 		treeLocations.add(new Vector3(-120.96467971801758f, 10.529276132583618f, 23.106441497802734f));
 		treeLocations.add(new Vector3(-98.51947784423828f, 13.396809101104736f, 22.77071237564087f));
-		treeLocations.add(new Vector3(-92.50558853149414f, 21.9486141204834f, 23.106443881988525f));
 		treeLocations.add(new Vector3(-98.46853256225586f, 17.31127142906189f, 23.106441497802734f));
 		treeLocations.add(new Vector3(8.375862836837769f, 31.375598907470703f, 3.296351730823517f));
 		treeLocations.add(new Vector3(-111.13079071044922f, 43.273258209228516f, 25.093955993652344f));
@@ -856,8 +859,6 @@ public class BritishColombiaScene extends GameObjectController {
 		treeLocations.add(new Vector3(-107.23898887634277f, 42.89004325866699f, 23.106443881988525f));
 		treeLocations.add(new Vector3(-105.85049629211426f, 49.57308769226074f, 25.827503204345703f));
 		treeLocations.add(new Vector3(-90.69664001464844f, 42.91548252105713f, 23.106441497802734f));
-		treeLocations.add(new Vector3(-89.95620727539062f, 36.200547218322754f, 23.106443881988525f));
-		treeLocations.add(new Vector3(-91.40037536621094f, 41.14053726196289f, 23.106441497802734f));
 		treeLocations.add(new Vector3(-15.661619901657104f, 30.36738395690918f, 4.119799435138702f));
 		treeLocations.add(new Vector3(23.305726051330566f, 35.22562265396118f, 5.921305418014526f));
 		treeLocations.add(new Vector3(-85.3123950958252f, 48.56708526611328f, 23.106443881988525f));
@@ -884,20 +885,15 @@ public class BritishColombiaScene extends GameObjectController {
 		treeLocations.add(new Vector3(33.385045528411865f, 62.81205654144287f, 23.872339725494385f));
 		treeLocations.add(new Vector3(71.22486114501953f, 78.50456237792969f, 14.69279170036316f));
 		treeLocations.add(new Vector3(93.5478401184082f, 84.40260887145996f, 19.21115279197693f));
-		treeLocations.add(new Vector3(58.28172206878662f, 71.24260902404785f, 10.335695743560791f));
 		treeLocations.add(new Vector3(51.895413398742676f, 69.20557498931885f, 12.127304077148438f));
 		treeLocations.add(new Vector3(79.28991794586182f, 88.85946273803711f, 20.187172889709473f));
-		treeLocations.add(new Vector3(47.20085620880127f, 72.0529842376709f, 13.511165380477905f));
 		treeLocations.add(new Vector3(-47.583656311035156f, 63.164873123168945f, 22.807252407073975f));
 		treeLocations.add(new Vector3(-41.45383358001709f, 62.53499507904053f, 25.15523910522461f));
 		treeLocations.add(new Vector3(50.04824161529541f, 86.80651664733887f, 12.87721872329712f));
 		treeLocations.add(new Vector3(-49.16046619415283f, 77.67490863800049f, 21.141035556793213f));
-		treeLocations.add(new Vector3(74.88038539886475f, 108.06333541870117f, 34.71426010131836f));
-		treeLocations.add(new Vector3(54.217586517333984f, 107.31576919555664f, 33.15035820007324f));
 		treeLocations.add(new Vector3(-58.296241760253906f, 128.9216136932373f, 26.109132766723633f));
 		treeLocations.add(new Vector3(48.99434566497803f, 115.60525894165039f, 40.66720485687256f));
 		treeLocations.add(new Vector3(-37.447266578674316f, 152.57439613342285f, 32.953550815582275f));
-		treeLocations.add(new Vector3(-53.23376655578613f, 132.40756034851074f, 28.817830085754395f));
 		treeLocations.add(new Vector3(34.60968494415283f, 114.75642204284668f, 37.561912536621094f));
 		treeLocations.add(new Vector3(32.54527807235718f, 119.47021484375f, 39.94044303894043f));
 		treeLocations.add(new Vector3(30.374319553375244f, 117.35430717468262f, 38.1156063079834f));

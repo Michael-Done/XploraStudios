@@ -62,7 +62,7 @@ public class CollisionRect extends CollisionShape {
 		} else if (lastPoint.y >= ne.y + margin) {
 			return new Vector2(currentPoint.x, ne.y + margin);
 		}
-		return null;
+		return lastPoint;
 	}
 
 }
