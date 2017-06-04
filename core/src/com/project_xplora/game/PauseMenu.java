@@ -3,6 +3,8 @@
  */
 package com.project_xplora.game;
 
+import javax.swing.JOptionPane;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -27,19 +29,22 @@ public class PauseMenu {
 	InputProcessor previousInput;
 	boolean previousCursorCatched;
 	public int PAUSE = Keys.ESCAPE;
-	public class PauseStage extends Stage{
+	public boolean backToMenu = false;
+	public class PauseStage extends Stage {
 		public boolean paused;
+
 		@Override
-		public boolean keyDown(int keyCode){
+		public boolean keyDown(int keyCode) {
 			super.keyDown(keyCode);
-			if(keyCode == PAUSE){
+			if (keyCode == PAUSE) {
 				paused = false;
 				return true;
 			}
 			return false;
 		}
-		
+
 	}
+
 	/**
 	 * 
 	 */
@@ -48,26 +53,44 @@ public class PauseMenu {
 		stage = new PauseStage();
 		table = new Table();
 		TextButton quitGame = new TextButton("Quit Game", skin);
-		quitGame.addListener(new ClickListener(){
+		quitGame.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Gdx.app.exit();
 			}
 		});
+		
+//		TextButton mainMenu = new TextButton("Main Menu", skin);
+//		mainMenu.addListener(new ClickListener() {
+//			@Override
+//			public void clicked(InputEvent event, float x, float y) {
+//				backToMenu = true;
+//				((PauseStage)(stage)).paused = false;
+//			}
+//		});
+		
 		table.clear();
-		table.add(new Label("TESTING", skin));
-		table.add(new TextButton("Quit Game", skin));
+		table.add(new Label("Game Paused", skin));
 		table.row();
+		table.add(quitGame);
+		table.row();
+		
 		table.pack();
+		table.setX(Gdx.graphics.getWidth()/2 - table.getWidth()/2);
+		table.setY(Gdx.graphics.getHeight()/2 - table.getHeight()/2);
 		stage.addActor(table);
 	}
-	public void update(){
+
+	public void update() {
 		stage.draw();
 	}
-	public void setPrevious(){
+
+	public void setPrevious() {
 		previousInput = Gdx.input.getInputProcessor();
 		previousCursorCatched = Gdx.input.isCursorCatched();
 	}
-	public void restorePrevious(){
+
+	public void restorePrevious() {
 		Gdx.input.setInputProcessor(previousInput);
 		Gdx.input.setCursorCatched(previousCursorCatched);
 	}

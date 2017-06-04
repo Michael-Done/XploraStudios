@@ -226,6 +226,14 @@ public class ProjectXploraGame implements ApplicationListener {
 		}
 		if(paused){
 			pauseMenu.update();
+//			if(pauseMenu.backToMenu){
+//				System.out.println("Back to Menu");
+//				pauseMenu.backToMenu = false;
+//				currentScene = Level.MENU;
+//				scenes.get(currentScene).updateSettings(settings);
+//				camera.position.set(0, 0, 1);
+//				camera.lookAt(0f, 1f, 1f);
+//			}
 		}
 	}
 
