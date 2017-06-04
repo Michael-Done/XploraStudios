@@ -168,7 +168,7 @@ public class PlayerCameraController extends InputAdapter {
 		Vector2 newPos = new Vector2(current);
 		for(CollisionShape i : collisions){
 			if(i.isInside(current)){
-				newPos = i.newPointCaclulation(current, old);
+				newPos = i.newPointCaclulation(newPos, old);
 			}
 		}
 		if(newPos == null){

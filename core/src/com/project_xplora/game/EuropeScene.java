@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.project_xplora.collision_util.CollisionRect;
 
 /**
  * @author Michael
@@ -31,6 +32,7 @@ public class EuropeScene extends GameObjectController {
 		super(settings);
 		initalizeGrassLocations();
 		initalize();
+		// initalizeCollisionShapes();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -55,11 +57,11 @@ public class EuropeScene extends GameObjectController {
 		super.update();
 		counter = (counter + 1) % 120;
 		Vector2 camLoc = new Vector2(ProjectXploraGame.camera.position.x, ProjectXploraGame.camera.position.y);
-		for(int i = grassIndexStart; i < objects.size; i++){
+		for (int i = grassIndexStart; i < objects.size; i++) {
 			Vector3 grassLoc3 = new Vector3();
 			objects.get(i).transform.getTranslation(grassLoc3);
 			Vector2 grassLoc = new Vector2(grassLoc3.x, grassLoc3.y);
-			if(grassLoc.dst(camLoc) > 25){
+			if (grassLoc.dst(camLoc) > 25) {
 				grassLoc.x -= camLoc.x;
 				grassLoc.y -= camLoc.y;
 				grassLoc.x *= -1;
@@ -71,7 +73,7 @@ public class EuropeScene extends GameObjectController {
 				objects.get(i).transform.setTranslation(new Vector3(grassLoc.x, grassLoc.y, 0));
 			}
 		}
-		//System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
+		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
 	}
 
 	private void initalizeGrassLocations() {
@@ -84,11 +86,63 @@ public class EuropeScene extends GameObjectController {
 		}
 	}
 
+	private void initalizeCollisionShapes() {
+		cameraController.addCollision(new CollisionRect(new Vector2(99.7129111328125f, 88.19154660949707f),
+				new Vector2(100.4299111328125f, 94.11384660949707f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(99.71290159606933f, 78.90683095703125f),
+				new Vector2(100.42990159606934f, 84.82913095703125f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(99.71290159606933f, 69.16798036346435f),
+				new Vector2(100.42990159606934f, 75.09028036346436f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(81.79947424316406f, 88.3429328704834f),
+				new Vector2(82.51647424316407f, 94.2652328704834f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(81.79947424316406f, 78.60408704528808f),
+				new Vector2(82.51647424316407f, 84.52638704528809f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(81.79947424316406f, 69.31938569793701f),
+				new Vector2(82.51647424316407f, 75.24168569793702f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-20.50627898788452f, 1.0298187638282776f),
+				new Vector2(-19.789278987884522f, 6.9521187638282775f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-20.561685081481933f, -6.394687483215332f),
+				new Vector2(-19.844685081481934f, -0.4723874832153321f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(93.07341497192382f, 97.858634475708f),
+				new Vector2(98.99571497192383f, 98.57563447570801f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(83.23366086730957f, 97.85865354919433f),
+				new Vector2(89.15596086730957f, 98.57565354919434f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(83.2336513305664f, 66.62368822479247f),
+				new Vector2(89.15595133056641f, 67.34068822479249f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(92.7706615234375f, 66.6237072982788f),
+				new Vector2(98.6929615234375f, 67.34070729827882f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-55.27248937835694f, 6.956856731414795f),
+				new Vector2(-49.35018937835693f, 7.673856731414795f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-46.352005789184574f, 6.956856731414795f),
+				new Vector2(-40.42970578918457f, 7.673856731414795f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-37.40384895553589f, 6.956856731414795f),
+				new Vector2(-31.48154895553589f, 7.673856731414795f)));
+		cameraController.addCollision(new CollisionRect(new Vector2(-28.73270113220215f, 6.956856731414795f),
+				new Vector2(-22.81040113220215f, 7.673856731414795f)));
+	}
+
+	@Override
+	public void camSetup() {
+		// Create a camera and point it to our model
+		Gdx.input.setCursorCatched(true);
+		float playerHeight = 1f;
+		ProjectXploraGame.camera.position.set(0f, 0f, playerHeight);
+		ProjectXploraGame.camera.lookAt(0f, 1f, playerHeight);
+		ProjectXploraGame.camera.near = 0.1f;
+		ProjectXploraGame.camera.far = 1000f;
+		ProjectXploraGame.camera.update();
+		cameraController = new PlayerCameraController(ProjectXploraGame.camera, settings);
+		initalizeCollisionShapes();
+		// cameraController.unlockPosition();
+		Gdx.input.setInputProcessor(cameraController);
+		cameraResize(screenWidth, screenHeight);
+	}
+
 	@Override
 	public void loadModelInstances() {
 		initalizeTrees();
 		initalizeGrassLocations();
-		
+
 		// sky dome
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		GameObject sky_inst = new GameObject(sky);

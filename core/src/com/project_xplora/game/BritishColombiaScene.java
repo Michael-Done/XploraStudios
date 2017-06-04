@@ -227,18 +227,6 @@ public class BritishColombiaScene extends GameObjectController {
 	}
 
 	private void initalizeCollisionShapes() {
-		// cameraController.addCollision(new CollisionRect(new Vector2(-150f,
-		// 8f), new Vector2(-92.5f, 58f)));
-		// cameraController.addCollision(new CollisionRect(new Vector2(-107.6f,
-		// 57.8f), new Vector2(-92.5747f, 105.01f)));
-		// cameraController.addCollision(new CollisionRect(new Vector2(-138.6f,
-		// 61.8f), new Vector2(-111.4f, 94.4f)));
-		// cameraController.addCollision(new CollisionRect(new Vector2(-150.6f,
-		// 57.8f), new Vector2(-142.6f, 94.4f)));
-		// cameraController.addCollision(new CollisionRect(new Vector2(-151f,
-		// 94f), new Vector2(-150.4f, 121f)));
-		// cameraController.addCollision(new CollisionRect(new Vector2(-151f,
-		// 94f), new Vector2(-150.4f, 121f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-137.98783361911774f, 114.8446736484766f),
 				new Vector2(-134.45952355861664f, 116.84577129781246f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-135.9876924753189f, 101.64572574198246f),
