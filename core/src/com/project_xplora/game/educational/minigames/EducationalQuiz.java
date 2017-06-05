@@ -28,7 +28,7 @@ public class EducationalQuiz extends GameObjectController {
 	private List<String> questions, choices, answers;
 	private String userChosenAnswer;
 	private int questionNumber;
-	private boolean generateQuestion, isCorrect;
+	private boolean generateQuestion, isCorrect, exitMinigame;
 	private ClickListener listener1, listener2, listener3;
 
 	private float screenWidth;
@@ -86,8 +86,7 @@ public class EducationalQuiz extends GameObjectController {
 				option2.addListener(listener2);
 				option3.addListener(listener3);
 				if (isCorrect) {
-					//Quit (should just return back to the current world)
-					Gdx.app.exit();
+					exitMinigame = true;
 				} else {
 					generateQuestion = true;
 				}
@@ -222,5 +221,8 @@ public class EducationalQuiz extends GameObjectController {
 		quizScreen.dispose();
 		quizFont.dispose();
 		quizTable = null;
+	}
+	public boolean isCorrect(){
+		return exitMinigame;
 	}
 }

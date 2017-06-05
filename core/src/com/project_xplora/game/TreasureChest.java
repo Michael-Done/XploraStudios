@@ -51,33 +51,34 @@ public class TreasureChest {
 
 	public void open() {
 		open = true;
-		targetDeg = 0;
+		targetDeg = -90;
 	}
 
 	public void close() {
 		open = false;
-		targetDeg = -90;
+		targetDeg = 0;
 	}
 
 	public void update(Vector3 camLoc) {
-		if (camLoc.dst(lid.transform.getTranslation(new Vector3())) > 5) {
+		if (camLoc.dst(lid.transform.getTranslation(new Vector3())) < 5) {
 			open();
 		} else {
 			if (!isUnlocked) {
 				close();
 			}
 		}
+		System.out.println(targetDeg);
 		if (useRoll) {
 			currentDeg = lid.transform.getRotation(new Quaternion()).nor().getRoll() - 90;
 		} else {
-			currentDeg = lid.transform.getRotation(new Quaternion()).nor().getPitch() - 90;
+			currentDeg = -lid.transform.getRotation(new Quaternion()).nor().getPitch() - 90;
 		}
-		if (open && currentDeg < targetDeg) {
+		if (open && currentDeg > targetDeg) {
 			lid.transform.rotate(1, 0, 0, (targetDeg - currentDeg) / 4);
-		} else if (!open && currentDeg > targetDeg) {
+		} else if (!open && currentDeg < targetDeg) {
 			lid.transform.rotate(1, 0, 0, (targetDeg - currentDeg) / 4);
 		}
-		if (open && Math.abs((targetDeg - currentDeg)) < 1 && !isUnlocked) {
+		if (open && Math.abs((targetDeg - currentDeg)) < 2 && !isUnlocked) {
 			isQuiz = true;
 			isUnlocked = true;
 		} else {

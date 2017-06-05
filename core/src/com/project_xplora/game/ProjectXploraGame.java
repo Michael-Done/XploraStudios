@@ -29,6 +29,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
 import com.project_xplora.game.PauseMenu.PauseStage;
 import com.project_xplora.game.educational.minigames.BritishColumbiaQuiz;
+import com.project_xplora.game.educational.minigames.EducationalQuiz;
+import com.project_xplora.game.educational.minigames.WorldWar2Quiz;
 
 public class ProjectXploraGame implements ApplicationListener {
 	TreeSet<PlayerData> highscores;
@@ -38,9 +40,11 @@ public class ProjectXploraGame implements ApplicationListener {
 	Settings settings;
 	public ArrayList<PlayerData> players;
 	public boolean paused = false;
+
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2
 	}
+
 	PauseMenu pauseMenu;
 	Level currentScene;
 	public int screenWidth;
@@ -91,8 +95,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.ROME, new RomeScene(settings));
 		scenes.put(Level.EUROPE, new EuropeScene(settings));
 		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
+		scenes.put(Level.MINIGAME2, new WorldWar2Quiz(settings));
 		// For testing purposes
-		//currentScene = Level.MINIGAME1;
+		// currentScene = Level.MINIGAME1;
 		currentScene = Level.MENU;
 
 		scenes.get(currentScene).camSetup();
@@ -203,37 +208,49 @@ public class ProjectXploraGame implements ApplicationListener {
 					settings = ((SettingsScene) scenes.get(currentScene)).getNewSettings();
 				}
 				((SettingsScene) scenes.get(currentScene)).resetChoice();
-				
+
 				currentScene = Level.MENU;
 				scenes.get(currentScene).updateSettings(settings);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+			}
+		case EUROPE:
+			if (((EuropeScene) scenes.get(currentScene)).isQuiz) {
+				currentScene = Level.MINIGAME2;
+				scenes.get(currentScene).camSetup();
+			}
+			break;
+		case MINIGAME2:
+			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
+				currentScene = Level.EUROPE;
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
 			}
 		default:
 			break;
 		}
-		if(scenes.get(currentScene).paused && !paused){
+		if (scenes.get(currentScene).paused && !paused) {
 			paused = true;
 			pauseMenu.setPrevious();
 			Gdx.input.setCursorCatched(false);
-			((PauseStage)pauseMenu.stage).paused = true;
+			((PauseStage) pauseMenu.stage).paused = true;
 			Gdx.input.setInputProcessor(pauseMenu.stage);
-		} else if(!((PauseStage)pauseMenu.stage).paused && paused){
+		} else if (!((PauseStage) pauseMenu.stage).paused && paused) {
 			paused = false;
 			pauseMenu.restorePrevious();
 			scenes.get(currentScene).unPause();
-			
+
 		}
-		if(paused){
+		if (paused) {
 			pauseMenu.update();
-//			if(pauseMenu.backToMenu){
-//				System.out.println("Back to Menu");
-//				pauseMenu.backToMenu = false;
-//				currentScene = Level.MENU;
-//				scenes.get(currentScene).updateSettings(settings);
-//				camera.position.set(0, 0, 1);
-//				camera.lookAt(0f, 1f, 1f);
-//			}
+			// if(pauseMenu.backToMenu){
+			// System.out.println("Back to Menu");
+			// pauseMenu.backToMenu = false;
+			// currentScene = Level.MENU;
+			// scenes.get(currentScene).updateSettings(settings);
+			// camera.position.set(0, 0, 1);
+			// camera.lookAt(0f, 1f, 1f);
+			// }
 		}
 	}
 

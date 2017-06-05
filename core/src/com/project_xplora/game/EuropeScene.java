@@ -51,7 +51,9 @@ public class EuropeScene extends GameObjectController {
 	Model wheat;
 	TreasureChest t;
 	public boolean isQuiz = false;
+	
 	private Array<TreasureChest> chests;
+	
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -150,6 +152,7 @@ public class EuropeScene extends GameObjectController {
 			}
 		}
 		t.update(ProjectXploraGame.camera.position);
+		isQuiz = t.isQuiz();
 		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
 	}
 
@@ -289,7 +292,7 @@ public class EuropeScene extends GameObjectController {
 	public void loadModelInstances() {
 		initalizeTrees();
 		initalizeGrassLocations();
-		t = new TreasureChest(0, 0, 0, 0);
+		t = new TreasureChest(28.5756f, 59.9431f, 0f, 180f);
 		objects.add(t.base);
 		objects.add(t.lid);
 		// sky dome
