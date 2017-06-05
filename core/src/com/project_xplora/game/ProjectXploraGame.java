@@ -241,7 +241,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				// TRANSITION BETWEEN SCENES HERE
 				// TRANSITION BETWEEN SCENES HERE
 				// TRANSITION BETWEEN SCENES HERE
-			} else if(((BritishColombiaScene) scenes.get(currentScene)).artifactsUnlocked >= 5){
+			} else if (((BritishColombiaScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
 				((BritishColombiaScene) scenes.get(currentScene)).exitStage.draw();
 			}
 			timer.update(currentScene, paused);
@@ -260,12 +260,15 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentScene = Level.MINIGAME2;
 				scenes.get(currentScene).camSetup();
 			} else if (((EuropeScene) scenes.get(currentScene)).moveToNext) {
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-			} else if(((EuropeScene) scenes.get(currentScene)).artifactsUnlocked >= 5){
+				currentScene = Level.BC;
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+				ProjectXploraGame.camera.position.set(0f, 0f, 1);
+				ProjectXploraGame.camera.lookAt(0f, 1f, 1);
+				ProjectXploraGame.camera.near = 0.1f;
+				ProjectXploraGame.camera.far = 1000f;
+				ProjectXploraGame.camera.update();
+			} else if (((EuropeScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
 				((EuropeScene) scenes.get(currentScene)).exitStage.draw();
 			}
 			timer.update(currentScene, paused);
@@ -292,7 +295,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				ProjectXploraGame.camera.near = 0.1f;
 				ProjectXploraGame.camera.far = 1000f;
 				ProjectXploraGame.camera.update();
-			} else if(((RomeScene) scenes.get(currentScene)).artifactsUnlocked >= 5){
+			} else if (((RomeScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
 				((RomeScene) scenes.get(currentScene)).exitStage.draw();
 			}
 			timer.update(currentScene, paused);
