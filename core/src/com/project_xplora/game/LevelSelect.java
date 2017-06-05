@@ -76,10 +76,11 @@ public class LevelSelect extends GameObjectController {
 				objects.removeValue(europeText_inst, true);
 		}
 		if (lookingAtExit) {
+			objects.add(exitText_inst);
 			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 				levelChoice = 3;
 			}
-		}else {
+		} else {
 			while (objects.contains(exitText_inst, true))
 				objects.removeValue(exitText_inst, true);
 		}
@@ -96,6 +97,9 @@ public class LevelSelect extends GameObjectController {
 		assets.load("Grass.g3db", Model.class);
 		assets.load("BCText.g3db", Model.class);
 		assets.load("RomeText.g3db", Model.class);
+		assets.load("TreeHighPoly.g3db", Model.class);
+		assets.load("RomanStatue.g3db", Model.class);
+		assets.load("GunIcon.g3db", Model.class);
 		assets.load("EuropeText.g3db", Model.class);
 		assets.finishLoading();
 	}
@@ -110,8 +114,8 @@ public class LevelSelect extends GameObjectController {
 	public void loadModelInstances() {
 		// The locations of all the signs in clockwise order
 		Vector3 BCLocation = new Vector3(0, 0, -5f);
-		Vector3 Text = new Vector3(-4.330f, 0, -2.5f);
-		Vector3 europeLocation = new Vector3(4.330f, 0, -2.5f);
+		Vector3 europeLocation = new Vector3(-4.330f, 0, -2.5f);
+		Vector3 romeLocation = new Vector3(4.330f, 0, -2.5f);
 		Vector3 exitLocation = new Vector3(0f, 0, 5f);
 
 		// The locations of all the text signs in clockwise order
@@ -155,6 +159,21 @@ public class LevelSelect extends GameObjectController {
 		Model exitText = assets.get("ExitButton.g3db", Model.class);
 		exitText_inst = new GameObject(exitText);
 		exitText_inst.transform.translate(exitTextLocation).rotate(0, 1f, 0, 180);
+
+		Model tree = assets.get("TreeHighPoly.g3db", Model.class);
+		ModelInstance tree_inst = new GameObject(tree);
+		tree_inst.transform.translate(BCLocation).scale(0.5f, 0.5f, 0.5f);
+		objects.add(tree_inst);
+
+		Model gun = assets.get("GunIcon.g3db", Model.class);
+		ModelInstance gun_inst = new GameObject(gun);
+		gun_inst.transform.translate(europeLocation).rotate(0, 1, 0, 60);
+		objects.add(gun_inst);
+
+		Model statue = assets.get("RomanStatue.g3db", Model.class);
+		ModelInstance statue_inst = new GameObject(statue);
+		statue_inst.transform.translate(romeLocation).rotate(0, 1, 0, -60);
+		objects.add(statue_inst);
 	}
 
 	@Override
