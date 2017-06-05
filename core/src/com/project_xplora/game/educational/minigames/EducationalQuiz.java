@@ -29,7 +29,7 @@ public class EducationalQuiz extends GameObjectController {
 	private String userChosenAnswer;
 	private int questionNumber;
 	private boolean generateQuestion, isCorrect, exitMinigame;
-	private ClickListener listener1, listener2, listener3;
+	private ClickListener listener1, listener2, listener3, listener4;
 
 	private float screenWidth;
 	private float screenHeight;
@@ -63,24 +63,22 @@ public class EducationalQuiz extends GameObjectController {
 		listener1 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "a";
+				continueButton.addListener(listener4);
 			}
 		};
 		listener2 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "b";
+				continueButton.addListener(listener4);
 			}
 		};
 		listener3 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				userChosenAnswer = "c";
+				continueButton.addListener(listener4);
 			}
 		};
-
-		continueButton = new TextButton("Continue", quizSkin);
-		option1.addListener(listener1);
-		option2.addListener(listener2);
-		option3.addListener(listener3);
-		continueButton.addListener(new ClickListener() {
+		listener4 = new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				option1.addListener(listener1);
 				option2.addListener(listener2);
@@ -91,8 +89,13 @@ public class EducationalQuiz extends GameObjectController {
 				} else {
 					generateQuestion = true;
 				}
+				continueButton.removeListener(listener4);
 			}
-		});
+		};
+		continueButton = new TextButton("Continue", quizSkin);
+		option1.addListener(listener1);
+		option2.addListener(listener2);
+		option3.addListener(listener3);
 		quizTable.add(option1).width(80).padTop(30).padLeft(50);
 		quizTable.row();
 		quizTable.add(option2).width(80).padTop(30).padLeft(50);
@@ -188,12 +191,14 @@ public class EducationalQuiz extends GameObjectController {
 			if (userChosenAnswer.equals(answers.get(questionNumber))) {
 				quizBackground.draw(checkMark, 1800, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Correct!", 1100, 240);
-				quizFont.draw(quizBackground, "Your chest is now unlocked! Press <Continue> to resume the game.", 140, 100);
+				quizFont.draw(quizBackground, "Your chest is now unlocked! Press <Continue> to resume the game.", 140,
+						100);
 				isCorrect = true;
 			} else {
 				quizBackground.draw(crossMark, 1800, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Incorrect!", 1100, 260);
-				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 1100, 220);
+				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 1100,
+						220);
 				quizFont.draw(quizBackground, "A time penalty of 30 seconds will be added.", 140, 125);
 				quizFont.draw(quizBackground, "Press <Continue> to try answering another question.", 140, 85);
 				isCorrect = false;
@@ -223,10 +228,12 @@ public class EducationalQuiz extends GameObjectController {
 		quizFont.dispose();
 		quizTable = null;
 	}
-	public boolean isCorrect(){
+
+	public boolean isCorrect() {
 		return exitMinigame;
 	}
-	public void resetExitMinigame(){
+
+	public void resetExitMinigame() {
 		exitMinigame = false;
 	}
 }
