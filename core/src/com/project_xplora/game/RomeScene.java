@@ -128,6 +128,11 @@ public class RomeScene extends GameObjectController {
 		assets.load("ColosseumLayer.g3db", Model.class);
 		assets.load("SkyDome.g3db", Model.class);
 		assets.load("ColosseumMiddle.g3db", Model.class);
+		assets.load("PillarModel.g3db", Model.class);
+		assets.load("TempleModel.g3db", Model.class);
+		assets.load("StatueModel.g3db", Model.class);
+		assets.load("ColosseumModel.g3db", Model.class);
+		assets.load("FountainModel.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -143,11 +148,11 @@ public class RomeScene extends GameObjectController {
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		Model colosseumCenter = assets.get("ColosseumMiddle.g3db", Model.class);
 
-		chests.add(new TreasureChest(0f, 26.25287f, 0f, 0f));
-		chests.add(new TreasureChest(-58.85176f, 23.81795f, 0f, 90f));
-		chests.add(new TreasureChest(-58.85176f, -23.81795f, 0f, 90f));
-		chests.add(new TreasureChest(58.85176f, -23.81795f, 0f, 180f));
-		chests.add(new TreasureChest(58.85176f, 23.81795f, 0f, 180f));
+		chests.add(new TreasureChest(0f, 26.25287f, 0f, 0f, assets.get("FountainModel.g3db", Model.class)));
+		chests.add(new TreasureChest(-58.85176f, 23.81795f, 0f, 90f, assets.get("PillarModel.g3db", Model.class)));
+		chests.add(new TreasureChest(-58.85176f, -23.81795f, 0f, 90f, assets.get("TempleModel.g3db", Model.class)));
+		chests.add(new TreasureChest(58.85176f, -23.81795f, 0f, 180f, assets.get("StatueModel.g3db", Model.class)));
+		chests.add(new TreasureChest(58.85176f, 23.81795f, 0f, 180f, assets.get("ColosseumModel.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);

@@ -127,6 +127,11 @@ public class EuropeScene extends GameObjectController {
 		assets.load("EuropeGround.g3db", Model.class);
 		assets.load("Tree2.g3db", Model.class);
 		assets.load("Wheat.g3db", Model.class);
+		assets.load("Gun.g3db", Model.class);
+		assets.load("DogTags.g3db", Model.class);
+		assets.load("Bomb.g3db", Model.class);
+		assets.load("TankModel.g3db", Model.class);
+		assets.load("Flag.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -161,6 +166,9 @@ public class EuropeScene extends GameObjectController {
 		for (TreasureChest t : chests) {
 			t.update(ProjectXploraGame.camera.position);
 			isQuiz |= t.isQuiz();
+			if(!t.isQuiz() && t.unlocked() && !t.added){
+				objects.add(t.artifact);
+			}
 		}
 		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
 	}
@@ -307,11 +315,11 @@ public class EuropeScene extends GameObjectController {
 	public void loadModelInstances() {
 		initalizeTrees();
 		initalizeGrassLocations();
-		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f));
-		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f));
-		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f));
-		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f));
-		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f));
+		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f, assets.get("Gun.g3db", Model.class)));
+		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("DogTags.g3db", Model.class)));
+		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("Flag.g3db", Model.class)));
+		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f, assets.get("TankModel.g3db", Model.class)));
+		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f, assets.get("Bomb.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);

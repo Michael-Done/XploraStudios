@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector3;
 public class TreasureChest {
 	public GameObject lid;
 	public GameObject base;
+	public GameObject artifact;
 	private boolean open;
 	private float targetDeg;
 	private float currentDeg;
@@ -29,16 +30,19 @@ public class TreasureChest {
 	private boolean isUnlocked = false;
 	private boolean isQuiz = false;
 	private int signum;
-
+	public boolean added = false;
+	private float artifactTargetZ;
 	/**
 	 * 
 	 */
-	public TreasureChest(float x, float y, float z, float rot) {
+	public TreasureChest(float x, float y, float z, float rot, Model model) {
 		AssetManager assets = new AssetManager();
 		assets.load("ChestLid.g3db", Model.class);
 		assets.load("ChestBase.g3db", Model.class);
 		assets.load("Interact.g3db", Model.class);
 		assets.finishLoading();
+		artifact = new GameObject(model, new Vector3(x, y, z));
+		artifact.transform.rotate(new Vector3(0, 1, 0), rot);
 		lid = new GameObject(assets.get("ChestLid.g3db", Model.class), new Vector3(x, y, z + 0.823f),
 				new Vector3(0, 0, 1), rot);
 		base = new GameObject(assets.get("ChestBase.g3db", Model.class), new Vector3(x, y, z + 0.823f),
@@ -47,6 +51,7 @@ public class TreasureChest {
 		lid.transform.rotate(1, 0, 0, 90);
 		base.transform.rotate(1, 0, 0, 90);
 		signum = (useRoll && rot > 1) || rot == 0 ? 1 : -1;
+		artifactTargetZ = z;
 		open = false;
 	}
 
@@ -59,7 +64,9 @@ public class TreasureChest {
 		open = false;
 		targetDeg = 0;
 	}
-
+	public boolean unlocked(){
+		return isUnlocked;
+	}
 	public void update(Vector3 camLoc) {
 		if (camLoc.dst(lid.transform.getTranslation(new Vector3())) < 5) {
 			open();
@@ -84,6 +91,12 @@ public class TreasureChest {
 			isUnlocked = true;
 		} else {
 			isQuiz = false;
+		}
+		if(isUnlocked && !isQuiz){
+			artifactTargetZ += 2;
+		}
+		if(artifact.transform.getTranslation(new Vector3()).y < artifactTargetZ){
+			artifact.transform.translate(0, 0.2f, 0);
 		}
 	}
 

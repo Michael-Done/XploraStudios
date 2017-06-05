@@ -246,6 +246,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setCursorCatched(true);
 				((EuropeScene) scenes.get(currentScene)).resetIsQuiz();
 			}
+			break;
 		case ROME:
 			if (((RomeScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME3;

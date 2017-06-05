@@ -128,6 +128,11 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.load("Water.g3db", Model.class);
 		assets.load("Tower.g3db", Model.class);
 		assets.load("House.g3db", Model.class);
+		assets.load("Bucket.g3db", Model.class);
+		assets.load("IceSculpture.g3db", Model.class);
+		assets.load("CanadaMap.g3db", Model.class);
+		assets.load("MountainsModel.g3db", Model.class);
+		assets.load("Redwood.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -144,11 +149,11 @@ public class BritishColombiaScene extends GameObjectController {
 
 	@Override
 	public void loadModelInstances() {
-		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f));
-		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f));
-		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f));
-		chests.add(new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f));
-		chests.add(new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f));
+		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f, assets.get("Bucket.g3db", Model.class)));
+		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f,  assets.get("IceSculpture.g3db", Model.class)));
+		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f, assets.get("Redwood.g3db", Model.class)));
+		chests.add(new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f,  assets.get("MountainsModel.g3db", Model.class)));
+		chests.add(new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f,  assets.get("CanadaMap.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
@@ -189,11 +194,11 @@ public class BritishColombiaScene extends GameObjectController {
 		ModelInstance boardwalk_inst = new GameObject(boardwalk);
 		objects.add(boardwalk_inst);
 
-		// Model boardwalkSupports = assets.get("BoardwalkSupports.g3db",
-		// Model.class);
-		// ModelInstance boardwalkSupports_inst = new
-		// GameObject(boardwalkSupports);
-		// objects.add(boardwalkSupports_inst);
+		 Model boardwalkSupports = assets.get("BoardwalkSupports.g3db",
+		 Model.class);
+		 ModelInstance boardwalkSupports_inst = new
+		 GameObject(boardwalkSupports);
+		 objects.add(boardwalkSupports_inst);
 
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		ModelInstance sky_inst = new GameObject(sky);
@@ -221,9 +226,6 @@ public class BritishColombiaScene extends GameObjectController {
 		for (Vector3 i : treeLocations) {
 			objects.add(new GameObject(treeHighPoly, new Vector3(i.x, i.y, (float) (i.z + Math.random() * 0.5f))));
 		}
-		// for (GroundObjectData i : groundObjDataList) {
-		// objects.add(i.constructModel());
-		// }
 		ModelBuilder mb = new ModelBuilder();
 		mb.begin();
 		mb.node().id = "ball";
@@ -231,7 +233,6 @@ public class BritishColombiaScene extends GameObjectController {
 				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(1f, 1f, 1f, 10, 10);
 		Model a = mb.end();
 		collisionLocation = new ModelInstance(a);
-		// objects.add(collisionLocation);
 	}
 
 	@Override
