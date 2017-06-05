@@ -166,9 +166,7 @@ public class ProjectXploraGame implements ApplicationListener {
 			break;
 		case MENU:
 			if (((MenuScene) scenes.get(currentScene)).getChoice() == 3) {
-				currentScene = Level.EXIT;
-				scenes.get(currentScene).updateSettings(settings);
-				Gdx.app.exit();
+				currentScene = Level.CREDITS;
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.LEVEL_SELECT;
