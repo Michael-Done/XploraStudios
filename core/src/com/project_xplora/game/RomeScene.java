@@ -317,6 +317,10 @@ public class RomeScene extends GameObjectController {
 		for (TreasureChest t : chests) {
 			t.update(ProjectXploraGame.camera.position);
 			isQuiz |= t.isQuiz();
+			if(!t.isQuiz() && t.unlocked() && !t.added){
+				objects.add(t.artifact);
+				t.added = true;
+			}
 		}
 	}
 

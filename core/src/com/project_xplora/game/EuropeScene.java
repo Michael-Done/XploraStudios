@@ -46,7 +46,7 @@ public class EuropeScene extends GameObjectController {
 	btBroadphaseInterface broadphase;
 	btCollisionWorld collisionWorld;
 	private int counter = 0;
-	private int grassIndexStart;
+	private int grassIndexStart, grassEndIndex;
 	Model tree;
 	Model wheat;
 	public boolean isQuiz = false;
@@ -140,7 +140,7 @@ public class EuropeScene extends GameObjectController {
 		super.update();
 		counter = (counter + 1) % 120;
 		Vector2 camLoc = new Vector2(ProjectXploraGame.camera.position.x, ProjectXploraGame.camera.position.y);
-		for (int i = grassIndexStart; i < objects.size; i++) {
+		for (int i = grassIndexStart; i < grassEndIndex; i++) {
 			Vector3 grassLoc3 = new Vector3();
 			objects.get(i).transform.getTranslation(grassLoc3);
 			Vector2 grassLoc = new Vector2(grassLoc3.x, grassLoc3.y);
@@ -168,6 +168,7 @@ public class EuropeScene extends GameObjectController {
 			isQuiz |= t.isQuiz();
 			if(!t.isQuiz() && t.unlocked() && !t.added){
 				objects.add(t.artifact);
+				t.added = true;
 			}
 		}
 		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
@@ -552,8 +553,8 @@ public class EuropeScene extends GameObjectController {
 		wheat = assets.get("Wheat.g3db", Model.class);
 		for (Vector3 i : grassLocations) {
 			objects.add(new GameObject(wheat, i));
-
 		}
+		grassEndIndex = objects.size;
 	}
 
 	private void initalizeTrees() {

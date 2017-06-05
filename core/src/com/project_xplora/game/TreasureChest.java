@@ -41,7 +41,7 @@ public class TreasureChest {
 		assets.load("ChestBase.g3db", Model.class);
 		assets.load("Interact.g3db", Model.class);
 		assets.finishLoading();
-		artifact = new GameObject(model, new Vector3(x, y, z));
+		artifact = new GameObject(model, new Vector3(x, y, z + 2));
 		artifact.transform.rotate(new Vector3(0, 1, 0), rot);
 		lid = new GameObject(assets.get("ChestLid.g3db", Model.class), new Vector3(x, y, z + 0.823f),
 				new Vector3(0, 0, 1), rot);
@@ -95,9 +95,7 @@ public class TreasureChest {
 		if(isUnlocked && !isQuiz){
 			artifactTargetZ += 2;
 		}
-		if(artifact.transform.getTranslation(new Vector3()).y < artifactTargetZ){
-			artifact.transform.translate(0, 0.2f, 0);
-		}
+		
 	}
 
 	public boolean isQuiz() {
