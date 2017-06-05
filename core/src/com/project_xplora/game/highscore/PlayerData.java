@@ -10,11 +10,11 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	 */
 	private static final long serialVersionUID = -8800684059097726847L;
 	/** The Player's time taken to complete the rome level */
-	private long romeTime;
+	private float romeTime;
 	/** The Player's time taken to complete the europe level */
-	private long europeTime;
+	private float europeTime;
 	/** The Player's time taken to complete the BC level */
-	private long BCTime;
+	private float BCTime;
 	/** True if the player has completed the BC level */
 	private boolean BCCompleted;
 	/** True if the player has completed the europe level */
@@ -48,42 +48,42 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	/**
 	 * @return the romeTime
 	 */
-	public long getRomeTime() {
+	public float getRomeTime() {
 		return romeTime;
 	}
 
 	/**
 	 * @param romeTime the romeTime to set
 	 */
-	public void setRomeTime(long romeTime) {
+	public void setRomeTime(float romeTime) {
 		this.romeTime = romeTime;
 	}
 
 	/**
 	 * @return the europeTime
 	 */
-	public long getEuropeTime() {
+	public float getEuropeTime() {
 		return europeTime;
 	}
 
 	/**
-	 * @param europeTime the europeTime to set
+	 * @param f the europeTime to set
 	 */
-	public void setEuropeTime(long europeTime) {
-		this.europeTime = europeTime;
+	public void setEuropeTime(float f) {
+		this.europeTime = f;
 	}
 
 	/**
 	 * @return the bCTime
 	 */
-	public long getBCTime() {
+	public float getBCTime() {
 		return BCTime;
 	}
 
 	/**
 	 * @param bCTime the bCTime to set
 	 */
-	public void setBCTime(long bCTime) {
+	public void setBCTime(float bCTime) {
 		BCTime = bCTime;
 	}
 

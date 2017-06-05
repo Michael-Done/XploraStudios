@@ -50,7 +50,8 @@ public class EuropeScene extends GameObjectController {
 	Model tree;
 	Model wheat;
 	public boolean isQuiz = false;
-
+	private int artifactsUnlocked = 0;
+	public boolean moveToNext = false;
 	private Array<TreasureChest> chests;
 
 	class GroundObjectData {
@@ -166,7 +167,7 @@ public class EuropeScene extends GameObjectController {
 		for (TreasureChest t : chests) {
 			t.update(ProjectXploraGame.camera.position);
 			isQuiz |= t.isQuiz();
-			if(!t.isQuiz() && t.unlocked() && !t.added){
+			if (!t.isQuiz() && t.unlocked() && !t.added) {
 				objects.add(t.artifact);
 				t.added = true;
 			}

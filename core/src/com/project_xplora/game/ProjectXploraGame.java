@@ -41,6 +41,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	Settings settings;
 	PlayerData currentPlayer;
 	public boolean paused = false;
+	Timer timer;
 
 	public enum Level {
 		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT
@@ -149,12 +150,13 @@ public class ProjectXploraGame implements ApplicationListener {
 		System.out.println(currentScene);
 		switch (currentScene) {
 		case NAMESELECT:
-			if(((NameSelect)scenes.get(currentScene)).cont){
-				currentPlayer = new PlayerData(((NameSelect)scenes.get(currentScene)).name);
+			if (((NameSelect) scenes.get(currentScene)).cont) {
+				currentPlayer = new PlayerData(((NameSelect) scenes.get(currentScene)).name);
+				timer = new Timer(currentPlayer);
 				currentScene = Level.MENU;
 				scenes.get(currentScene).updateSettings(settings);
 				camera.position.set(0, 0, 1);
-				camera.lookAt(0f, 1f, 1f);	
+				camera.lookAt(0f, 1f, 1f);
 				Gdx.input.setCursorCatched(true);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 			}
@@ -235,6 +237,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentScene = Level.MINIGAME1;
 				scenes.get(currentScene).camSetup();
 			}
+			timer.update(currentScene, paused);
 			break;
 		case MINIGAME1:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
@@ -250,6 +253,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentScene = Level.MINIGAME2;
 				scenes.get(currentScene).camSetup();
 			}
+			timer.update(currentScene, paused);
 			break;
 		case MINIGAME2:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
@@ -265,6 +269,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentScene = Level.MINIGAME3;
 				scenes.get(currentScene).camSetup();
 			}
+			timer.update(currentScene, paused);
 			break;
 		case MINIGAME3:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
