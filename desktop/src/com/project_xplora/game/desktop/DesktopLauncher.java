@@ -23,6 +23,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -163,7 +165,7 @@ public class DesktopLauncher implements ActionListener {
 	 * of the fullscreen option.
 	 */
 	private static void gameLauncher() {
-		//Local Variables
+		// Local Variables
 		JButton start = new JButton("Start Game");
 		Font settingFonts = new Font("Agency FB", Font.PLAIN, 20);
 		JLabel title = new JLabel("Project Xplorer - Inital Settings Menu: ");
@@ -171,7 +173,7 @@ public class DesktopLauncher implements ActionListener {
 		JLabel vSyncLabel = new JLabel("VSync: ");
 		JLabel fullScreenLabel = new JLabel("    Screen: ");
 
-		//Frame Setup
+		// Frame Setup
 		setup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setup.setLayout(new FlowLayout());
 		title.setFont(new Font("Agency FB", Font.BOLD, 32));
@@ -196,7 +198,7 @@ public class DesktopLauncher implements ActionListener {
 		setup.add(Box.createVerticalStrut(90));
 		setup.add(start);
 
-		//Set Screen
+		// Set Screen
 		setup.pack();
 		setup.setSize(450, 300);
 		setup.setVisible(true);
@@ -219,9 +221,11 @@ public class DesktopLauncher implements ActionListener {
 	 * ProjectXploraGame <b> game </b> - Creates a new instance of the
 	 * ProjectXploraGame.
 	 * <p>
-	 * @param e - Stores the event detected by the actionListener.
+	 * 
+	 * @param e
+	 *            - Stores the event detected by the actionListener.
 	 */
-	public void actionPerformed(ActionEvent e) throws GdxRuntimeException{
+	public void actionPerformed(ActionEvent e) {
 		width = (int) (((Resolution) (resolutionSelection.getSelectedItem())).getX());
 		height = (int) (((Resolution) (resolutionSelection.getSelectedItem())).getY());
 		fullscreen = fullscreenSelection.getSelectedItem().equals("Fullscreen");
@@ -247,7 +251,6 @@ public class DesktopLauncher implements ActionListener {
 	 *            - The arguments passed from the command line.
 	 */
 	public static void main(String[] args) {
-		
 		gameLauncher();
 	}
 }
