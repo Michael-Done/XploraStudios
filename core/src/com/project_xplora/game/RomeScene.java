@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
@@ -56,9 +57,13 @@ public class RomeScene extends GameObjectController {
 	btCollisionWorld collisionWorld;
 
 	private Array<GroundObjectData> groundObjDataList;
+	public boolean isQuiz = false;
+
+	private Array<TreasureChest> chests;
 
 	public RomeScene(Settings settings) {
 		super(settings);
+		chests = new Array<TreasureChest>();
 		groundObjDataList = new Array<GroundObjectData>();
 		initalizeGroundObjectData();
 		initalizeCollisionWorld();
@@ -137,6 +142,41 @@ public class RomeScene extends GameObjectController {
 		Model colosseum = assets.get("ColosseumLayer.g3db", Model.class);
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		Model colosseumCenter = assets.get("ColosseumMiddle.g3db", Model.class);
+
+		chests.add(new TreasureChest(0f, 26.25287f, 0f, 0f));
+		chests.add(new TreasureChest(-58.85176f, 23.81795f, 0f, 90f));
+		chests.add(new TreasureChest(-58.85176f, -23.81795f, 0f, 90f));
+		chests.add(new TreasureChest(58.85176f, -23.81795f, 0f, 180f));
+		chests.add(new TreasureChest(58.85176f, 23.81795f, 0f, 180f));
+		for (TreasureChest t : chests) {
+			objects.add(t.base);
+			objects.add(t.lid);
+			if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == 0) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y)));
+			} else if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == 180) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			} else if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == -90) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			} else {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			}
+		}
 
 		objects.add(new GameObject(colosseumCenter));
 		// objects.add(new GameObject(box, new Vector3(0, 4, 0)));
@@ -269,6 +309,10 @@ public class RomeScene extends GameObjectController {
 	@Override
 	public void update() {
 		super.update();
+		for (TreasureChest t : chests) {
+			t.update(ProjectXploraGame.camera.position);
+			isQuiz |= t.isQuiz();
+		}
 	}
 
 	@Override
@@ -279,6 +323,10 @@ public class RomeScene extends GameObjectController {
 		if (intersectLocation != null) {
 			cameraController.setZ(intersectLocation.z + 1);
 		}
+	}
+
+	public void resetIsQuiz() {
+		isQuiz = false;
 	}
 
 	@Override
@@ -323,7 +371,7 @@ public class RomeScene extends GameObjectController {
 	}
 
 	private void initalizeCollisionShapes() {
-		//Gardens
+		// Gardens
 		cameraController.addCollision(new CollisionRect(new Vector2(-29.826101821899414f, 7.16373787689209f),
 				new Vector2(-26.338101821899414f, 17.14773787689209f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-29.826101821899414f, -17.14773787689209f),

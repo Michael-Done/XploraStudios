@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
 import com.project_xplora.game.PauseMenu.PauseStage;
+import com.project_xplora.game.educational.minigames.AncientRomeQuiz;
 import com.project_xplora.game.educational.minigames.BritishColumbiaQuiz;
 import com.project_xplora.game.educational.minigames.EducationalQuiz;
 import com.project_xplora.game.educational.minigames.WorldWar2Quiz;
@@ -42,7 +43,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	public boolean paused = false;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3
 	}
 
 	PauseMenu pauseMenu;
@@ -96,6 +97,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.EUROPE, new EuropeScene(settings));
 		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		scenes.put(Level.MINIGAME2, new WorldWar2Quiz(settings));
+		scenes.put(Level.MINIGAME3, new AncientRomeQuiz(settings));
 		// For testing purposes
 		// currentScene = Level.MINIGAME1;
 		currentScene = Level.MENU;
@@ -227,6 +229,20 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
 				((EuropeScene) scenes.get(currentScene)).resetIsQuiz();
+			}
+		case ROME:
+			if (((RomeScene) scenes.get(currentScene)).isQuiz) {
+				currentScene = Level.MINIGAME3;
+				scenes.get(currentScene).camSetup();
+			}
+			break;
+		case MINIGAME3:
+			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
+				((EducationalQuiz) scenes.get(currentScene)).resetExitMinigame();
+				currentScene = Level.ROME;
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+				((RomeScene) scenes.get(currentScene)).resetIsQuiz();
 			}
 		default:
 			break;

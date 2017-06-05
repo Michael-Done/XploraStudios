@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
@@ -146,7 +147,7 @@ public class EuropeScene extends GameObjectController {
 				grassLoc.nor().scl(25f);
 				grassLoc.x += camLoc.x;
 				grassLoc.y += camLoc.y;
-				System.out.println(grassLoc.dst(camLoc));
+				// System.out.println(grassLoc.dst(camLoc));
 				boolean relocate = true;
 				for (TreasureChest e : chests) {
 					if (e.location2().dst(grassLoc) < 7) {
@@ -270,9 +271,11 @@ public class EuropeScene extends GameObjectController {
 				new Vector2(-29.188843369483948f, 3.032171130180359f)));
 
 	}
-	public void resetIsQuiz(){
+
+	public void resetIsQuiz() {
 		isQuiz = false;
 	}
+
 	@Override
 	public void camSetup() {
 		// Create a camera and point it to our model
@@ -312,6 +315,31 @@ public class EuropeScene extends GameObjectController {
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
+			if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == 0) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y)));
+			} else if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == 180) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			} else if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == -90) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			} else {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			}
 		}
 		// sky dome
 		Model sky = assets.get("SkyDome.g3db", Model.class);
