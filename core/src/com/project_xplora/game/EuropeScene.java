@@ -194,7 +194,9 @@ public class EuropeScene extends GameObjectController {
 				moveToNext = true;
 			}
 		}
-		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
+		if (isQuiz) {
+			cameraController.keys.clear();
+		}
 	}
 
 	private void initalizeCollisionWorld() {

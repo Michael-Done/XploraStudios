@@ -367,6 +367,9 @@ public class BritishColombiaScene extends GameObjectController {
 				moveToNext = true;
 			}
 		}
+		if(isQuiz){
+			cameraController.keys.clear();
+		}
 	}
 
 	public void resetIsQuiz() {

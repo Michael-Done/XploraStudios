@@ -349,6 +349,9 @@ public class RomeScene extends GameObjectController {
 				moveToNext = true;
 			}
 		}
+		if(isQuiz){
+			cameraController.keys.clear();
+		}
 	}
 
 	@Override

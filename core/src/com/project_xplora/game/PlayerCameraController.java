@@ -32,7 +32,7 @@ import com.project_xplora.collision_util.CollisionShape;
  */
 public class PlayerCameraController extends InputAdapter {
 	private final Camera camera;
-	private final IntIntMap keys = new IntIntMap();
+	final IntIntMap keys = new IntIntMap();
 	private int STRAFE_LEFT = Keys.A;
 	private int STRAFE_RIGHT = Keys.D;
 	private int FORWARD = Keys.W;

@@ -12,6 +12,7 @@ import com.project_xplora.game.highscore.PlayerData;
  */
 public class Timer {
 	public PlayerData player;
+	private ProjectXploraGame.Level scene;
 
 	/**
 	 * 
@@ -21,11 +22,11 @@ public class Timer {
 	}
 
 	public void update(ProjectXploraGame.Level currentScene, boolean pause) {
+		scene = currentScene;
 		switch (currentScene) {
 		case EUROPE:
 			if (!pause)
 				player.setEuropeTime(player.getEuropeTime() + Gdx.graphics.getDeltaTime());
-			System.out.println(player.getEuropeTime());
 			break;
 		case BC:
 			if (!pause)
@@ -41,6 +42,10 @@ public class Timer {
 		}
 	}
 
+	public void total() {
+		player.setTime((long) (player.getEuropeTime() + player.getBCTime() + player.getRomeTime()));
+	}
+
 	public void finishEurope() {
 		player.setEuropecompleted(true);
 	}
@@ -51,5 +56,21 @@ public class Timer {
 
 	public void finishRome() {
 		player.setRomeCompleted(true);
+	}
+
+	public void add30() {
+		switch (scene) {
+		case EUROPE:
+			player.setEuropeTime(player.getEuropeTime() + 30);
+			break;
+		case BC:
+			player.setBCTime(player.getBCTime() + 30);
+			break;
+		case ROME:
+			player.setRomeTime(player.getRomeTime() + 30);
+			break;
+		default:
+			break;
+		}
 	}
 }
