@@ -73,6 +73,10 @@ public class RomeScene extends GameObjectController {
 	private Label exitLabel;
 	private Skin exitSkin;
 
+	public Stage hud;
+	private Label time;
+	private Label artifacts;
+	
 	public RomeScene(Settings settings) {
 		super(settings);
 		chests = new Array<TreasureChest>();
@@ -89,6 +93,16 @@ public class RomeScene extends GameObjectController {
 		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
 		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
 		exitStage.addActor(t);
+		
+		hud = new Stage();
+		time = new Label("", exitSkin);
+		artifacts = new Label("", exitSkin);
+		time.setX(10);
+		time.setY(10);
+		artifacts.setX(Gdx.graphics.getWidth() - artifacts.getWidth() - 20);
+		artifacts.setY(10);
+		hud.addActor(time);
+		hud.addActor(artifacts);
 	}
 
 	class GroundObjectData {
@@ -352,6 +366,8 @@ public class RomeScene extends GameObjectController {
 		if(isQuiz){
 			cameraController.keys.clear();
 		}
+		time.setText((ProjectXploraGame.timer.player.getRomeTime()/60) + " Seconds");
+		artifacts.setText(artifactsUnlocked + "/5");
 	}
 
 	@Override

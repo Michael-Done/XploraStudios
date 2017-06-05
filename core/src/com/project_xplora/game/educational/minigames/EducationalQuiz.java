@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.project_xplora.game.GameObjectController;
+import com.project_xplora.game.ProjectXploraGame;
 import com.project_xplora.game.Settings;
 
 public class EducationalQuiz extends GameObjectController {
@@ -190,6 +191,7 @@ public class EducationalQuiz extends GameObjectController {
 						100);
 				isCorrect = true;
 			} else {
+				ProjectXploraGame.timer.add30();
 				quizBackground.draw(crossMark, 540, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Incorrect!", 85, 260);
 				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 85, 220);

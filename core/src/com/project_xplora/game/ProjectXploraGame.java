@@ -18,6 +18,7 @@ import java.util.TreeSet;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -149,6 +150,12 @@ public class ProjectXploraGame implements ApplicationListener {
 		// Check for scene changes, especially relating to the menu
 		System.out.println(currentScene);
 		switch (currentScene) {
+		case SPLASHSCREEN:
+			if(Gdx.input.isKeyJustPressed(Keys.ANY_KEY)){
+				currentScene = Level.NAMESELECT;
+				scenes.get(currentScene).camSetup();
+			}
+			break;
 		case NAMESELECT:
 			if (((NameSelect) scenes.get(currentScene)).cont) {
 				currentPlayer = new PlayerData(((NameSelect) scenes.get(currentScene)).name);

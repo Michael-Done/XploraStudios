@@ -64,6 +64,10 @@ public class EuropeScene extends GameObjectController {
 	private Label exitLabel;
 	private Skin exitSkin;
 
+	public Stage hud;
+	private Label time;
+	private Label artifacts;
+
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -127,6 +131,16 @@ public class EuropeScene extends GameObjectController {
 		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
 		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
 		exitStage.addActor(exitLabel);
+		
+		hud = new Stage();
+		time = new Label("", exitSkin);
+		artifacts = new Label("", exitSkin);
+		time.setX(10);
+		time.setY(10);
+		artifacts.setX(Gdx.graphics.getWidth() - artifacts.getWidth() - 20);
+		artifacts.setY(10);
+		hud.addActor(time);
+		hud.addActor(artifacts);
 
 	}
 
@@ -178,6 +192,7 @@ public class EuropeScene extends GameObjectController {
 				if (relocate)
 					objects.get(i).transform.setTranslation(new Vector3(grassLoc.x, grassLoc.y, 0));
 			}
+
 		}
 		for (TreasureChest t : chests) {
 			t.update(ProjectXploraGame.camera.position);
@@ -197,6 +212,8 @@ public class EuropeScene extends GameObjectController {
 		if (isQuiz) {
 			cameraController.keys.clear();
 		}
+		time.setText((ProjectXploraGame.timer.player.getRomeTime() / 60) + " Seconds");
+		artifacts.setText(artifactsUnlocked + "/5");
 	}
 
 	private void initalizeCollisionWorld() {
