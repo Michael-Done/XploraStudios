@@ -10,9 +10,9 @@ public class BritishColumbiaQuiz extends EducationalQuiz {
 		super(currentSettings);
 		super.addElements("Which landform region is British Columbia situated in?", "Western Cordillera Region",
 				"Interior Plains", "Hudson Bay Lowlands", "a");
-		super.addElements("What is the name of the ocean that is along the coast of British Columbia?",
+		super.addElements("What is the name of the ocean that is along the coast of BC?",
 				"Atlantic Ocean", "Pacific Ocean", "Arctic Ocean", "b");
-		super.addElements("What is the name of the world-renowned mountain range in British Columbia?", "Himalayas",
+		super.addElements("What is the name of the world-renowned mountain range in BC?", "Himalayas",
 				"Appalachian Mountains", "The Rocky Mountains", "c");
 		super.addElements("Is British Columbia a province, territory or a state?", "Province", "Territory", "State",
 				"a");

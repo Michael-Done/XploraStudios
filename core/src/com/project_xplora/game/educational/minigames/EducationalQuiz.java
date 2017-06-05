@@ -21,7 +21,7 @@ public class EducationalQuiz extends GameObjectController {
 	private Skin quizSkin;
 	private Table quizTable;
 	private Stage quizStage;
-	private Texture quizScreen, lineSeparator, checkMark, crossMark, samplePicture;
+	private Texture quizScreen, checkMark, crossMark, samplePicture;
 	private BitmapFont quizFont;
 	private TextButton option1, option2, option3, continueButton;
 	private List<Boolean> questionsAsked;
@@ -41,7 +41,6 @@ public class EducationalQuiz extends GameObjectController {
 		quizTable = new Table();
 		quizStage = new Stage();
 		quizScreen = new Texture(Gdx.files.internal("ChestUnlockScreen.jpg"));
-		lineSeparator = new Texture(Gdx.files.internal("LineSeparator.png"));
 		checkMark = new Texture(Gdx.files.internal("Check_mark.png"));
 		crossMark = new Texture(Gdx.files.internal("Red-Cross-Mark-PNG.png"));
 		quizFont = new BitmapFont(Gdx.files.internal("quizFont.fnt"));
@@ -99,9 +98,9 @@ public class EducationalQuiz extends GameObjectController {
 		quizTable.row();
 		quizTable.add(option3).width(80).padTop(30).padLeft(50);
 		quizTable.row();
-		quizTable.add(continueButton).padTop(100);
+		quizTable.add(continueButton).padTop(80);
 		quizTable.setX(500f);
-		quizTable.setY(120f);
+		quizTable.setY(140f);
 		quizTable.pack();
 		quizTable.center();
 		quizStage.addActor(quizTable);
@@ -172,14 +171,13 @@ public class EducationalQuiz extends GameObjectController {
 	//Draws onto the screen every update
 	public void regularUpdates(int questionNumber) {
 		quizBackground.draw(quizScreen, 0, 0, screenWidth, screenHeight);
-		quizBackground.draw(lineSeparator, 850, 250);
-		quizBackground.draw(lineSeparator, 850, 150);
-		quizBackground.draw(samplePicture, 1000, 190, 800, 450);
-		quizFont.draw(quizBackground, "Question: " + questions.get(questionNumber), 90, 750);
-		quizFont.draw(quizBackground, "(Click on one of the multiple choice boxes)", 90, 695);
-		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 100, 585);
-		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 100, 470);
-		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 100, 355);
+		quizBackground.draw(samplePicture, 750, 300, 430, 305);
+		quizFont.getData().setScale(0.7f);
+		quizFont.draw(quizBackground, "Question: " + questions.get(questionNumber), 68, 750);
+		quizFont.draw(quizBackground, "(Click on one of the multiple choice boxes)", 68, 695);
+		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 85, 585);
+		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 85, 470);
+		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 85, 355);
 		if (!userChosenAnswer.equals("")) {
 			option1.removeListener(listener1);
 			option2.removeListener(listener2);
@@ -187,17 +185,16 @@ public class EducationalQuiz extends GameObjectController {
 			int markLocation = setMarkLocation();
 			if (userChosenAnswer.equals(answers.get(questionNumber))) {
 				quizBackground.draw(checkMark, 540, 545 - (markLocation * 115), 50, 50);
-				quizFont.draw(quizBackground, "Correct!", 1100, 240);
-				quizFont.draw(quizBackground, "Your chest is now unlocked! Press <Continue> to resume the game.", 140,
+				quizFont.draw(quizBackground, "Correct!", 85, 240);
+				quizFont.draw(quizBackground, "Your chest is now unlocked! Press <Continue> to resume the game.", 85,
 						100);
 				isCorrect = true;
 			} else {
 				quizBackground.draw(crossMark, 540, 545 - (markLocation * 115), 50, 50);
-				quizFont.draw(quizBackground, "Incorrect!", 1100, 260);
-				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 1100,
-						220);
-				quizFont.draw(quizBackground, "A time penalty of 30 seconds will be added.", 140, 125);
-				quizFont.draw(quizBackground, "Press <Continue> to try answering another question.", 140, 85);
+				quizFont.draw(quizBackground, "Incorrect!", 85, 260);
+				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 85, 220);
+				quizFont.draw(quizBackground, "A time penalty of 30 seconds will be added.", 85, 125);
+				quizFont.draw(quizBackground, "Press <Continue> to try answering another question.", 85, 85);
 				isCorrect = false;
 			}
 		}
