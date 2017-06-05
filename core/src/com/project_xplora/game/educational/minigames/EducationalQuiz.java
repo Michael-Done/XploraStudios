@@ -102,9 +102,9 @@ public class EducationalQuiz extends GameObjectController {
 		quizTable.row();
 		quizTable.add(option3).width(80).padTop(30).padLeft(50);
 		quizTable.row();
-		quizTable.add(continueButton).padTop(155);
-		quizTable.setX(1580f);
-		quizTable.setY(65f);
+		quizTable.add(continueButton).padTop(100);
+		quizTable.setX(500f);
+		quizTable.setY(120f);
 		quizTable.pack();
 		quizTable.center();
 		quizStage.addActor(quizTable);
@@ -177,25 +177,25 @@ public class EducationalQuiz extends GameObjectController {
 		quizBackground.draw(quizScreen, 0, 0, screenWidth, screenHeight);
 		quizBackground.draw(lineSeparator, 850, 250);
 		quizBackground.draw(lineSeparator, 850, 150);
-		quizBackground.draw(samplePicture, 140, 190, 800, 450);
+		quizBackground.draw(samplePicture, 1000, 190, 800, 450);
 		quizFont.draw(quizBackground, "Question: " + questions.get(questionNumber), 90, 750);
 		quizFont.draw(quizBackground, "(Click on one of the multiple choice boxes)", 90, 695);
-		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 1100, 585);
-		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 1100, 470);
-		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 1100, 355);
+		quizFont.draw(quizBackground, "a) " + choices.get(3 * questionNumber), 100, 585);
+		quizFont.draw(quizBackground, "b) " + choices.get(1 + (3 * questionNumber)), 100, 470);
+		quizFont.draw(quizBackground, "c) " + choices.get(2 + (3 * questionNumber)), 100, 355);
 		if (!userChosenAnswer.equals("")) {
 			option1.removeListener(listener1);
 			option2.removeListener(listener2);
 			option3.removeListener(listener3);
 			int markLocation = setMarkLocation();
 			if (userChosenAnswer.equals(answers.get(questionNumber))) {
-				quizBackground.draw(checkMark, 1800, 545 - (markLocation * 115), 50, 50);
+				quizBackground.draw(checkMark, 540, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Correct!", 1100, 240);
 				quizFont.draw(quizBackground, "Your chest is now unlocked! Press <Continue> to resume the game.", 140,
 						100);
 				isCorrect = true;
 			} else {
-				quizBackground.draw(crossMark, 1800, 545 - (markLocation * 115), 50, 50);
+				quizBackground.draw(crossMark, 540, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Incorrect!", 1100, 260);
 				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 1100,
 						220);

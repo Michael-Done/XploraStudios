@@ -39,11 +39,11 @@ public class ProjectXploraGame implements ApplicationListener {
 	ModelBatch modelBatch;
 	ObjectMap<Level, GameObjectController> scenes;
 	Settings settings;
-	public ArrayList<PlayerData> players;
+	PlayerData currentPlayer;
 	public boolean paused = false;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT
 	}
 
 	PauseMenu pauseMenu;
@@ -98,9 +98,10 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MINIGAME1, new BritishColumbiaQuiz(settings));
 		scenes.put(Level.MINIGAME2, new WorldWar2Quiz(settings));
 		scenes.put(Level.MINIGAME3, new AncientRomeQuiz(settings));
+		scenes.put(Level.NAMESELECT, new NameSelect(settings));
 		// For testing purposes
 		// currentScene = Level.MINIGAME1;
-		currentScene = Level.MENU;
+		currentScene = Level.NAMESELECT;
 
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
@@ -147,6 +148,17 @@ public class ProjectXploraGame implements ApplicationListener {
 		// Check for scene changes, especially relating to the menu
 		System.out.println(currentScene);
 		switch (currentScene) {
+		case NAMESELECT:
+			if(((NameSelect)scenes.get(currentScene)).cont){
+				currentPlayer = new PlayerData(((NameSelect)scenes.get(currentScene)).name);
+				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
+				camera.position.set(0, 0, 1);
+				camera.lookAt(0f, 1f, 1f);	
+				Gdx.input.setCursorCatched(true);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+			}
+			break;
 		case MENU:
 			if (((MenuScene) scenes.get(currentScene)).getChoice() == 3) {
 				currentScene = Level.EXIT;
@@ -217,6 +229,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
 			}
+			break;
 		case BC:
 			if (((BritishColombiaScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME1;
