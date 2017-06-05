@@ -4,10 +4,13 @@
 package com.project_xplora.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -34,6 +37,10 @@ import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
@@ -58,8 +65,13 @@ public class RomeScene extends GameObjectController {
 
 	private Array<GroundObjectData> groundObjDataList;
 	public boolean isQuiz = false;
-
+	int artifactsUnlocked = 0;
+	public boolean moveToNext = false;
 	private Array<TreasureChest> chests;
+
+	public Stage exitStage;
+	private Label exitLabel;
+	private Skin exitSkin;
 
 	public RomeScene(Settings settings) {
 		super(settings);
@@ -68,6 +80,15 @@ public class RomeScene extends GameObjectController {
 		initalizeGroundObjectData();
 		initalizeCollisionWorld();
 		initalize();
+		exitSkin = new Skin(Gdx.files.internal("uiskin.json"));
+		exitStage = new Stage();
+		exitLabel = new Label("Level Completed! Space bar to continue to next level", exitSkin);
+		Table t = new Table();
+		t.addActor(exitLabel);
+		t.pack();
+		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
+		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
+		exitStage.addActor(t);
 	}
 
 	class GroundObjectData {
@@ -317,9 +338,15 @@ public class RomeScene extends GameObjectController {
 		for (TreasureChest t : chests) {
 			t.update(ProjectXploraGame.camera.position);
 			isQuiz |= t.isQuiz();
-			if(!t.isQuiz() && t.unlocked() && !t.added){
+			if (!t.isQuiz() && t.unlocked() && !t.added) {
 				objects.add(t.artifact);
+				artifactsUnlocked++;
 				t.added = true;
+			}
+		}
+		if (artifactsUnlocked >= 5) {
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+				moveToNext = true;
 			}
 		}
 	}

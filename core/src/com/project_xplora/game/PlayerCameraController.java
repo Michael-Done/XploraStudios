@@ -118,7 +118,6 @@ public class PlayerCameraController extends InputAdapter {
 		camera.direction.rotate(camera.up, deltaX);
 		tmp.set(camera.direction).crs(camera.up).nor();
 		camera.direction.rotate(tmp, deltaY);
-		// camera.up.rotate(tmp, deltaY);
 		return true;
 	}
 

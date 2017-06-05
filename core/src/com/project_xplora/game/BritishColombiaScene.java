@@ -6,6 +6,7 @@ package com.project_xplora.game;
 import java.awt.Point;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,6 +29,9 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
@@ -51,6 +55,12 @@ public class BritishColombiaScene extends GameObjectController {
 
 	ModelInstance collisionLocation;
 	public boolean isQuiz = false;
+	int artifactsUnlocked = 0;
+	public boolean moveToNext = false;
+	
+	public Stage exitStage;
+	private Label exitLabel;
+	private Skin exitSkin;
 
 	private Array<TreasureChest> chests;
 
@@ -112,7 +122,12 @@ public class BritishColombiaScene extends GameObjectController {
 		initalizeTreeLocations();
 		initalizeCollisionWorld();
 		initalize();
-		// TODO Auto-generated constructor stub
+		exitSkin = new Skin(Gdx.files.internal("uiskin.json"));
+		exitStage = new Stage();
+		exitLabel = new Label("Level Completed! Space bar to continue to next level", exitSkin);
+		exitLabel.setX(Gdx.graphics.getWidth()/2 - exitLabel.getWidth()/2);
+		exitLabel.setY(Gdx.graphics.getHeight()/2 - exitLabel.getHeight()/2 - 100);
+		exitStage.addActor(exitLabel);
 	}
 
 	@Override
@@ -150,10 +165,12 @@ public class BritishColombiaScene extends GameObjectController {
 	@Override
 	public void loadModelInstances() {
 		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f, assets.get("Bucket.g3db", Model.class)));
-		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f,  assets.get("IceSculpture.g3db", Model.class)));
+		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f, assets.get("IceSculpture.g3db", Model.class)));
 		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f, assets.get("Redwood.g3db", Model.class)));
-		chests.add(new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f,  assets.get("MountainsModel.g3db", Model.class)));
-		chests.add(new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f,  assets.get("CanadaMap.g3db", Model.class)));
+		chests.add(
+				new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f, assets.get("MountainsModel.g3db", Model.class)));
+		chests.add(
+				new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f, assets.get("CanadaMap.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
@@ -194,11 +211,9 @@ public class BritishColombiaScene extends GameObjectController {
 		ModelInstance boardwalk_inst = new GameObject(boardwalk);
 		objects.add(boardwalk_inst);
 
-		 Model boardwalkSupports = assets.get("BoardwalkSupports.g3db",
-		 Model.class);
-		 ModelInstance boardwalkSupports_inst = new
-		 GameObject(boardwalkSupports);
-		 objects.add(boardwalkSupports_inst);
+		Model boardwalkSupports = assets.get("BoardwalkSupports.g3db", Model.class);
+		ModelInstance boardwalkSupports_inst = new GameObject(boardwalkSupports);
+		objects.add(boardwalkSupports_inst);
 
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		ModelInstance sky_inst = new GameObject(sky);
@@ -340,9 +355,16 @@ public class BritishColombiaScene extends GameObjectController {
 		for (TreasureChest t : chests) {
 			t.update(ProjectXploraGame.camera.position);
 			isQuiz |= t.isQuiz();
-			if(!t.isQuiz() && t.unlocked() && !t.added){
+			if (!t.isQuiz() && t.unlocked() && !t.added) {
 				objects.add(t.artifact);
+				artifactsUnlocked++;
 				t.added = true;
+			}
+		}
+		if (artifactsUnlocked >= 5) {
+			exitStage.draw();
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+				moveToNext = true;
 			}
 		}
 	}

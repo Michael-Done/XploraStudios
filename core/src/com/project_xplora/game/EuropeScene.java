@@ -4,6 +4,7 @@
 package com.project_xplora.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,6 +27,11 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
 import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
 import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
 import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
@@ -50,9 +56,13 @@ public class EuropeScene extends GameObjectController {
 	Model tree;
 	Model wheat;
 	public boolean isQuiz = false;
-	private int artifactsUnlocked = 0;
+	int artifactsUnlocked = 0;
 	public boolean moveToNext = false;
 	private Array<TreasureChest> chests;
+
+	public Stage exitStage;
+	private Label exitLabel;
+	private Skin exitSkin;
 
 	class GroundObjectData {
 		/** The location of the groundObject */
@@ -111,8 +121,13 @@ public class EuropeScene extends GameObjectController {
 		initalizeGroundObjectData();
 		initalizeCollisionWorld();
 		initalize();
-		// initalizeCollisionShapes();
-		// TODO Auto-generated constructor stub
+		exitSkin = new Skin(Gdx.files.internal("uiskin.json"));
+		exitStage = new Stage();
+		exitLabel = new Label("Level Completed! Space bar to continue to next level", exitSkin);
+		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
+		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
+		exitStage.addActor(exitLabel);
+
 	}
 
 	@Override
@@ -168,8 +183,15 @@ public class EuropeScene extends GameObjectController {
 			t.update(ProjectXploraGame.camera.position);
 			isQuiz |= t.isQuiz();
 			if (!t.isQuiz() && t.unlocked() && !t.added) {
+				artifactsUnlocked++;
 				objects.add(t.artifact);
 				t.added = true;
+			}
+		}
+		if (artifactsUnlocked >= 5) {
+			exitStage.draw();
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+				moveToNext = true;
 			}
 		}
 		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
@@ -318,8 +340,8 @@ public class EuropeScene extends GameObjectController {
 		initalizeTrees();
 		initalizeGrassLocations();
 		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f, assets.get("Gun.g3db", Model.class)));
-		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("DogTags.g3db", Model.class)));
-		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("Flag.g3db", Model.class)));
+		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("Flag.g3db", Model.class)));
+		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("DogTags.g3db", Model.class)));
 		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f, assets.get("TankModel.g3db", Model.class)));
 		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f, assets.get("Bomb.g3db", Model.class)));
 		for (TreasureChest t : chests) {
