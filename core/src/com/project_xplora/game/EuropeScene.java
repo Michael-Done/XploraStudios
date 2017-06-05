@@ -44,16 +44,14 @@ public class EuropeScene extends GameObjectController {
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
 	btCollisionWorld collisionWorld;
-
 	private int counter = 0;
 	private int grassIndexStart;
 	Model tree;
 	Model wheat;
-	TreasureChest t;
 	public boolean isQuiz = false;
-	
+
 	private Array<TreasureChest> chests;
-	
+
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -106,6 +104,7 @@ public class EuropeScene extends GameObjectController {
 	public EuropeScene(Settings settings) {
 		super(settings);
 		groundObjDataList = new Array<GroundObjectData>();
+		chests = new Array<TreasureChest>();
 		initalizeGrassLocations();
 		initalizeGroundObjectData();
 		initalizeCollisionWorld();
@@ -148,11 +147,20 @@ public class EuropeScene extends GameObjectController {
 				grassLoc.x += camLoc.x;
 				grassLoc.y += camLoc.y;
 				System.out.println(grassLoc.dst(camLoc));
-				objects.get(i).transform.setTranslation(new Vector3(grassLoc.x, grassLoc.y, 0));
+				boolean relocate = true;
+				for (TreasureChest e : chests) {
+					if (e.location2().dst(grassLoc) < 7) {
+						relocate = false;
+					}
+				}
+				if (relocate)
+					objects.get(i).transform.setTranslation(new Vector3(grassLoc.x, grassLoc.y, 0));
 			}
 		}
-		t.update(ProjectXploraGame.camera.position);
-		isQuiz = t.isQuiz();
+		for (TreasureChest t : chests) {
+			t.update(ProjectXploraGame.camera.position);
+			isQuiz |= t.isQuiz();
+		}
 		// System.out.println((int) (1 / Gdx.graphics.getDeltaTime()) + " FPS");
 	}
 
@@ -169,11 +177,11 @@ public class EuropeScene extends GameObjectController {
 
 	private void initalizeGroundObjectData() {
 		groundObjDataList.add(
-                new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f, new Vector3(305f, 305f, 1f)));
+				new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f, new Vector3(305f, 305f, 1f)));
 	}
 
 	private void initalizeGrassLocations() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 500; i++) {
 			float random1 = (float) Math.random();
 			float random2 = (float) Math.random();
 			float randomXPoint = (float) (random2 * 25 * Math.cos(Math.PI * 2 * random1 / random2));
@@ -262,7 +270,9 @@ public class EuropeScene extends GameObjectController {
 				new Vector2(-29.188843369483948f, 3.032171130180359f)));
 
 	}
-
+	public void resetIsQuiz(){
+		isQuiz = false;
+	}
 	@Override
 	public void camSetup() {
 		// Create a camera and point it to our model
@@ -279,8 +289,9 @@ public class EuropeScene extends GameObjectController {
 		Gdx.input.setInputProcessor(cameraController);
 		cameraResize(screenWidth, screenHeight);
 	}
+
 	@Override
-	public void updateCamera(){
+	public void updateCamera() {
 		super.updateCamera();
 		Vector3 intersectLocation = GroundCollisionDetector.rayTest(collisionWorld, cameraController.getRayFrom(),
 				cameraController.getRayTo());
@@ -288,13 +299,20 @@ public class EuropeScene extends GameObjectController {
 			cameraController.setZ(intersectLocation.z + 1.4f);
 		}
 	}
+
 	@Override
 	public void loadModelInstances() {
 		initalizeTrees();
 		initalizeGrassLocations();
-		t = new TreasureChest(28.5756f, 59.9431f, 0f, 180f);
-		objects.add(t.base);
-		objects.add(t.lid);
+		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f));
+		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f));
+		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f));
+		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f));
+		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f));
+		for (TreasureChest t : chests) {
+			objects.add(t.base);
+			objects.add(t.lid);
+		}
 		// sky dome
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		GameObject sky_inst = new GameObject(sky);

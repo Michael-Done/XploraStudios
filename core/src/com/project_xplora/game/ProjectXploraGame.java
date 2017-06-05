@@ -222,9 +222,11 @@ public class ProjectXploraGame implements ApplicationListener {
 			break;
 		case MINIGAME2:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
+				((EducationalQuiz) scenes.get(currentScene)).resetExitMinigame();
 				currentScene = Level.EUROPE;
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
+				((EuropeScene) scenes.get(currentScene)).resetIsQuiz();
 			}
 		default:
 			break;

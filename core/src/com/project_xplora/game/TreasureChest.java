@@ -28,6 +28,7 @@ public class TreasureChest {
 	private boolean useRoll;
 	private boolean isUnlocked = false;
 	private boolean isQuiz = false;
+	private int signum;
 
 	/**
 	 * 
@@ -45,7 +46,7 @@ public class TreasureChest {
 		useRoll = rot == 90 || rot == -90;
 		lid.transform.rotate(1, 0, 0, 90);
 		base.transform.rotate(1, 0, 0, 90);
-
+		signum = (useRoll && rot > 1) || rot == 0 ? 1 : -1;
 		open = false;
 	}
 
@@ -69,9 +70,9 @@ public class TreasureChest {
 		}
 		System.out.println(targetDeg);
 		if (useRoll) {
-			currentDeg = lid.transform.getRotation(new Quaternion()).nor().getRoll() - 90;
+			currentDeg = signum*lid.transform.getRotation(new Quaternion()).nor().getRoll() - 90;
 		} else {
-			currentDeg = -lid.transform.getRotation(new Quaternion()).nor().getPitch() - 90;
+			currentDeg = signum*lid.transform.getRotation(new Quaternion()).nor().getPitch() - 90;
 		}
 		if (open && currentDeg > targetDeg) {
 			lid.transform.rotate(1, 0, 0, (targetDeg - currentDeg) / 4);
@@ -89,5 +90,7 @@ public class TreasureChest {
 	public boolean isQuiz() {
 		return isQuiz;
 	}
-
+	public Vector2 location2 (){
+		return new Vector2(lid.transform.getTranslation(new Vector3()).x, lid.transform.getTranslation(new Vector3()).y);
+	}
 }

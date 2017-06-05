@@ -87,6 +87,7 @@ public class EducationalQuiz extends GameObjectController {
 				option3.addListener(listener3);
 				if (isCorrect) {
 					exitMinigame = true;
+					generateQuestion = true;
 				} else {
 					generateQuestion = true;
 				}
@@ -224,5 +225,8 @@ public class EducationalQuiz extends GameObjectController {
 	}
 	public boolean isCorrect(){
 		return exitMinigame;
+	}
+	public void resetExitMinigame(){
+		exitMinigame = false;
 	}
 }
