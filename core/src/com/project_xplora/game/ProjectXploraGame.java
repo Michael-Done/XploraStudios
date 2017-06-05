@@ -41,7 +41,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	Settings settings;
 	static PlayerData currentPlayer;
 	public boolean paused = false;
-	Timer timer;
+	public static Timer timer;
 
 	public enum Level {
 		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
@@ -100,7 +100,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MINIGAME2, new WorldWar2Quiz(settings));
 		scenes.put(Level.MINIGAME3, new AncientRomeQuiz(settings));
 		scenes.put(Level.NAMESELECT, new NameSelect(settings));
-		
+
 		// For testing purposes
 		// currentScene = Level.MINIGAME1;
 		currentScene = Level.NAMESELECT;
@@ -133,6 +133,7 @@ public class ProjectXploraGame implements ApplicationListener {
 
 	@Override
 	public void render() {
+
 		// Clear the viewport
 		Gdx.gl.glViewport(0, 0, screenWidth, screenHeight);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -155,6 +156,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentPlayer = new PlayerData(((NameSelect) scenes.get(currentScene)).name);
 				timer = new Timer(currentPlayer);
 				currentScene = Level.MENU;
+				scenes.put(Level.GAMEFINISH, new GameCompletedScene(settings));
 				scenes.get(currentScene).updateSettings(settings);
 				camera.position.set(0, 0, 1);
 				camera.lookAt(0f, 1f, 1f);
@@ -249,6 +251,7 @@ public class ProjectXploraGame implements ApplicationListener {
 			} else if (((BritishColombiaScene) scenes.get(currentScene)).moveToNext) {
 				currentScene = Level.GAMEFINISH;
 				scenes.get(currentScene).camSetup();
+				((GameCompletedScene) scenes.get(currentScene)).updateTable();
 			} else if (((BritishColombiaScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
 				((BritishColombiaScene) scenes.get(currentScene)).exitStage.draw();
 			}

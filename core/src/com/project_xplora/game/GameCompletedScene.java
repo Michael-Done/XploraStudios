@@ -22,6 +22,7 @@ public class GameCompletedScene extends GameObjectController {
 	private Stage stage;
 	private Table table;
 	private Skin skin;
+
 	/**
 	 * @param settings
 	 */
@@ -29,38 +30,49 @@ public class GameCompletedScene extends GameObjectController {
 		super(settings);
 		loadModelInstances();
 	}
-	public void camSetup(){
+
+	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
+		Gdx.input.setInputProcessor(stage);
 	}
-	public void loadModelInstances(){
+
+	public void loadModelInstances() {
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		table = new Table();
+	}
+
+	public void updateTable() {
 		TextButton next = new TextButton("Continue", skin);
-		next.addListener(new ClickListener(){
+		next.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				nextScene = true;
 			}
 		});
-		table.addActor(new Label("Rome Time taken: " + ProjectXploraGame.currentPlayer.getRomeTime()/60 + " Minutes", skin));
+		table.clear();
+		table.add(
+				new Label("Rome Time taken: " + ProjectXploraGame.timer.player.getRomeTime() / 60 + " Minutes", skin));
 		table.row();
-		table.addActor(new Label("Europe Time taken: " + ProjectXploraGame.currentPlayer.getEuropeTime()/60 + " Minutes", skin));
+		table.add(new Label("Europe Time taken: " + ProjectXploraGame.timer.player.getEuropeTime() / 60.0f + " Minutes",
+				skin));
 		table.row();
-		table.addActor(new Label("British Columbia Time taken: " + ProjectXploraGame.currentPlayer.getBCTime()/60 + " Minutes", skin));
+		table.add(new Label(
+				"British Columbia Time taken: " + ProjectXploraGame.timer.player.getBCTime() / 60.0f + " Minutes",
+				skin));
 		table.row();
-		table.addActor(new Label("Total Time taken: " + ProjectXploraGame.currentPlayer.getTime()/60 + " Minutes", skin));
+		table.add(
+				new Label("Total Time taken: " + ProjectXploraGame.timer.player.getTime() / 60.0f + " Minutes", skin));
 		table.row();
-		table.addActor(next);
+		table.add(next);
 		table.pack();
-		table.setX(Gdx.graphics.getWidth()/2 - table.getWidth()/2);
-		table.setY(Gdx.graphics.getHeight()/2 - table.getHeight()/2);
-		
+		table.setX(Gdx.graphics.getWidth() / 2 - table.getWidth() / 2);
+		table.setY(Gdx.graphics.getHeight() / 2 - table.getHeight() / 2);
 		stage.addActor(table);
 	}
-	public void update(){
+
+	public void update() {
 		stage.draw();
 	}
-	
 
 }
