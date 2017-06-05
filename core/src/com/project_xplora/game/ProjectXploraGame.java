@@ -145,6 +145,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		}
 		// System.out.println(currentScene);
 		// Check for scene changes, especially relating to the menu
+		System.out.println(currentScene);
 		switch (currentScene) {
 		case MENU:
 			if (((MenuScene) scenes.get(currentScene)).getChoice() == 3) {
@@ -216,6 +217,21 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
 			}
+		case BC:
+			if (((BritishColombiaScene) scenes.get(currentScene)).isQuiz) {
+				currentScene = Level.MINIGAME1;
+				scenes.get(currentScene).camSetup();
+			}
+			break;
+		case MINIGAME1:
+			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
+				((EducationalQuiz) scenes.get(currentScene)).resetExitMinigame();
+				currentScene = Level.BC;
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+				((BritishColombiaScene) scenes.get(currentScene)).resetIsQuiz();
+			}
+			break;
 		case EUROPE:
 			if (((EuropeScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME2;

@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
@@ -30,6 +31,7 @@ import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
+import com.project_xplora.game.EuropeScene.GroundObjectData;
 
 /**
  * @author Michael
@@ -48,6 +50,9 @@ public class BritishColombiaScene extends GameObjectController {
 	btCollisionWorld collisionWorld;
 
 	ModelInstance collisionLocation;
+	public boolean isQuiz = false;
+
+	private Array<TreasureChest> chests;
 
 	class GroundObjectData {
 		/** The location of the groundObject */
@@ -102,6 +107,7 @@ public class BritishColombiaScene extends GameObjectController {
 		super(settings);
 		groundObjDataList = new Array<GroundObjectData>();
 		treeLocations = new Array<Vector3>();
+		chests = new Array<TreasureChest>();
 		initalizeGroundObjectData();
 		initalizeTreeLocations();
 		initalizeCollisionWorld();
@@ -138,6 +144,41 @@ public class BritishColombiaScene extends GameObjectController {
 
 	@Override
 	public void loadModelInstances() {
+		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f));
+		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f));
+		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f));
+		chests.add(new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f));
+		chests.add(new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f));
+		for (TreasureChest t : chests) {
+			objects.add(t.base);
+			objects.add(t.lid);
+			if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == 0) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y)));
+			} else if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == 180) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			} else if (t.base.transform.getRotation(new Quaternion()).nor().getRoll() == -90) {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x - 1,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			} else {
+				cameraController.addCollision(new CollisionRect(
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x,
+								t.base.transform.getTranslation(new Vector3()).y - 1),
+						new Vector2(t.base.transform.getTranslation(new Vector3()).x + 1,
+								t.base.transform.getTranslation(new Vector3()).y + 1)));
+			}
+		}
+
 		treeHighPoly = assets.get("TreeHighPoly.g3db", Model.class);
 
 		Model mountain = assets.get("Mountains3.g3db", Model.class);
@@ -285,8 +326,8 @@ public class BritishColombiaScene extends GameObjectController {
 				new Vector2(-111.33959174156189f, 94.67278718948364f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-89.0821472927928f, 54.18705224990845f),
 				new Vector2(-88.14071495085955f, 108.70761632919312f)));
-		
-		for(Vector3 i : treeLocations){
+
+		for (Vector3 i : treeLocations) {
 			cameraController.addCollision(new CollisionCircle(new Vector2(i.x, i.y), 1.5f));
 		}
 	}
@@ -294,7 +335,15 @@ public class BritishColombiaScene extends GameObjectController {
 	@Override
 	public void update() {
 		super.update();
-		System.out.println(1 / Gdx.graphics.getDeltaTime() + " FPS");
+		// System.out.println(1 / Gdx.graphics.getDeltaTime() + " FPS");
+		for (TreasureChest t : chests) {
+			t.update(ProjectXploraGame.camera.position);
+			isQuiz |= t.isQuiz();
+		}
+	}
+
+	public void resetIsQuiz() {
+		isQuiz = false;
 	}
 
 	@Override
