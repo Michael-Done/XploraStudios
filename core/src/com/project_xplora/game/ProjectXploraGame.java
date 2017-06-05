@@ -44,7 +44,7 @@ public class ProjectXploraGame implements ApplicationListener {
 	public static Timer timer;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
+		SPLASHSCREEN, MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
 	}
 
 	PauseMenu pauseMenu;
@@ -88,7 +88,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		settings.setMouseSens(10);
 		scenes = new ObjectMap<Level, GameObjectController>();
 
-		// scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
+		scenes.put(Level.SPLASHSCREEN, new SplashScreen (settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
@@ -101,9 +101,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MINIGAME3, new AncientRomeQuiz(settings));
 		scenes.put(Level.NAMESELECT, new NameSelect(settings));
 
-		// For testing purposes
-		// currentScene = Level.MINIGAME1;
-		currentScene = Level.NAMESELECT;
+		currentScene = Level.SPLASHSCREEN;
 
 		scenes.get(currentScene).camSetup();
 		// Get screen dimensions
