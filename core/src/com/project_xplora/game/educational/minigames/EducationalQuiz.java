@@ -30,10 +30,8 @@ public class EducationalQuiz extends GameObjectController {
 	private int questionNumber;
 	private boolean generateQuestion, isCorrect, exitMinigame;
 	private ClickListener listener1, listener2, listener3, listener4;
-
 	private float screenWidth;
 	private float screenHeight;
-	private float relativeLocation;
 
 	//Constructor
 	public EducationalQuiz(Settings settings) {
@@ -55,7 +53,6 @@ public class EducationalQuiz extends GameObjectController {
 		answers = new ArrayList<String>();
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
-		relativeLocation = screenWidth / screenHeight;
 
 		option1 = new TextButton("A", quizSkin);
 		option2 = new TextButton("B", quizSkin);

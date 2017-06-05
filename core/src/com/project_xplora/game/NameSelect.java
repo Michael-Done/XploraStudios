@@ -3,6 +3,8 @@
  */
 package com.project_xplora.game;
 
+import javax.swing.JOptionPane;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -44,7 +46,12 @@ public class NameSelect extends GameObjectController {
 		continueButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!field.getText().equals("")) {
+				if (field.getText().length() >= 21) {
+					JOptionPane.showMessageDialog(null,
+							"For visual error prevention purposes, you cannot have a username that is longer than 20 characters");
+				}
+
+				if (!field.getText().trim().equals("") && field.getText().length() < 21) {
 					cont = true;
 					name = field.getMessageText();
 				}
