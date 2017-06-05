@@ -39,12 +39,12 @@ public class ProjectXploraGame implements ApplicationListener {
 	ModelBatch modelBatch;
 	ObjectMap<Level, GameObjectController> scenes;
 	Settings settings;
-	PlayerData currentPlayer;
+	static PlayerData currentPlayer;
 	public boolean paused = false;
 	Timer timer;
 
 	public enum Level {
-		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT
+		MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
 	}
 
 	PauseMenu pauseMenu;
@@ -100,6 +100,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MINIGAME2, new WorldWar2Quiz(settings));
 		scenes.put(Level.MINIGAME3, new AncientRomeQuiz(settings));
 		scenes.put(Level.NAMESELECT, new NameSelect(settings));
+		
 		// For testing purposes
 		// currentScene = Level.MINIGAME1;
 		currentScene = Level.NAMESELECT;
@@ -231,16 +232,23 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setCursorCatched(true);
 			}
 			break;
+		case GAMEFINISH:
+			if (((GameCompletedScene) scenes.get(currentScene)).nextScene) {
+				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+				camera.position.set(0, 0, 1);
+				camera.lookAt(0f, 1f, 1f);
+			}
+			break;
 		case BC:
 			if (((BritishColombiaScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME1;
 				scenes.get(currentScene).camSetup();
 			} else if (((BritishColombiaScene) scenes.get(currentScene)).moveToNext) {
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
-				// TRANSITION BETWEEN SCENES HERE
+				currentScene = Level.GAMEFINISH;
+				scenes.get(currentScene).camSetup();
 			} else if (((BritishColombiaScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
 				((BritishColombiaScene) scenes.get(currentScene)).exitStage.draw();
 			}
@@ -263,11 +271,10 @@ public class ProjectXploraGame implements ApplicationListener {
 				currentScene = Level.BC;
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
-				ProjectXploraGame.camera.position.set(0f, 0f, 1);
-				ProjectXploraGame.camera.lookAt(0f, 1f, 1);
+				ProjectXploraGame.camera.position.set(149f, -50f, 1 + 12.36f);
+				ProjectXploraGame.camera.lookAt(149f, -49f, 1 + 12.36f);
 				ProjectXploraGame.camera.near = 0.1f;
 				ProjectXploraGame.camera.far = 1000f;
-				ProjectXploraGame.camera.update();
 			} else if (((EuropeScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
 				((EuropeScene) scenes.get(currentScene)).exitStage.draw();
 			}

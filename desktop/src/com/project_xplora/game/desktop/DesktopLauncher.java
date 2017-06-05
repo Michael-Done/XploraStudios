@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.project_xplora.game.ProjectXploraGame;
 
 /**
@@ -220,7 +221,7 @@ public class DesktopLauncher implements ActionListener {
 	 * <p>
 	 * @param e - Stores the event detected by the actionListener.
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) throws GdxRuntimeException{
 		width = (int) (((Resolution) (resolutionSelection.getSelectedItem())).getX());
 		height = (int) (((Resolution) (resolutionSelection.getSelectedItem())).getY());
 		fullscreen = fullscreenSelection.getSelectedItem().equals("Fullscreen");
@@ -246,6 +247,7 @@ public class DesktopLauncher implements ActionListener {
 	 *            - The arguments passed from the command line.
 	 */
 	public static void main(String[] args) {
+		
 		gameLauncher();
 	}
 }
