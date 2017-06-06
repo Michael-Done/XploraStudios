@@ -97,10 +97,10 @@ public class RomeScene extends GameObjectController {
 		hud = new Stage();
 		time = new Label("", exitSkin);
 		artifacts = new Label("", exitSkin);
-		time.setX(10);
-		time.setY(10);
-		artifacts.setX(Gdx.graphics.getWidth() - artifacts.getWidth() - 20);
-		artifacts.setY(10);
+		time.setX(100);
+		time.setY(100);
+		artifacts.setX(Gdx.graphics.getWidth() - artifacts.getWidth() - 100);
+		artifacts.setY(100);
 		hud.addActor(time);
 		hud.addActor(artifacts);
 	}
@@ -378,7 +378,7 @@ public class RomeScene extends GameObjectController {
 		if (isQuiz) {
 			cameraController.keys.clear();
 		}
-		time.setText((ProjectXploraGame.timer.player.getRomeTime() / 60) + " Seconds");
+		time.setText((ProjectXploraGame.timer.player.getRomeTime() + " Seconds"));
 		artifacts.setText(artifactsUnlocked + "/5");
 	}
 

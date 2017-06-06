@@ -275,6 +275,8 @@ public class ProjectXploraGame implements ApplicationListener {
 				((BritishColombiaScene) scenes.get(currentScene)).exitStage.draw();
 			}
 			timer.update(currentScene, paused);
+			if (currentScene == Level.BC)
+				((BritishColombiaScene) scenes.get(currentScene)).hud.draw();
 			break;
 		case MINIGAME1:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
@@ -301,6 +303,8 @@ public class ProjectXploraGame implements ApplicationListener {
 				((EuropeScene) scenes.get(currentScene)).exitStage.draw();
 			}
 			timer.update(currentScene, paused);
+			if (currentScene == Level.EUROPE)
+				((EuropeScene) scenes.get(currentScene)).hud.draw();
 			break;
 		case MINIGAME2:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
@@ -328,6 +332,8 @@ public class ProjectXploraGame implements ApplicationListener {
 				((RomeScene) scenes.get(currentScene)).exitStage.draw();
 			}
 			timer.update(currentScene, paused);
+			if (currentScene == Level.ROME)
+				((RomeScene) scenes.get(currentScene)).hud.draw();
 			break;
 		case MINIGAME3:
 			if (((EducationalQuiz) scenes.get(currentScene)).isCorrect()) {
