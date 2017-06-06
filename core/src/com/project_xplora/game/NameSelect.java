@@ -71,7 +71,7 @@ public class NameSelect extends GameObjectController {
 
 	public void update() {
 		batch.begin();
-		batch.draw(backgroundTexture, 0, 0);
+		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
 		stage.draw();
 	}
