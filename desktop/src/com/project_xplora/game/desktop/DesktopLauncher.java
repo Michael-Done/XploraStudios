@@ -72,7 +72,7 @@ import com.project_xplora.game.ProjectXploraGame;
  * <h2>Course Info:</h2> ICS4U0 with Krasteva, V.
  * <p>
  * 
- * @version 1.0 | 12.05.2017
+ * @version 5.0 | 06.06.2017
  * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
 

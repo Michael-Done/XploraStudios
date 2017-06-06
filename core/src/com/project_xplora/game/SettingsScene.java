@@ -26,8 +26,17 @@ import com.project_xplora.game.settings_menu_classes.KeyField;
 import com.project_xplora.game.settings_menu_classes.KeyHandlerStage;
 
 /**
- * @author Michael
- *
+ * The settings scene class. The scen in which the user chooses their settings.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * final TextButton <b> *all buttons in this class* </b> - the buttons that the
+ * user changes the settings with.
+ * <p>
+ * Time taken to complete: 2 hours
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
 public class SettingsScene extends GameObjectController {
 	SpriteBatch batch;
@@ -77,17 +86,19 @@ public class SettingsScene extends GameObjectController {
 		// loadModelInstances();
 
 	}
+
 	@Override
-	public void updateSettings(Settings settings){
+	public void updateSettings(Settings settings) {
 		tempSettings = settings;
 	}
+
 	@Override
 	public void loadModelInstances() {
 		table.clear();
-		skin.getFont("font-label").getData().setScale(Gdx.graphics.getWidth()/6400.0f, Gdx.graphics.getHeight()/3600.0f);
-		skin.getFont("font-button").getData().setScale(Gdx.graphics.getWidth()/6400.0f, Gdx.graphics.getHeight()/3600.0f);
-
-
+		skin.getFont("font-label").getData().setScale(Gdx.graphics.getWidth() / 6400.0f,
+				Gdx.graphics.getHeight() / 3600.0f);
+		skin.getFont("font-button").getData().setScale(Gdx.graphics.getWidth() / 6400.0f,
+				Gdx.graphics.getHeight() / 3600.0f);
 
 		volume = new Slider(0, 100, 1, false, skin);
 		volume.setValue(tempSettings.getMasterVolume());
@@ -202,9 +213,9 @@ public class SettingsScene extends GameObjectController {
 	}
 
 	public void update() {
-		//batch.begin();
+		// batch.begin();
 		stage.draw();
-		//batch.end();
+		// batch.end();
 
 		choice = cancelListener.getChoice();
 		if (applyListener.getChoice() != 0) {

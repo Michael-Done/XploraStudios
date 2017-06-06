@@ -16,8 +16,8 @@ import com.badlogic.gdx.math.Vector2;
  * <p>
  * Time taken to complete: 15 mins
  * 
- * @author Michael Done, Cyrus Gandevia
- * @version 5.0
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  *
  */
 public abstract class CollisionShape {
