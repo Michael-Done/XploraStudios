@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * The treasure chest class. This class is used in all 3 of the levels in order
- * to help organize and animate the treasure chests.
+ * The pause menu class. This class is used in all 3 of the levels in order
+ * to pause the game.
  * <p>
  * <b> Class Fields: </b>
  * <p>

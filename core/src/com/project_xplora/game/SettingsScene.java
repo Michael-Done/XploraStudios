@@ -212,6 +212,7 @@ public class SettingsScene extends GameObjectController {
 		stage.addActor(table);
 	}
 
+	@Override
 	public void update() {
 		// batch.begin();
 		stage.draw();
@@ -224,19 +225,34 @@ public class SettingsScene extends GameObjectController {
 
 	}
 
+	/**
+	 * sets the correct input processor
+	 * 
+	 */
 	public void setInputProccessor() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(stage);
 	}
 
+	/**
+	 * resets the player's choice
+	 */
 	public void resetChoice() {
 		choice = 0;
 	}
 
+	/**
+	 * @return choice
+	 */
 	public int getChoice() {
 		return choice;
 	}
 
+	/**
+	 * gets the new settings after exiting the scene
+	 * 
+	 * @return the new settings
+	 */
 	public Settings getNewSettings() {
 		tempSettings.setForward(((KeyField) forward).getKey());
 		tempSettings.setBackward(((KeyField) backward).getKey());
@@ -257,6 +273,7 @@ public class SettingsScene extends GameObjectController {
 		table = null;
 	}
 
+	/** a helper class used for the apply and cancel buttons */
 	class ApplyCancelListener extends ClickListener {
 		private boolean apply;
 		private int choice;

@@ -10,6 +10,20 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * The MenuScene class. This is the main menu scene that the user can go to each
+ * of the scenes from
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * ModelInstance <b> *all ModelInstances in this class* </b> - the different
+ * models in the scene
+ * <p>
+ * Time taken to complete: 3 hours
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
 public class MenuScene extends GameObjectController {
 	ModelInstance exitText_inst;
 	ModelInstance playText_inst;
@@ -17,15 +31,24 @@ public class MenuScene extends GameObjectController {
 	ModelInstance highscoresText_inst;
 	ModelInstance artifactText_inst;
 	ModelInstance instructionText_inst;
-
+	/** the player's choice in the menu */
 	int menuChoice = -1;
 
+	/**
+	 * class constructor
+	 * 
+	 * @param settings
+	 */
 	public MenuScene(Settings settings) {
 		super(settings);
 		initalize();
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * 
+	 * @return the user's choice
+	 */
 	public int getChoice() {
 		return menuChoice;
 	}
@@ -203,22 +226,22 @@ public class MenuScene extends GameObjectController {
 		ModelInstance play_inst = new GameObject(play);
 		play_inst.transform.translate(playLocation);
 		objects.add(play_inst);
-		
+
 		Model highscores = assets.get("Trophy.g3db", Model.class);
 		ModelInstance highscores_inst = new GameObject(highscores);
 		highscores_inst.transform.translate(highscoresLocation).rotate(0, 1f, 0, 120f);
 		objects.add(highscores_inst);
-		
+
 		Model settings = assets.get("Gear.g3db", Model.class);
 		ModelInstance settings_inst = new GameObject(settings);
 		settings_inst.transform.translate(settingsLocation).rotate(0, 1f, 0, 60f);
 		objects.add(settings_inst);
-		
+
 		Model instructions = assets.get("Instructions.g3db", Model.class);
 		ModelInstance instructions_inst = new GameObject(instructions);
 		instructions_inst.transform.translate(instructionLocation).rotate(0, 1f, 0, -60f);
 		objects.add(instructions_inst);
-		
+
 		Model artefact = assets.get("Artefact.g3db", Model.class);
 		ModelInstance artefact_inst = new GameObject(artefact);
 		artefact_inst.transform.translate(artifactLocation).rotate(0, 1f, 0, -60f);
@@ -248,7 +271,11 @@ public class MenuScene extends GameObjectController {
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 2f, 2f, 2f, 1f));
 		environment.add(new DirectionalLight().set(0.01f, 0.01f, 0.01f, 0.1f, 0.1f, -1f));
 	}
-	public void resetMenuChoice(){
+
+	/**
+	 * resets the player's menu choice
+	 */
+	public void resetMenuChoice() {
 		menuChoice = -1;
 	}
 }
