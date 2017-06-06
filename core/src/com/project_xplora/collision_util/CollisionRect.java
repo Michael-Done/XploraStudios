@@ -14,15 +14,32 @@ import com.badlogic.gdx.math.Vector2;
  * sw---------|
  */
 /**
- * @author Michael
+ * This class is the rectangle implementation of the {@link CollisionShape}
+ * class. It detects collisions with a rectangle shape.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * private {@link Vector2} <b> ne </b> - the north east corner
+ * <p>
+ * private {@link Vector2} <b> sw </b> - the south west corner
+ * <p>
+ * Time taken to complete: 30 mins
+ * 
+ * @author Michael Done, Cyrus Gandevia
+ * @version 5.0
  *
  */
 public class CollisionRect extends CollisionShape {
-	Vector2 ne;
-	Vector2 sw;
+	/** the north east corner */
+	private Vector2 ne;
+	/** the south west corner */
+	private Vector2 sw;
 
 	/**
+	 * Class constructor. Constructs a new CollisionRect given two points
 	 * 
+	 * @param sw,
+	 *            ne
 	 */
 	public CollisionRect(Vector2 sw, Vector2 ne) { // Liam was here
 		this.ne = ne;
@@ -30,12 +47,11 @@ public class CollisionRect extends CollisionShape {
 		margin = 0.15f;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * The rectangle implementation of the isInside method.
 	 * 
-	 * @see
-	 * com.project_xplora.collision_util.CollisionShape#isInside(com.badlogic.
-	 * gdx.math.Vector2)
+	 * @param point
+	 * @return true if the point is inside the object
 	 */
 	@Override
 	public boolean isInside(Vector2 point) {
@@ -44,12 +60,12 @@ public class CollisionRect extends CollisionShape {
 
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * The rectangle implementation of the newPointCacluation method.
 	 * 
-	 * @see
-	 * com.project_xplora.collision_util.CollisionShape#newPointCaclulation(com.
-	 * badlogic.gdx.math.Vector2, com.badlogic.gdx.math.Vector2)
+	 * @param currentPoint,
+	 *            lastPoint
+	 * @return the point after the collision occurs
 	 */
 	@Override
 	public Vector2 newPointCaclulation(Vector2 currentPoint, Vector2 lastPoint) {
