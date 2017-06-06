@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -43,6 +44,8 @@ public class ProjectXploraGame implements ApplicationListener {
 	static PlayerData currentPlayer;
 	public boolean paused = false;
 	public static Timer timer;
+	private Music musicPlayer;
+	private String [] musicFileNames;
 
 	public enum Level {
 		SPLASHSCREEN, MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
