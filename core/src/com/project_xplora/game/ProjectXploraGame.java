@@ -35,37 +35,65 @@ import com.project_xplora.game.educational.minigames.BritishColumbiaQuiz;
 import com.project_xplora.game.educational.minigames.EducationalQuiz;
 import com.project_xplora.game.educational.minigames.WorldWar2Quiz;
 
+/**
+ * The ProjectXploraGame class. this is where all program control and flow is
+ * processed. Each frame the game goes through the render method.
+ * <p>
+ * Time taken to complete: 7 hours
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
 public class ProjectXploraGame implements ApplicationListener {
+	/** the highscores */
 	static TreeSet<PlayerData> highscores;
+	/** the camera used throughout the game */
 	static PerspectiveCamera camera;
+	/** the model batch used for all objects */
 	ModelBatch modelBatch;
+	/** the list of scenes */
 	ObjectMap<Level, GameObjectController> scenes;
+	/** the settings */
 	Settings settings;
+	/** the current player's data */
 	static PlayerData currentPlayer;
+	/** if the game is paused */
 	public boolean paused = false;
+	/** the timer used to score the player */
 	public static Timer timer;
+	/** the music player */
 	private Music musicPlayer;
+	/** the list of music files */
 	private String[] musicFileNames;
+	/** whether or not to play music */
 	private boolean callMusicPlay;
 
+	/** the list of levels */
 	public enum Level {
 		SPLASHSCREEN, MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
 	}
 
+	/** yhe pause menu */
 	PauseMenu pauseMenu;
+	/** the curent scene */
 	Level currentScene;
+	/** the screen width */
 	public int screenWidth;
+	/** the scren height */
 	public int screenHeight;
-
+	/** the list of all models being rendered */
 	Array<ModelInstance> instances = new Array<ModelInstance>();
 
+	/**
+	 * initalizes EVERYTHING
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void create() {
 		Bullet.init();
 		pauseMenu = new PauseMenu();
 
-		//Initialize Music
+		// Initialize Music
 		musicFileNames = new String[5];
 		musicFileNames[0] = "SplashScreen.mp3";
 		musicFileNames[1] = "MenuAndScreens.mp3";
@@ -128,6 +156,9 @@ public class ProjectXploraGame implements ApplicationListener {
 		modelBatch = new ModelBatch();
 	}
 
+	/**
+	 * called when the app exits. Saves the highscores
+	 */
 	@Override
 	public void dispose() {
 		try {
@@ -147,6 +178,7 @@ public class ProjectXploraGame implements ApplicationListener {
 
 	}
 
+	/** called each frame. Controls all program flow as well. */
 	@Override
 	public void render() {
 
