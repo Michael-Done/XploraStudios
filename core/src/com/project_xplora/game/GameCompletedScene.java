@@ -14,8 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.project_xplora.game.settings_menu_classes.KeyField;
 
 /**
- * @author Michael
- *
+ * The GameCompleted class. This is the scene that dispalys when the user
+ * completes the game
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * Stage <b> stage </b> - The stage
+ * <p>
+ * Table <b> table </b> - The table
+ * <p>
+ * Skin <b> skin </b> - The GUI skin
+ * <p>
+ * Time taken to complete: 0.5 hours
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
 public class GameCompletedScene extends GameObjectController {
 	public boolean nextScene = false;
@@ -24,6 +37,8 @@ public class GameCompletedScene extends GameObjectController {
 	private Skin skin;
 
 	/**
+	 * Class constructor.
+	 * 
 	 * @param settings
 	 */
 	public GameCompletedScene(Settings settings) {
@@ -31,18 +46,21 @@ public class GameCompletedScene extends GameObjectController {
 		loadModelInstances();
 	}
 
+	@Override
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(stage);
 		ProjectXploraGame.timer.total();
 	}
 
+	@Override
 	public void loadModelInstances() {
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		table = new Table();
 	}
 
+	/** updates the table */
 	public void updateTable() {
 		TextButton next = new TextButton("Continue", skin);
 		next.addListener(new ClickListener() {
@@ -72,6 +90,7 @@ public class GameCompletedScene extends GameObjectController {
 		stage.addActor(table);
 	}
 
+	@Override
 	public void update() {
 		stage.draw();
 	}
