@@ -34,6 +34,7 @@ public class GameCompletedScene extends GameObjectController {
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(stage);
+		ProjectXploraGame.timer.total();
 	}
 
 	public void loadModelInstances() {
