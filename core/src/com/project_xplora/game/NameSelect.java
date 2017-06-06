@@ -6,6 +6,8 @@ package com.project_xplora.game;
 import javax.swing.JOptionPane;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 public class NameSelect extends GameObjectController {
 	private Skin skin;
+	private SpriteBatch batch;
+	private Texture backgroundTexture;
 	private Table table;
 	private Stage stage;
 	public String name = "";
@@ -38,6 +42,8 @@ public class NameSelect extends GameObjectController {
 
 	public void loadModelInstances() {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture(Gdx.files.internal("nameSelect.jpg"));
 		table = new Table();
 		stage = new Stage();
 		field = new TextField("", skin);
@@ -64,6 +70,9 @@ public class NameSelect extends GameObjectController {
 	}
 
 	public void update() {
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0);
+		batch.end();
 		stage.draw();
 	}
 
