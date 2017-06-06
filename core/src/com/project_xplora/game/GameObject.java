@@ -11,29 +11,35 @@ import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * The game Object class. this class is used as a class for all the 3-d objects
+ * in the game. It provides useful tools for the other classes.
+ * <p>
+ * Time taken to complete: 1 hours
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
 public class GameObject extends ModelInstance implements Disposable {
-	public final btCollisionObject body;
-
-	public GameObject(Model model, btCollisionShape shape, Vector3 loc) {
-		super(model);
-		this.transform.translate(loc);
-		body = new btCollisionObject();
-		body.setCollisionShape(shape);
-		body.setWorldTransform(this.transform);
-		this.transform.rotate(1, 0, 0, 90);
-	}
-
-	public GameObject(Model model, btCollisionShape shape) {
-		this(model, shape, new Vector3(0, 0, 0));
-	}
-
+	/**
+	 * class constructor.
+	 * 
+	 * @param model
+	 * @param loc
+	 */
 	public GameObject(Model model, Vector3 loc) {
 		super(model);
 		this.transform.translate(loc);
 		this.transform.rotate(1, 0, 0, 90);
-		body = null;
 	}
 
+	/**
+	 * class constructor.
+	 * 
+	 * @param model
+	 * @param loc
+	 * @param rot
+	 */
 	public GameObject(Model model, Vector3 loc, Vector3 rot) {
 		super(model);
 		this.transform.translate(loc);
@@ -41,22 +47,38 @@ public class GameObject extends ModelInstance implements Disposable {
 		this.transform.rotate(0, 1, 0, rot.y);
 		this.transform.rotate(0, 0, 1, rot.z);
 		this.transform.rotate(1, 0, 0, 90);
-		body = null;
 	}
 
+	/**
+	 * class constructor
+	 * 
+	 * @param model
+	 * @param loc
+	 * @param axis
+	 * @param angle
+	 */
 	public GameObject(Model model, Vector3 loc, Vector3 axis, float angle) {
 		super(model);
 		this.transform.translate(loc);
 		this.transform.rotate(axis, angle);
-		body = null;
 	}
 
+	/**
+	 * class constructor
+	 * 
+	 * @param model
+	 */
 	public GameObject(Model model) {
 		super(model);
 		this.transform.rotate(1, 0, 0, 90);
-		body = null;
 	}
 
+	/**
+	 * rotates the model around the given axis
+	 * 
+	 * @param axis
+	 * @param rot
+	 */
 	public void rotate(Vector3 axis, float rot) {
 		this.transform.rotate(1, 0, 0, -90);
 		this.transform.rotate(axis, rot);
@@ -65,6 +87,6 @@ public class GameObject extends ModelInstance implements Disposable {
 
 	@Override
 	public void dispose() {
-		body.dispose();
+
 	}
 }
