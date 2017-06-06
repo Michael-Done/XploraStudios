@@ -45,7 +45,8 @@ public class ProjectXploraGame implements ApplicationListener {
 	public boolean paused = false;
 	public static Timer timer;
 	private Music musicPlayer;
-	private String [] musicFileNames;
+	private String[] musicFileNames;
+	private boolean callMusicPlay;
 
 	public enum Level {
 		SPLASHSCREEN, MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
@@ -63,8 +64,16 @@ public class ProjectXploraGame implements ApplicationListener {
 	public void create() {
 		Bullet.init();
 		pauseMenu = new PauseMenu();
-		// Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),
-		// true);
+
+		//Initialize Music
+		musicFileNames = new String[5];
+		musicFileNames[0] = "SplashScreen.mp3";
+		musicFileNames[1] = "MenuAndScreens.mp3";
+		musicFileNames[2] = "RomeTrack3.mp3";
+		musicFileNames[3] = "EuropeTrack1.mp3";
+		musicFileNames[4] = "BCTrack1.mp3";
+		musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[0]));
+
 		try {
 			FileInputStream fileIn = new FileInputStream(System.getProperty("user.home") + "/highscores.ser");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -94,7 +103,7 @@ public class ProjectXploraGame implements ApplicationListener {
 
 		scenes.put(Level.SPLASHSCREEN, new SplashScreen(settings));
 		scenes.put(Level.INSTRUCTION, new InstructionsScene(settings));
-		scenes.put(Level.ARTIFACT, new ArtifactScene (settings));
+		scenes.put(Level.ARTIFACT, new ArtifactScene(settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
@@ -159,6 +168,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		System.out.println(currentScene);
 		switch (currentScene) {
 		case SPLASHSCREEN:
+			musicPlayer.play();
 			if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
 				currentScene = Level.NAMESELECT;
 				scenes.get(currentScene).camSetup();
@@ -173,13 +183,23 @@ public class ProjectXploraGame implements ApplicationListener {
 				scenes.get(currentScene).updateSettings(settings);
 				camera.position.set(0, 0, 1);
 				camera.lookAt(0f, 1f, 1f);
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 				Gdx.input.setCursorCatched(true);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 			}
 			break;
 		case MENU:
+			if (callMusicPlay) {
+				musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[1]));
+				musicPlayer.play();
+				musicPlayer.setLooping(true);
+				callMusicPlay = false;
+			}
 			if (((MenuScene) scenes.get(currentScene)).getChoice() == 3) {
 				currentScene = Level.CREDITS;
+				musicPlayer.stop();
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 0) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.LEVEL_SELECT;
@@ -245,18 +265,27 @@ public class ProjectXploraGame implements ApplicationListener {
 				camera.lookAt(0f, 1f, 1f);
 
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 0) {
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.ROME;
 				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				camera.far = 3000f;
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 2) {
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.EUROPE;
 				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				camera.far = 3000f;
 			} else if (((LevelSelect) scenes.get(currentScene)).getLevelChoice() == 1) {
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 				((LevelSelect) scenes.get(currentScene)).resetLevelChoice();
 				currentScene = Level.BC;
 				scenes.get(currentScene).updateSettings(settings);
@@ -287,9 +316,18 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setCursorCatched(true);
 				camera.position.set(0, 0, 1);
 				camera.lookAt(0f, 1f, 1f);
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 			}
 			break;
 		case BC:
+			if (callMusicPlay) {
+				musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[4]));
+				musicPlayer.play();
+				musicPlayer.setLooping(true);
+				callMusicPlay = false;
+			}
 			if (((BritishColombiaScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME1;
 				scenes.get(currentScene).camSetup();
@@ -315,10 +353,19 @@ public class ProjectXploraGame implements ApplicationListener {
 			}
 			break;
 		case EUROPE:
+			if (callMusicPlay) {
+				musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[3]));
+				musicPlayer.play();
+				musicPlayer.setLooping(true);
+				callMusicPlay = false;
+			}
 			if (((EuropeScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME2;
 				scenes.get(currentScene).camSetup();
 			} else if (((EuropeScene) scenes.get(currentScene)).moveToNext) {
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 				currentScene = Level.BC;
 				timer.player.setEuropecompleted(true);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
@@ -344,10 +391,19 @@ public class ProjectXploraGame implements ApplicationListener {
 			}
 			break;
 		case ROME:
+			if (callMusicPlay) {
+				musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[3]));
+				musicPlayer.play();
+				musicPlayer.setLooping(true);
+				callMusicPlay = false;
+			}
 			if (((RomeScene) scenes.get(currentScene)).isQuiz) {
 				currentScene = Level.MINIGAME3;
 				scenes.get(currentScene).camSetup();
 			} else if (((RomeScene) scenes.get(currentScene)).moveToNext) {
+				musicPlayer.stop();
+				musicPlayer.dispose();
+				callMusicPlay = true;
 				currentScene = Level.EUROPE;
 				timer.player.setRomeCompleted(true);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
