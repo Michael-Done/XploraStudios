@@ -76,7 +76,7 @@ public class RomeScene extends GameObjectController {
 	public Stage hud;
 	private Label time;
 	private Label artifacts;
-	
+
 	public RomeScene(Settings settings) {
 		super(settings);
 		chests = new Array<TreasureChest>();
@@ -93,7 +93,7 @@ public class RomeScene extends GameObjectController {
 		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
 		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
 		exitStage.addActor(t);
-		
+
 		hud = new Stage();
 		time = new Label("", exitSkin);
 		artifacts = new Label("", exitSkin);
@@ -168,6 +168,12 @@ public class RomeScene extends GameObjectController {
 		assets.load("StatueModel.g3db", Model.class);
 		assets.load("ColosseumModel.g3db", Model.class);
 		assets.load("FountainModel.g3db", Model.class);
+
+		assets.load("ColumnDescription.g3db", Model.class);
+		assets.load("TempleDsription.g3db", Model.class);
+		assets.load("StatueDescription.g3db", Model.class);
+		assets.load("ColosseumDescription.g3db", Model.class);
+		assets.load("FountainDescription.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -183,11 +189,16 @@ public class RomeScene extends GameObjectController {
 		Model sky = assets.get("SkyDome.g3db", Model.class);
 		Model colosseumCenter = assets.get("ColosseumMiddle.g3db", Model.class);
 
-		chests.add(new TreasureChest(0f, 26.25287f, 0f, 0f, assets.get("FountainModel.g3db", Model.class)));
-		chests.add(new TreasureChest(-58.85176f, 23.81795f, 0f, 90f, assets.get("PillarModel.g3db", Model.class)));
-		chests.add(new TreasureChest(-58.85176f, -23.81795f, 0f, 90f, assets.get("TempleModel.g3db", Model.class)));
-		chests.add(new TreasureChest(58.85176f, -23.81795f, 0f, 180f, assets.get("StatueModel.g3db", Model.class)));
-		chests.add(new TreasureChest(58.85176f, 23.81795f, 0f, 180f, assets.get("ColosseumModel.g3db", Model.class)));
+		chests.add(new TreasureChest(0f, 26.25287f, 0f, 0f, assets.get("FountainModel.g3db", Model.class),
+				assets.get("FountainDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-58.85176f, 23.81795f, 0f, 90f, assets.get("PillarModel.g3db", Model.class),
+				assets.get("ColumnDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-58.85176f, -23.81795f, 0f, 90f, assets.get("TempleModel.g3db", Model.class),
+				assets.get("TempleDsription.g3db", Model.class)));
+		chests.add(new TreasureChest(58.85176f, -23.81795f, 0f, 180f, assets.get("StatueModel.g3db", Model.class),
+				assets.get("StatueDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(58.85176f, 23.81795f, 0f, 180f, assets.get("ColosseumModel.g3db", Model.class),
+				assets.get("ColosseumDescription.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
@@ -354,6 +365,7 @@ public class RomeScene extends GameObjectController {
 			isQuiz |= t.isQuiz();
 			if (!t.isQuiz() && t.unlocked() && !t.added) {
 				objects.add(t.artifact);
+				objects.add(t.description);
 				artifactsUnlocked++;
 				t.added = true;
 			}
@@ -363,10 +375,10 @@ public class RomeScene extends GameObjectController {
 				moveToNext = true;
 			}
 		}
-		if(isQuiz){
+		if (isQuiz) {
 			cameraController.keys.clear();
 		}
-		time.setText((ProjectXploraGame.timer.player.getRomeTime()/60) + " Seconds");
+		time.setText((ProjectXploraGame.timer.player.getRomeTime() / 60) + " Seconds");
 		artifacts.setText(artifactsUnlocked + "/5");
 	}
 

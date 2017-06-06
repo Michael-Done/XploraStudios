@@ -162,6 +162,12 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.load("CanadaMap.g3db", Model.class);
 		assets.load("MountainsModel.g3db", Model.class);
 		assets.load("Redwood.g3db", Model.class);
+		
+		assets.load("BucketDescription.g3db", Model.class);
+		assets.load("IcesculptureDescription.g3db", Model.class);
+		assets.load("MapDescription.g3db", Model.class);
+		assets.load("MountainsDescription.g3db", Model.class);
+		assets.load("RedwoodDescription.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -178,13 +184,13 @@ public class BritishColombiaScene extends GameObjectController {
 
 	@Override
 	public void loadModelInstances() {
-		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f, assets.get("Bucket.g3db", Model.class)));
-		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f, assets.get("IceSculpture.g3db", Model.class)));
-		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f, assets.get("Redwood.g3db", Model.class)));
+		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f, assets.get("Bucket.g3db", Model.class), assets.get("BucketDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f, assets.get("IceSculpture.g3db", Model.class), assets.get("IcesculptureDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f, assets.get("Redwood.g3db", Model.class), assets.get("RedwoodDescription.g3db", Model.class)));
 		chests.add(
-				new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f, assets.get("MountainsModel.g3db", Model.class)));
+				new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f, assets.get("MountainsModel.g3db", Model.class), assets.get("MountainsDescription.g3db", Model.class)));
 		chests.add(
-				new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f, assets.get("CanadaMap.g3db", Model.class)));
+				new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f, assets.get("CanadaMap.g3db", Model.class), assets.get("MapDescription.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
@@ -371,6 +377,7 @@ public class BritishColombiaScene extends GameObjectController {
 			isQuiz |= t.isQuiz();
 			if (!t.isQuiz() && t.unlocked() && !t.added) {
 				objects.add(t.artifact);
+				objects.add(t.description);
 				artifactsUnlocked++;
 				t.added = true;
 			}

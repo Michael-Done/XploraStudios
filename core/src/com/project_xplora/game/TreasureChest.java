@@ -23,6 +23,7 @@ public class TreasureChest {
 	public GameObject lid;
 	public GameObject base;
 	public GameObject artifact;
+	public GameObject description;
 	private boolean open;
 	private float targetDeg;
 	private float currentDeg;
@@ -31,11 +32,10 @@ public class TreasureChest {
 	private boolean isQuiz = false;
 	private int signum;
 	public boolean added = false;
-	private float artifactTargetZ;
 	/**
 	 * 
 	 */
-	public TreasureChest(float x, float y, float z, float rot, Model model) {
+	public TreasureChest(float x, float y, float z, float rot, Model model, Model description) {
 		AssetManager assets = new AssetManager();
 		assets.load("ChestLid.g3db", Model.class);
 		assets.load("ChestBase.g3db", Model.class);
@@ -53,6 +53,8 @@ public class TreasureChest {
 		signum = (useRoll && rot > 1) || rot == 0 ? 1 : -1;
 		artifactTargetZ = z;
 		open = false;
+		this.description = new GameObject(description, new Vector3(x, y, z));
+		this.description.transform.rotate(0, 1, 0, rot);
 	}
 
 	public void open() {

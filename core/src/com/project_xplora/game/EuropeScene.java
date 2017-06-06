@@ -162,6 +162,12 @@ public class EuropeScene extends GameObjectController {
 		assets.load("Bomb.g3db", Model.class);
 		assets.load("TankModel.g3db", Model.class);
 		assets.load("Flag.g3db", Model.class);
+		
+		assets.load("RifleDescription.g3db", Model.class);
+		assets.load("DogtagsDescription.g3db", Model.class);
+		assets.load("BombDescription.g3db", Model.class);
+		assets.load("TankDescription.g3db", Model.class);
+		assets.load("FlagDescription.g3db", Model.class);
 		assets.finishLoading();
 	}
 
@@ -200,6 +206,7 @@ public class EuropeScene extends GameObjectController {
 			if (!t.isQuiz() && t.unlocked() && !t.added) {
 				artifactsUnlocked++;
 				objects.add(t.artifact);
+				objects.add(t.description);
 				t.added = true;
 			}
 		}
@@ -358,11 +365,11 @@ public class EuropeScene extends GameObjectController {
 	public void loadModelInstances() {
 		initalizeTrees();
 		initalizeGrassLocations();
-		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f, assets.get("Gun.g3db", Model.class)));
-		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("Flag.g3db", Model.class)));
-		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("DogTags.g3db", Model.class)));
-		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f, assets.get("TankModel.g3db", Model.class)));
-		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f, assets.get("Bomb.g3db", Model.class)));
+		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f, assets.get("Gun.g3db", Model.class), assets.get("RifleDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("Flag.g3db", Model.class), assets.get("FlagDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("DogTags.g3db", Model.class), assets.get("DogtagsDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f, assets.get("TankModel.g3db", Model.class), assets.get("TankDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f, assets.get("Bomb.g3db", Model.class), assets.get("BombDescription.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
