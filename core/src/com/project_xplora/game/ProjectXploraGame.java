@@ -89,7 +89,8 @@ public class ProjectXploraGame implements ApplicationListener {
 		settings.setMouseSens(10);
 		scenes = new ObjectMap<Level, GameObjectController>();
 
-		scenes.put(Level.SPLASHSCREEN, new SplashScreen (settings));
+		scenes.put(Level.SPLASHSCREEN, new SplashScreen(settings));
+		scenes.put(Level.INSTRUCTION, new InstructionsScene(settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
@@ -151,7 +152,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		System.out.println(currentScene);
 		switch (currentScene) {
 		case SPLASHSCREEN:
-			if(Gdx.input.isKeyJustPressed(Keys.ANY_KEY)){
+			if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
 				currentScene = Level.NAMESELECT;
 				scenes.get(currentScene).camSetup();
 			}
@@ -182,12 +183,27 @@ public class ProjectXploraGame implements ApplicationListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 1) {
+				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
+				currentScene = Level.INSTRUCTION;
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 5) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.SETTINGS;
 				scenes.get(currentScene).updateSettings(settings);
 				scenes.get(currentScene).loadModelInstances();
 				((SettingsScene) scenes.get(currentScene)).setInputProccessor();
+			}
+			break;
+		case INSTRUCTION:
+			if (Gdx.input.isKeyJustPressed(Keys.C)) {
+				((InstructionsScene) scenes.get(currentScene)).incrementScreen();
+				((InstructionsScene) scenes.get(currentScene)).changeCurrentTexture();
+			} else if (Gdx.input.isKeyJustPressed(Keys.X)) {
+				((InstructionsScene) scenes.get(currentScene)).resetMenuScreen();
+				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
 			}
 			break;
 		case LEVEL_SELECT:

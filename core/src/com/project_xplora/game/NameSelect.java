@@ -40,28 +40,23 @@ public class NameSelect extends GameObjectController {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		table = new Table();
 		stage = new Stage();
-		field = new TextField("name", skin);
+		field = new TextField("", skin);
 		field.selectAll();
 		TextButton continueButton = new TextButton("Accept", skin);
 		continueButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (field.getText().length() >= 21) {
-					JOptionPane.showMessageDialog(null,
-							"For visual error prevention purposes, you cannot have a username that is longer than 20 characters");
-				}
-
 				if (!field.getText().trim().equals("") && field.getText().length() < 21) {
 					cont = true;
 					name = field.getMessageText();
 				}
 			}
 		});
-		table.add(new Label("ENTER USERNAME:", skin));
+		table.add(new Label("Enter Username:", skin));
 		table.row();
 		table.add(field).size(800, 100);
 		table.row();
-		table.add(continueButton);
+		table.add(continueButton).padTop(20);
 		table.pack();
 		table.setX(Gdx.graphics.getWidth() / 2 - table.getWidth() / 2);
 		table.setY(Gdx.graphics.getHeight() / 2 - table.getHeight() / 2);

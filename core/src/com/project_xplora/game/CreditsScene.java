@@ -20,7 +20,7 @@ public class CreditsScene extends GameObjectController {
 
 	public void update() {
 		backgroundBatch.begin();
-		backgroundBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		backgroundBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth() + counter, Gdx.graphics.getHeight());
 		backgroundBatch.end();
 		counter++;
 		if (counter == 300) {
