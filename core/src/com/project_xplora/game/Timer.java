@@ -48,18 +48,6 @@ public class Timer {
 		player.setTime((long) (player.getEuropeTime() + player.getBCTime() + player.getRomeTime()));
 	}
 
-	public void finishEurope() {
-		player.setEuropecompleted(true);
-	}
-
-	public void finishBC() {
-		player.setBCCompleted(true);
-	}
-
-	public void finishRome() {
-		player.setRomeCompleted(true);
-	}
-
 	public void add30() {
 		if(scene == 0){
 			player.setEuropeTime(player.getEuropeTime() + 30);

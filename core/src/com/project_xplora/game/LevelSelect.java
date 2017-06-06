@@ -43,8 +43,10 @@ public class LevelSelect extends GameObjectController {
 		boolean lookingAtExit = cameraController.getXYAngle() > 150 || cameraController.getXYAngle() < -150;
 		// System.out.println(cameraController.getXYAngle());
 		boolean lookingAtRome = cameraController.getXYAngle() > 30 && cameraController.getXYAngle() < 90;
-		boolean lookingAtBC = cameraController.getXYAngle() > -30 && cameraController.getXYAngle() < 30;
-		boolean lookingAtEurope = cameraController.getXYAngle() > -90 && cameraController.getXYAngle() < -30;
+		boolean lookingAtBC = (cameraController.getXYAngle() > -30 && cameraController.getXYAngle() < 30)
+				&& ProjectXploraGame.timer.player.isEuropecompleted();
+		boolean lookingAtEurope = (cameraController.getXYAngle() > -90 && cameraController.getXYAngle() < -30)
+				&& ProjectXploraGame.timer.player.isEuropecompleted();
 
 		if (lookingAtRome) {
 			objects.add(romeText_inst);

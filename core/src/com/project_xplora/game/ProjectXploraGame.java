@@ -80,7 +80,7 @@ public class ProjectXploraGame implements ApplicationListener {
 			highscores = new TreeSet<PlayerData>();
 		}
 		for (PlayerData i : highscores) {
-			System.out.println(i.getPlayerName());
+			System.out.println("something here");
 		}
 		camera = new PerspectiveCamera();
 		camera.fieldOfView = 60;
@@ -102,6 +102,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		scenes.put(Level.MINIGAME2, new WorldWar2Quiz(settings));
 		scenes.put(Level.MINIGAME3, new AncientRomeQuiz(settings));
 		scenes.put(Level.NAMESELECT, new NameSelect(settings));
+		scenes.put(Level.HIGHSCORES, new HighScoresScene(settings, highscores));
 
 		currentScene = Level.SPLASHSCREEN;
 
@@ -117,6 +118,8 @@ public class ProjectXploraGame implements ApplicationListener {
 	@Override
 	public void dispose() {
 		try {
+			if (timer.player.getTime() != 0)
+				highscores.add(timer.player);
 			FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/highscores.ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(highscores);
@@ -192,6 +195,10 @@ public class ProjectXploraGame implements ApplicationListener {
 				scenes.get(currentScene).updateSettings(settings);
 				scenes.get(currentScene).loadModelInstances();
 				((SettingsScene) scenes.get(currentScene)).setInputProccessor();
+			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 4) {
+				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
+				currentScene = Level.HIGHSCORES;
+				scenes.get(currentScene).camSetup();
 			}
 			break;
 		case INSTRUCTION:
@@ -269,6 +276,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				scenes.get(currentScene).camSetup();
 			} else if (((BritishColombiaScene) scenes.get(currentScene)).moveToNext) {
 				currentScene = Level.GAMEFINISH;
+				timer.player.setBCCompleted(true);
 				scenes.get(currentScene).camSetup();
 				((GameCompletedScene) scenes.get(currentScene)).updateTable();
 			} else if (((BritishColombiaScene) scenes.get(currentScene)).artifactsUnlocked >= 5) {
@@ -293,6 +301,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				scenes.get(currentScene).camSetup();
 			} else if (((EuropeScene) scenes.get(currentScene)).moveToNext) {
 				currentScene = Level.BC;
+				timer.player.setEuropecompleted(true);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
 				ProjectXploraGame.camera.position.set(149f, -50f, 1 + 12.36f);
@@ -321,6 +330,7 @@ public class ProjectXploraGame implements ApplicationListener {
 				scenes.get(currentScene).camSetup();
 			} else if (((RomeScene) scenes.get(currentScene)).moveToNext) {
 				currentScene = Level.EUROPE;
+				timer.player.setRomeCompleted(true);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
 				Gdx.input.setCursorCatched(true);
 				ProjectXploraGame.camera.position.set(0f, 0f, 1);
@@ -343,6 +353,24 @@ public class ProjectXploraGame implements ApplicationListener {
 				Gdx.input.setCursorCatched(true);
 				((RomeScene) scenes.get(currentScene)).resetIsQuiz();
 			}
+			break;
+		case HIGHSCORES:
+			if (((HighScoresScene) scenes.get(currentScene)).backtoMenu) {
+				((HighScoresScene) scenes.get(currentScene)).backtoMenu = false;
+				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
+				camera.position.set(0, 0, 1);
+				camera.lookAt(0f, 1f, 1f);
+				Gdx.input.setCursorCatched(true);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			break;
 		default:
 			break;
 		}
@@ -360,14 +388,7 @@ public class ProjectXploraGame implements ApplicationListener {
 		}
 		if (paused) {
 			pauseMenu.update();
-			// if(pauseMenu.backToMenu){
-			// System.out.println("Back to Menu");
-			// pauseMenu.backToMenu = false;
-			// currentScene = Level.MENU;
-			// scenes.get(currentScene).updateSettings(settings);
-			// camera.position.set(0, 0, 1);
-			// camera.lookAt(0f, 1f, 1f);
-			// }
+
 		}
 	}
 

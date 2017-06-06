@@ -25,7 +25,7 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	private long finalTime;
 	/** The player's name */
 	private String playerName;
-	
+
 	public PlayerData(String name) {
 		romeTime = 0;
 		europeTime = 0;
@@ -39,7 +39,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 
 	@Override
 	public int compareTo(PlayerData other) {
-		if(this.finalTime == other.finalTime){
+		if (other != null && other.playerName != null && this.finalTime == other.finalTime) {
+			System.out.println(other.playerName);
 			return this.playerName.compareTo(other.playerName);
 		}
 		return (int) (this.finalTime - other.finalTime);
@@ -53,7 +54,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param romeTime the romeTime to set
+	 * @param romeTime
+	 *            the romeTime to set
 	 */
 	public void setRomeTime(float romeTime) {
 		this.romeTime = romeTime;
@@ -67,7 +69,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param f the europeTime to set
+	 * @param f
+	 *            the europeTime to set
 	 */
 	public void setEuropeTime(float f) {
 		this.europeTime = f;
@@ -81,7 +84,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param bCTime the bCTime to set
+	 * @param bCTime
+	 *            the bCTime to set
 	 */
 	public void setBCTime(float bCTime) {
 		BCTime = bCTime;
@@ -95,7 +99,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param bCCompleted the bCCompleted to set
+	 * @param bCCompleted
+	 *            the bCCompleted to set
 	 */
 	public void setBCCompleted(boolean bCCompleted) {
 		BCCompleted = bCCompleted;
@@ -109,7 +114,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param europecompleted the europeCompleted to set
+	 * @param europecompleted
+	 *            the europeCompleted to set
 	 */
 	public void setEuropecompleted(boolean europecompleted) {
 		this.europeCompleted = europecompleted;
@@ -123,7 +129,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param romeCompleted the romeCompleted to set
+	 * @param romeCompleted
+	 *            the romeCompleted to set
 	 */
 	public void setRomeCompleted(boolean romeCompleted) {
 		this.romeCompleted = romeCompleted;
@@ -137,7 +144,8 @@ public class PlayerData implements Serializable, Comparable<PlayerData> {
 	}
 
 	/**
-	 * @param time the time to set
+	 * @param time
+	 *            the time to set
 	 */
 	public void setTime(long time) {
 		this.finalTime = time;

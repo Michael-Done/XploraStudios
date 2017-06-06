@@ -54,7 +54,8 @@ public class NameSelect extends GameObjectController {
 			public void clicked(InputEvent event, float x, float y) {
 				if (!field.getText().trim().equals("") && field.getText().length() < 21) {
 					cont = true;
-					name = field.getMessageText();
+					name = field.getText();
+					System.out.println("NAME: " + name);
 				}
 			}
 		});
