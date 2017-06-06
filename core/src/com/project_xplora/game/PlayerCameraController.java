@@ -1,10 +1,4 @@
-/**
- *  XploraStudios
- *  Ms. Krasteva
- *  PlayerCameraController.java
- *  @author Michael Done, CyrusGandevia
- *  @Version 1.0 | 12/05/2017
- */
+
 package com.project_xplora.game;
 
 import com.badlogic.gdx.Gdx;
@@ -26,9 +20,29 @@ import com.project_xplora.collision_util.CollisionShape;
 
 /**
  * Takes a {@link Camera} instance and controls it via w,a,s,d and mouse
- * panning.
+ * panning. Also controls all collisions with the player. /** The treasure chest
+ * class. This class is used in all 3 of the levels in order to help organize
+ * and animate the treasure chests.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * private int <b> *all private ints in theis class* </b> - The keys used to
+ * controll the movement
+ * <p>
+ * private float <b> velocity </b> - The player speed
+ * <p>
+ * private float <b> degreesPerPixel </b> - The mouseSensitivity
+ * <p>
+ * final IntIntMap <b> keys </b> - The list of keys being pressed
+ * <p>
+ * private final Camera <b> camera </b> - The camera
+ * <p>
+ * private Array<CollisionShapes <b> collisions </b> - The walls
+ * <p>
+ * Time taken to complete: 3 hours
  * 
- * @author Michael Done, CyrusGandevia
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
 public class PlayerCameraController extends InputAdapter {
 	private final Camera camera;
@@ -50,18 +64,27 @@ public class PlayerCameraController extends InputAdapter {
 	public boolean paused = false;
 
 	private Array<CollisionShape> collisions;
-
+	/**
+	 * Contructs a new camera controller given the camera
+	 * @param camera
+	 */
 	public PlayerCameraController(Camera camera) {
 		this.camera = camera;
 		collisions = new Array<CollisionShape>();
 	}
-
+	/**
+	 * Contructs a new camera controller given the camera and settings
+	 * @param camera
+	 */
 	public PlayerCameraController(Camera camera, Settings settings) {
 		this(camera);
 		updateSettings(settings);
 
 	}
-
+	/**
+	 * updates the settings
+	 * @param settings
+	 */
 	public void updateSettings(Settings settings) {
 		FORWARD = settings.getForward();
 		BACKWARD = settings.getBackward();
@@ -70,15 +93,18 @@ public class PlayerCameraController extends InputAdapter {
 		degreesPerPixel = (((float) settings.getMouseSens()) / 100) / 2;
 		PAUSE = settings.getPause();
 	}
-
+	/**
+	 * locks the position of the camera
+	 */
 	public void lockPosition() {
 		lockedPosition = true;
 	}
-
+	/**
+	 * unlocks the position of the camera
+	 */
 	public void unlockPosition() {
 		lockedPosition = false;
 	}
-
 	@Override
 	public boolean keyDown(int keycode) {
 		keys.put(keycode, keycode);
@@ -120,11 +146,13 @@ public class PlayerCameraController extends InputAdapter {
 		camera.direction.rotate(tmp, deltaY);
 		return true;
 	}
-
+	/** 
+	 * updates the camera controller
+	 */
 	public void update() {
 		update(Gdx.graphics.getDeltaTime());
 	}
-
+	/** updates the camera controller */
 	public void update(float deltaTime) {
 		if (keys.containsKey(PAUSE) && !paused) {
 			pause();
@@ -133,11 +161,6 @@ public class PlayerCameraController extends InputAdapter {
 		rayTo.set(camera.position.x, camera.position.y, -20f);
 		Vector2 old = new Vector2(camera.position.x, camera.position.y);
 		if (!lockedPosition && !paused) {
-			if (keys.containsKey(Keys.SHIFT_LEFT)) {
-				velocity = 50;
-			} else {
-				velocity = 5;
-			}
 			if (keys.containsKey(FORWARD)) {
 				tmp.set(camera.direction).nor().scl(deltaTime * velocity);
 				tmp.z = 0;
@@ -184,47 +207,55 @@ public class PlayerCameraController extends InputAdapter {
 		}
 		camera.update(true);
 	}
-
+	/**
+	 * 
+	 * @return the X Y angle of the camera
+	 */
 	public float getXYAngle() {
 		float x = camera.direction.x;
 		float y = camera.direction.y;
-		float z = camera.direction.z;
 		float hypotenuse = (float) Math.sqrt((x * x) + (y * y));
 		// System.out.println("(" + x + ", " + y + ", " + z + ") " +
 		// hypotenuse);
 		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.x);
 	}
-
-	public float getYZAngle() {
-		float x = camera.direction.x;
-		float y = camera.direction.y;
-		float z = camera.direction.z;
-		float hypotenuse = (float) Math.sqrt((z * z) + (y * y));
-		// System.out.println("(" + x + ", " + y + ", " + z + ") " +
-		// hypotenuse);
-		return (float) (Math.acos(y / hypotenuse) * (180 / Math.PI)) * Math.signum(camera.direction.z);
-	}
-
+	/**
+	 * sets the z location of the camera
+	 * @param z
+	 */
 	public void setZ(float z) {
 		camera.position.z = z;
 	}
-
+	/**
+	 * 
+	 * @return the start of the collision ray
+	 */
 	public Vector3 getRayFrom() {
 		return rayFrom;
 	}
-
+	/**
+	 * 
+	 * @return the end of the collision ray
+	 */
 	public Vector3 getRayTo() {
 		return rayTo;
 	}
-
+	/**
+	 * adds a new collision object to the world
+	 * @param c
+	 */
 	public void addCollision(CollisionShape c) {
 		collisions.add(c);
 	}
-
+	/**
+	 * paused the camera controller
+	 */
 	public void pause() {
 		paused = true;
 	}
-
+	/**
+	 * unpauses the camera controller
+	 */
 	public void unPause() {
 		paused = false;
 		try {

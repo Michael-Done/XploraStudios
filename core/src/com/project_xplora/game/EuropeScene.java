@@ -240,7 +240,7 @@ public class EuropeScene extends GameObjectController {
 	}
 
 	private void initalizeGrassLocations() {
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < 300; i++) {
 			float random1 = (float) Math.random();
 			float random2 = (float) Math.random();
 			float randomXPoint = (float) (random2 * 25 * Math.cos(Math.PI * 2 * random1 / random2));
