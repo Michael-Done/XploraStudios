@@ -1,21 +1,11 @@
-/**
- *  XploraStudios
- *  Ms. Krasteva
- *  ProjectXploraGame.java
- *  @author Michael Done, CyrusGandevia
- *  @Version 1.0 | 12/05/2017
- */
 package com.project_xplora.game;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.TreeSet;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -25,7 +15,6 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.project_xplora.game.highscore.PlayerData;
@@ -36,7 +25,7 @@ import com.project_xplora.game.educational.minigames.EducationalQuiz;
 import com.project_xplora.game.educational.minigames.WorldWar2Quiz;
 
 /**
- * The ProjectXploraGame class. this is where all program control and flow is
+ * The ProjectXploraGame class. This is where all program control and flow is
  * processed. Each frame the game goes through the render method.
  * <p>
  * Time taken to complete: 7 hours
@@ -73,13 +62,13 @@ public class ProjectXploraGame implements ApplicationListener {
 		SPLASHSCREEN, MENU, LEVEL_SELECT, EXIT, SETTINGS, ARTIFACT, HIGHSCORES, INSTRUCTION, ROME, EUROPE, BC, STARTUP, CREDITS, MINIGAME1, MINIGAME2, MINIGAME3, NAMESELECT, GAMEFINISH
 	}
 
-	/** yhe pause menu */
+	/** the pause menu */
 	PauseMenu pauseMenu;
-	/** the curent scene */
+	/** the current scene */
 	Level currentScene;
 	/** the screen width */
 	public int screenWidth;
-	/** the scren height */
+	/** the screen height */
 	public int screenHeight;
 	/** the list of all models being rendered */
 	Array<ModelInstance> instances = new Array<ModelInstance>();
@@ -424,7 +413,7 @@ public class ProjectXploraGame implements ApplicationListener {
 			break;
 		case ROME:
 			if (callMusicPlay) {
-				musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[3]));
+				musicPlayer = Gdx.audio.newMusic(Gdx.files.internal(musicFileNames[2]));
 				musicPlayer.play();
 				musicPlayer.setLooping(true);
 				callMusicPlay = false;

@@ -26,7 +26,7 @@ import com.project_xplora.game.settings_menu_classes.KeyField;
 import com.project_xplora.game.settings_menu_classes.KeyHandlerStage;
 
 /**
- * The settings scene class. The scen in which the user chooses their settings.
+ * The settings scene class. The scene in which the user chooses their settings.
  * <p>
  * <b> Class Fields: </b>
  * <p>

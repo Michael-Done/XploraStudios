@@ -28,7 +28,7 @@ public class Timer {
 	private int scene = 0;
 
 	/**
-	 * basic construtor that takes in a new PlayerData to modify.
+	 * basic constructor that takes in a new PlayerData to modify.
 	 * 
 	 * @param player
 	 */

@@ -1,9 +1,4 @@
-/**
- * 
- */
 package com.project_xplora.game;
-
-import javax.swing.JOptionPane;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,9 +13,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * @author Michael
- *
+ * The NameSelect class is Project Xplorer's name select screen manager.
+ * <p>
+ * Time taken to complete: 20 minutes.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * Skin <b> skin </b> - Creates a Skin for the class.
+ * <p>
+ * SpriteBatch <b> batch </b> - Creates a SpriteBatch for the class.
+ * <p>
+ * Texture <b> backgroundTexture </b> - Stores a Texture for the class.
+ * <p>
+ * Table <b> table </b> - Creates a Table for the class.
+ * <p>
+ * Stage <b> stage </b> - Creates a Stage for the class.
+ * <p>
+ * String <b> name </b> - Stores the user's name.
+ * <p>
+ * boolean <b> cont </b> - Whether the game should proceed or not.
+ * <p>
+ * TextField <b> field </b> - Used to create a textfield that the user can type
+ * in.
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
+
 public class NameSelect extends GameObjectController {
 	private Skin skin;
 	private SpriteBatch batch;
@@ -32,14 +51,21 @@ public class NameSelect extends GameObjectController {
 	TextField field;
 
 	/**
+	 * Class Constructor: Initializes object with current settings as well as
+	 * loads in all model instances.
+	 * 
 	 * @param settings
+	 *            - Stores the current settings.
 	 */
 	public NameSelect(Settings settings) {
 		super(settings);
 		loadModelInstances();
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Initializes fields, assigns click listeners to buttons, creates table,
+	 * adds table to stage and sets focus to textfield.
+	 */
 	public void loadModelInstances() {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		batch = new SpriteBatch();
@@ -72,6 +98,11 @@ public class NameSelect extends GameObjectController {
 		field.getOnscreenKeyboard().show(true);
 	}
 
+	/**
+	 * Updates the libGDX game client screen. This method is called very
+	 * frequently in order to update the screen. It also manages what is to be
+	 * drawn for the name select screen.
+	 */
 	public void update() {
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -79,6 +110,7 @@ public class NameSelect extends GameObjectController {
 		stage.draw();
 	}
 
+	/** Overrides the camera setup. */
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(stage);

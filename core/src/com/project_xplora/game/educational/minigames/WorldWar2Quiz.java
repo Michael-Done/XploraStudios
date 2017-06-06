@@ -4,8 +4,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.project_xplora.game.Settings;
 
+/**
+ * The WorldWar2Quiz class feeds information to its superclass,
+ * EducationalQuiz.java, which serves as the template for Project Xplorer's
+ * educational mini game component.
+ * <p>
+ * Time taken to complete: 30 minutes.
+ * 
+ * <h2>Course Info:</h2> ICS4U0 with Krasteva, V.
+ * <p>
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
+
 public class WorldWar2Quiz extends EducationalQuiz {
 
+	/**
+	 * WorldWar2Quiz Class Constructor. Initializes current settings, and adds
+	 * the questions, choices, answers and sample image to the
+	 * EducationalQuiz.java template class.
+	 * 
+	 * @param settings
+	 *            - Stores the current settings.
+	 */
 	public WorldWar2Quiz(Settings currentSettings) {
 		super(currentSettings);
 		super.addElements("When did World War II begin?", "1939", "1945", "1960", "a");

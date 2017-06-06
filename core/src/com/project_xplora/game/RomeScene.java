@@ -48,35 +48,41 @@ import com.project_xplora.collision_util.CollisionShape;
 import com.project_xplora.game.BritishColombiaScene.GroundObjectData;
 
 /**
- * @author Michael
- *
+ * The EuropeScene class sets up Project Xplorer's second level.
+ * <p>
+ * Time taken to complete: 5 hours.
+ * <p>
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
+
 public class RomeScene extends GameObjectController {
-	/**
-	 * @param settings
-	 */
+	//Fields
 	GameObject ground;
 	GameObject box;
-
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
 	btCollisionWorld collisionWorld;
-
 	private Array<GroundObjectData> groundObjDataList;
 	public boolean isQuiz = false;
 	int artifactsUnlocked = 0;
 	public boolean moveToNext = false;
 	private Array<TreasureChest> chests;
-
 	public Stage exitStage;
 	private Label exitLabel;
 	private Skin exitSkin;
-
 	public Stage hud;
 	private Label time;
 	private Label artifacts;
 
+	/**
+	 * Class Constructor: Initializes object with settings passed through
+	 * parameter as well as initializes all fields.
+	 * 
+	 * @param settings
+	 *            - Stores the current settings.
+	 */
 	public RomeScene(Settings settings) {
 		super(settings);
 		chests = new Array<TreasureChest>();
@@ -93,7 +99,6 @@ public class RomeScene extends GameObjectController {
 		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
 		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
 		exitStage.addActor(t);
-
 		hud = new Stage();
 		time = new Label("", exitSkin);
 		artifacts = new Label("", exitSkin);
@@ -105,6 +110,7 @@ public class RomeScene extends GameObjectController {
 		hud.addActor(artifacts);
 	}
 
+	/** Helper Class for ground objects. */
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -118,6 +124,19 @@ public class RomeScene extends GameObjectController {
 		/** The dimensions of the box */
 		public Vector3 dimensions;
 
+		/**
+		 * Class Constructor.
+		 * 
+		 * @param location
+		 *            - Location of the groundObject that is passed as a
+		 *            parameter.
+		 * @param rotateAround
+		 *            - The axis meant to be rotated around.
+		 * @param rotation
+		 *            - Rotation around the axis in degrees.
+		 * @param dimensions
+		 *            - The dimensions of the box.
+		 */
 		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions) {
 			this.location = location;
 			this.rotateAround = rotateAround;
@@ -125,6 +144,7 @@ public class RomeScene extends GameObjectController {
 			this.dimensions = dimensions;
 		}
 
+		/** Constructs CollisionObject. */
 		public btCollisionObject construct() {
 			btCollisionObject out = new btCollisionObject();
 			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x / 2, dimensions.y / 2, dimensions.z / 2));
@@ -136,6 +156,7 @@ public class RomeScene extends GameObjectController {
 			return out;
 		}
 
+		/** Constructs Model */
 		public ModelInstance constructModel() {
 			ModelBuilder mb = new ModelBuilder();
 			mb.begin();
@@ -346,6 +367,7 @@ public class RomeScene extends GameObjectController {
 						new Vector3(0.0f, -0.0f, 90.00000250447816f)));
 	}
 
+	/** Initializes Collision World Configurations */
 	public void initalizeCollisionWorld() {
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -392,6 +414,7 @@ public class RomeScene extends GameObjectController {
 		}
 	}
 
+	/** Resets the isQuiz variable. */
 	public void resetIsQuiz() {
 		isQuiz = false;
 	}
@@ -402,8 +425,6 @@ public class RomeScene extends GameObjectController {
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.7f, 0.7f, 0.7f, 1f));
 		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.8f, -1f, -0.8f));
 		environment.add(new DirectionalLight().set(0.1f, 0.1f, 0.05f, 0.8f, 1f, 0.8f));
-		// environment.add(new PointLight().set(1f, 1f, 1f, new Vector3(0, 10,
-		// 1), 1000f));
 	}
 
 	@Override
@@ -424,6 +445,7 @@ public class RomeScene extends GameObjectController {
 		initalizeCollisionShapes();
 	}
 
+	/** Initializes all ground object data. */
 	private void initalizeGroundObjectData() {
 		groundObjDataList.add(new GroundObjectData(new Vector3(35.57417f, 0f, 1.1453f), new Vector3(0, 0, 0), 0f,
 				new Vector3(3.757f, 5.173f, 0.17f)));
@@ -437,6 +459,7 @@ public class RomeScene extends GameObjectController {
 				new Vector3(145.056f, 104.201f, 0.242f)));
 	}
 
+	/** Initializes all collision shapes. */
 	private void initalizeCollisionShapes() {
 		// Gardens
 		cameraController.addCollision(new CollisionRect(new Vector2(-29.826101821899414f, 7.16373787689209f),

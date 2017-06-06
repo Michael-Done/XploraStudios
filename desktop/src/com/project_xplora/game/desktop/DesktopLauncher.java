@@ -98,7 +98,7 @@ public class DesktopLauncher implements ActionListener {
 	 * The Resolution class is a custom-made helper class that is used for
 	 * storing resolution options. It extends the Point class, which is a
 	 * pre-built Java class that represents a location on the screen based on
-	 * it's (x,y) coordinate. There is also an overriden toString method which
+	 * it's (x,y) coordinate. There is also an overridden toString method which
 	 * is helpful for displaying the value of the resolution objects. For
 	 * example, an object that has been declared using: <i>new Resolution
 	 * (1920,1080)</i>, will display "1920 x 1080" on the JComboBox.

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.project_xplora.game;
 
 import com.badlogic.gdx.Gdx;
@@ -30,23 +27,25 @@ import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
-import com.project_xplora.game.BritishColombiaScene.GroundObjectData;
 
 /**
- * @author Michael
- *
+ * The EuropeScene class sets up Project Xplorer's second level.
+ * <p>
+ * Time taken to complete: 8 hours.
+ * <p>
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
-public class EuropeScene extends GameObjectController {
-	Array<Vector3> grassLocations = new Array<Vector3>();
 
+public class EuropeScene extends GameObjectController {
+	//Fields
+	Array<Vector3> grassLocations = new Array<Vector3>();
 	Array<Vector3> treeLocations = new Array<Vector3>();
 	private Array<GroundObjectData> groundObjDataList;
-
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
@@ -59,15 +58,14 @@ public class EuropeScene extends GameObjectController {
 	int artifactsUnlocked = 0;
 	public boolean moveToNext = false;
 	private Array<TreasureChest> chests;
-
 	public Stage exitStage;
 	private Label exitLabel;
 	private Skin exitSkin;
-
 	public Stage hud;
 	private Label time;
 	private Label artifacts;
 
+	/** Helper Class for ground objects. */
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -81,6 +79,19 @@ public class EuropeScene extends GameObjectController {
 		/** The dimensions of the box */
 		public Vector3 dimensions;
 
+		/**
+		 * Class Constructor.
+		 * 
+		 * @param location
+		 *            - Location of the groundObject that is passed as a
+		 *            parameter.
+		 * @param rotateAround
+		 *            - The axis meant to be rotated around.
+		 * @param rotation
+		 *            - Rotation around the axis in degrees.
+		 * @param dimensions
+		 *            - The dimensions of the box.
+		 */
 		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions) {
 			this.location = location;
 			this.rotateAround = rotateAround;
@@ -88,6 +99,7 @@ public class EuropeScene extends GameObjectController {
 			this.dimensions = dimensions;
 		}
 
+		/** Constructs CollisionObeject. */
 		public btCollisionObject construct() {
 			btCollisionObject out = new btCollisionObject();
 			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x / 2, dimensions.y / 2, dimensions.z / 2));
@@ -99,6 +111,7 @@ public class EuropeScene extends GameObjectController {
 			return out;
 		}
 
+		/** Constructs Model */
 		public ModelInstance constructModel() {
 			ModelBuilder mb = new ModelBuilder();
 			mb.begin();
@@ -115,7 +128,11 @@ public class EuropeScene extends GameObjectController {
 	}
 
 	/**
+	 * Class Constructor: Initializes object with settings passed through
+	 * parameter as well as initializes all fields.
+	 * 
 	 * @param settings
+	 *            - Stores the current settings.
 	 */
 	public EuropeScene(Settings settings) {
 		super(settings);
@@ -131,7 +148,6 @@ public class EuropeScene extends GameObjectController {
 		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
 		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
 		exitStage.addActor(exitLabel);
-		
 		hud = new Stage();
 		time = new Label("", exitSkin);
 		artifacts = new Label("", exitSkin);
@@ -162,7 +178,7 @@ public class EuropeScene extends GameObjectController {
 		assets.load("Bomb.g3db", Model.class);
 		assets.load("TankModel.g3db", Model.class);
 		assets.load("Flag.g3db", Model.class);
-		
+
 		assets.load("RifleDescription.g3db", Model.class);
 		assets.load("DogtagsDescription.g3db", Model.class);
 		assets.load("BombDescription.g3db", Model.class);
@@ -223,6 +239,7 @@ public class EuropeScene extends GameObjectController {
 		artifacts.setText(artifactsUnlocked + "/5");
 	}
 
+	/** Initializes Collision World Configurations. */
 	private void initalizeCollisionWorld() {
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -234,11 +251,13 @@ public class EuropeScene extends GameObjectController {
 		}
 	}
 
+	/** Initializes all ground object data. */
 	private void initalizeGroundObjectData() {
 		groundObjDataList.add(
 				new GroundObjectData(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), 0f, new Vector3(305f, 305f, 1f)));
 	}
 
+	/** Initializes all grass locations. */
 	private void initalizeGrassLocations() {
 		for (int i = 0; i < 300; i++) {
 			float random1 = (float) Math.random();
@@ -249,6 +268,7 @@ public class EuropeScene extends GameObjectController {
 		}
 	}
 
+	/** Initializes all collision shapes. */
 	private void initalizeCollisionShapes() {
 		// Circles
 		cameraController.addCollision(
@@ -330,6 +350,7 @@ public class EuropeScene extends GameObjectController {
 
 	}
 
+	/** Resets the isQuiz variable. */
 	public void resetIsQuiz() {
 		isQuiz = false;
 	}
@@ -365,11 +386,16 @@ public class EuropeScene extends GameObjectController {
 	public void loadModelInstances() {
 		initalizeTrees();
 		initalizeGrassLocations();
-		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f, assets.get("Gun.g3db", Model.class), assets.get("RifleDescription.g3db", Model.class)));
-		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("Flag.g3db", Model.class), assets.get("FlagDescription.g3db", Model.class)));
-		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("DogTags.g3db", Model.class), assets.get("DogtagsDescription.g3db", Model.class)));
-		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f, assets.get("TankModel.g3db", Model.class), assets.get("TankDescription.g3db", Model.class)));
-		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f, assets.get("Bomb.g3db", Model.class), assets.get("BombDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(28.5756f, 59.9431f, 0f, 180f, assets.get("Gun.g3db", Model.class),
+				assets.get("RifleDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-27.2791f, -2.256398f, 0f, 90f, assets.get("Flag.g3db", Model.class),
+				assets.get("FlagDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-17.5712f, -77.4782f, 0f, 0f, assets.get("DogTags.g3db", Model.class),
+				assets.get("DogtagsDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(57.7517f, -49.4148f, 0f, 90f, assets.get("TankModel.g3db", Model.class),
+				assets.get("TankDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(91.227f, 92.3701f, 0f, 0f, assets.get("Bomb.g3db", Model.class),
+				assets.get("BombDescription.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
@@ -1716,6 +1742,5 @@ public class EuropeScene extends GameObjectController {
 		objects.add(new GameObject(tree, new Vector3(140.14798164367676f, 144.23874855041504f, 5.523005723953247f)));
 		objects.add(new GameObject(tree, new Vector3(130.31620025634766f, 152.0967197418213f, 4.231519997119904f)));
 		objects.add(new GameObject(tree, new Vector3(125.83954811096191f, 145.08295059204102f, 5.173973441123962f)));
-
 	}
 }

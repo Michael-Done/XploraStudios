@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.project_xplora.collision_util;
 
 import com.badlogic.gdx.math.Vector2;
@@ -9,30 +6,32 @@ import com.badlogic.gdx.math.Vector2;
  * This class is the circle implementation of the {@link CollisionShape} class.
  * It detects collisions with a circular shape.
  * <p>
+ * Time Taken to Complete Class: 30 minutes
+ * <p>
  * <b> Class Fields: </b>
  * <p>
- * private {@link Vector2} <b> center </b> - the center
+ * private {@link Vector2} <b> center </b> - The CollisionCircle object's center
+ * point.
  * <p>
- * private float <b> radius </b> - the radius
+ * private float <b> radius </b> - The CollisionCircle object's radius.
  * <p>
- * Time taken to complete: 30 mins
  * 
  * @version 5.0 | 06.06.2017
  * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  *
  */
 public class CollisionCircle extends CollisionShape {
-	/** the center */
 	private Vector2 center;
-	/** the radius */
 	private float radius;
 
 	/**
-	 * Class constructor. Constructs a new CollisionCircle given a center and a
-	 * radius
+	 * The CollisionCircle Class constructor. Constructs a new CollisionCircle
+	 * based on the center and radius provided through the parameters.
 	 * 
-	 * @param center,
-	 *            radius
+	 * @param center
+	 *            - Location of the vector's center.
+	 * @param radius
+	 *            - Length of the radius.
 	 */
 	public CollisionCircle(Vector2 center, float radius) {
 		this.center = center;
@@ -41,10 +40,11 @@ public class CollisionCircle extends CollisionShape {
 	}
 
 	/**
-	 * The circle implementation of the isInside method.
+	 * The circle implementation of the isInside ( ) method.
 	 * 
 	 * @param point
-	 * @return true if the point is inside the object
+	 *            - Point location of the vector.
+	 * @return Returns true if the point is inside the object.
 	 */
 	@Override
 	public boolean isInside(Vector2 point) {
@@ -52,11 +52,19 @@ public class CollisionCircle extends CollisionShape {
 	}
 
 	/**
-	 * The circle implementation of the newPointCacluation method.
+	 * The circle implementation of the newPointCacluation ( ) method.
+	 * <p>
+	 * <b> Local Variables: </b>
+	 * <p>
+	 * Vector2 <b> tmp </b> - Temporary vector used for the collision
+	 * calculations.
 	 * 
-	 * @param currentPoint,
-	 *            lastPoint
-	 * @return the point after the collision occurs
+	 * @param currentPoint
+	 *            - Current point location of the vector.
+	 * @param lastPoint
+	 *            - Previous point location of the vector.
+	 * @return Returns the point location of the vector after the collision
+	 *         occurs.
 	 */
 	@Override
 	public Vector2 newPointCaclulation(Vector2 currentPoint, Vector2 lastPoint) {

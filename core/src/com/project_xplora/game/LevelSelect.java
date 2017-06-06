@@ -10,38 +10,63 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * The LevelSelect class is Project Xplorer's level selection manager.
+ * <p>
+ * Time taken to complete: 3 hours.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * ModelInstance <b> romeText_inst </b> - Stores an instance of the Rome text
+ * model.
+ * <p>
+ * ModelInstance <b> BCText_inst </b> - Stores an instance of the BC text model.
+ * <p>
+ * ModelInstance <b> europeText_inst </b> - Stores an instance of the Europe
+ * text model.
+ * <p>
+ * ModelInstance <b> exitText_inst </b> - Stores an instance of the exit text
+ * model.
+ * <p>
+ * int <b> levelChoice </b> - Stores value of the chosen level.
+ * <p>
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
 public class LevelSelect extends GameObjectController {
-
-	public LevelSelect(Settings settings) {
-		super(settings);
-		initalize();
-	}
 
 	ModelInstance romeText_inst;
 	ModelInstance BCText_inst;
 	ModelInstance europeText_inst;
 	ModelInstance exitText_inst;
-
 	private int levelChoice = -1;
 
+	/** Resets level choice. */
 	public void resetLevelChoice() {
 		levelChoice = -1;
 	}
 
+	/** @return Returns the level choice. */
 	public int getLevelChoice() {
 		return levelChoice;
 	}
 
+	/**
+	 * Class Constructor: Initializes the object with current settings.
+	 * 
+	 * @param settings
+	 *            - Stores the current settings.
+	 */
+	public LevelSelect(Settings settings) {
+		super(settings);
+		initalize();
+	}
+
 	@Override
 	public void update() {
-		/*
-		 * Index : Model | 0 : sky dome | 1-12 : grass | 13 : ground | 14 : exit
-		 * sign | 15 :
-		 * 
-		 */
 		updateCamera();
 		boolean lookingAtExit = cameraController.getXYAngle() > 150 || cameraController.getXYAngle() < -150;
-		// System.out.println(cameraController.getXYAngle());
 		boolean lookingAtRome = cameraController.getXYAngle() > 30 && cameraController.getXYAngle() < 90;
 		boolean lookingAtBC = (cameraController.getXYAngle() > -30 && cameraController.getXYAngle() < 30)
 				&& ProjectXploraGame.timer.player.isEuropecompleted();

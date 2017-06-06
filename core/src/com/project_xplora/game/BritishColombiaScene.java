@@ -1,9 +1,4 @@
-/**
- * 
- */
 package com.project_xplora.game;
-
-import java.awt.Point;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -35,39 +30,38 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.project_xplora.collision_util.CollisionCircle;
 import com.project_xplora.collision_util.CollisionRect;
-import com.project_xplora.game.EuropeScene.GroundObjectData;
 
 /**
- * @author Michael
- *
+ * The BritishColumbiaScene class sets up Project Xplorer's third level.
+ * <p>
+ * Time taken to complete: 8 hours.
+ * <p>
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
  */
 public class BritishColombiaScene extends GameObjectController {
-
+	//Fields
 	Array<Vector3> treeLocations;
 	Model treeHighPoly;
 	Model treeLowPoly;
 	private Array<GroundObjectData> groundObjDataList;
-
 	btCollisionConfiguration collisionConfig;
 	btDispatcher dispatcher;
 	btBroadphaseInterface broadphase;
 	btCollisionWorld collisionWorld;
-
 	ModelInstance collisionLocation;
 	public boolean isQuiz = false;
 	int artifactsUnlocked = 0;
 	public boolean moveToNext = false;
-	
 	public Stage exitStage;
 	private Label exitLabel;
 	private Skin exitSkin;
-
 	public Stage hud;
 	private Label time;
 	private Label artifacts;
-	
 	private Array<TreasureChest> chests;
 
+	/** Helper Class for ground objects. */
 	class GroundObjectData {
 		/** The location of the groundObject */
 		public Vector3 location;
@@ -81,6 +75,19 @@ public class BritishColombiaScene extends GameObjectController {
 		/** The dimensions of the box */
 		public Vector3 dimensions;
 
+		/**
+		 * Class Constructor.
+		 * 
+		 * @param location
+		 *            - Location of the groundObject that is passed as a
+		 *            parameter.
+		 * @param rotateAround
+		 *            - The axis meant to be rotated around.
+		 * @param rotation
+		 *            - Rotation around the axis in degrees.
+		 * @param dimensions
+		 *            - The dimensions of the box.
+		 */
 		public GroundObjectData(Vector3 location, Vector3 rotateAround, float rotation, Vector3 dimensions) {
 			this.location = location;
 			this.rotateAround = rotateAround;
@@ -88,6 +95,7 @@ public class BritishColombiaScene extends GameObjectController {
 			this.dimensions = dimensions;
 		}
 
+		/** Constructs CollisionObeject. */
 		public btCollisionObject construct() {
 			btCollisionObject out = new btCollisionObject();
 			btBoxShape shape = new btBoxShape(new Vector3(dimensions.x / 2, dimensions.y / 2, dimensions.z / 2));
@@ -99,6 +107,7 @@ public class BritishColombiaScene extends GameObjectController {
 			return out;
 		}
 
+		/** Constructs Model */
 		public ModelInstance constructModel() {
 			ModelBuilder mb = new ModelBuilder();
 			mb.begin();
@@ -115,7 +124,11 @@ public class BritishColombiaScene extends GameObjectController {
 	}
 
 	/**
+	 * Class Constructor: Initializes object with settings passed through
+	 * parameter as well as initializes all fields.
+	 * 
 	 * @param settings
+	 *            - Stores the current settings.
 	 */
 	public BritishColombiaScene(Settings settings) {
 		super(settings);
@@ -129,10 +142,9 @@ public class BritishColombiaScene extends GameObjectController {
 		exitSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		exitStage = new Stage();
 		exitLabel = new Label("Level Completed! Space bar to continue to next level", exitSkin);
-		exitLabel.setX(Gdx.graphics.getWidth()/2 - exitLabel.getWidth()/2);
-		exitLabel.setY(Gdx.graphics.getHeight()/2 - exitLabel.getHeight()/2 - 100);
+		exitLabel.setX(Gdx.graphics.getWidth() / 2 - exitLabel.getWidth() / 2);
+		exitLabel.setY(Gdx.graphics.getHeight() / 2 - exitLabel.getHeight() / 2 - 100);
 		exitStage.addActor(exitLabel);
-		
 		hud = new Stage();
 		time = new Label("", exitSkin);
 		artifacts = new Label("", exitSkin);
@@ -162,7 +174,7 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.load("CanadaMap.g3db", Model.class);
 		assets.load("MountainsModel.g3db", Model.class);
 		assets.load("Redwood.g3db", Model.class);
-		
+
 		assets.load("BucketDescription.g3db", Model.class);
 		assets.load("IcesculptureDescription.g3db", Model.class);
 		assets.load("MapDescription.g3db", Model.class);
@@ -171,6 +183,7 @@ public class BritishColombiaScene extends GameObjectController {
 		assets.finishLoading();
 	}
 
+	/** Initializes the CollisionWorld Configurations. */
 	private void initalizeCollisionWorld() {
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
@@ -184,13 +197,16 @@ public class BritishColombiaScene extends GameObjectController {
 
 	@Override
 	public void loadModelInstances() {
-		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f, assets.get("Bucket.g3db", Model.class), assets.get("BucketDescription.g3db", Model.class)));
-		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f, assets.get("IceSculpture.g3db", Model.class), assets.get("IcesculptureDescription.g3db", Model.class)));
-		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f, assets.get("Redwood.g3db", Model.class), assets.get("RedwoodDescription.g3db", Model.class)));
-		chests.add(
-				new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f, assets.get("MountainsModel.g3db", Model.class), assets.get("MountainsDescription.g3db", Model.class)));
-		chests.add(
-				new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f, assets.get("CanadaMap.g3db", Model.class), assets.get("MapDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(117.074f, -106.2915f, 12.365f, 180f, assets.get("Bucket.g3db", Model.class),
+				assets.get("BucketDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(5.7923f, 73.2825f, 56.4242f, 90f, assets.get("IceSculpture.g3db", Model.class),
+				assets.get("IcesculptureDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(133.3986f, 108.9361f, 57.9891f, 180f, assets.get("Redwood.g3db", Model.class),
+				assets.get("RedwoodDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-145.2268f, 110.3029f, 80.5643f, 0f,
+				assets.get("MountainsModel.g3db", Model.class), assets.get("MountainsDescription.g3db", Model.class)));
+		chests.add(new TreasureChest(-126.8985f, -135.4488f, 15.2694f, 180f, assets.get("CanadaMap.g3db", Model.class),
+				assets.get("MapDescription.g3db", Model.class)));
 		for (TreasureChest t : chests) {
 			objects.add(t.base);
 			objects.add(t.lid);
@@ -287,6 +303,7 @@ public class BritishColombiaScene extends GameObjectController {
 		cameraResize(screenWidth, screenHeight);
 	}
 
+	/** Initializes all collision shapes. */
 	private void initalizeCollisionShapes() {
 		cameraController.addCollision(new CollisionRect(new Vector2(-137.98783361911774f, 114.8446736484766f),
 				new Vector2(-134.45952355861664f, 116.84577129781246f)));
@@ -362,13 +379,13 @@ public class BritishColombiaScene extends GameObjectController {
 				new Vector2(-111.33959174156189f, 94.67278718948364f)));
 		cameraController.addCollision(new CollisionRect(new Vector2(-89.0821472927928f, 54.18705224990845f),
 				new Vector2(-88.14071495085955f, 108.70761632919312f)));
-
 		for (Vector3 i : treeLocations) {
 			cameraController.addCollision(new CollisionCircle(new Vector2(i.x, i.y), 1.5f));
 		}
 	}
 
 	@Override
+	/** updates all aspects of the scene */
 	public void update() {
 		super.update();
 		// System.out.println(1 / Gdx.graphics.getDeltaTime() + " FPS");
@@ -388,13 +405,14 @@ public class BritishColombiaScene extends GameObjectController {
 				moveToNext = true;
 			}
 		}
-		if(isQuiz){
+		if (isQuiz) {
 			cameraController.keys.clear();
 		}
 		time.setText((ProjectXploraGame.timer.player.getBCTime()) + " Seconds");
 		artifacts.setText(artifactsUnlocked + "/5");
 	}
 
+	/** Resets the isQuiz variable. */
 	public void resetIsQuiz() {
 		isQuiz = false;
 	}
@@ -411,6 +429,7 @@ public class BritishColombiaScene extends GameObjectController {
 
 	}
 
+	/** Initializes placements of all ground objects. */
 	private void initalizeGroundObjectData() {
 		groundObjDataList.add(new GroundObjectData(
 				new Vector3(-119.27326202392578f, 22.249927520751953f, 20.606400966644287f), new Vector3(0, 0, 0), 0f,

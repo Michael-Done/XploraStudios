@@ -16,8 +16,58 @@ import com.project_xplora.game.GameObjectController;
 import com.project_xplora.game.ProjectXploraGame;
 import com.project_xplora.game.Settings;
 
+/**
+ * The EducationalQuiz class creates the template for Project Xplorer's
+ * educational mini game component.
+ * <p>
+ * Time taken to complete: 3 hours.
+ * <p>
+ * <b> Class Fields: </b>
+ * <p>
+ * SpriteBatch <b> quizBackground </b> - Creates a SpriteBatch for the class.
+ * <p>
+ * Skin <b> quizSkin </b> - Creates a Skin for the class.
+ * <p>
+ * Table <b> quizTable </b> - Creates a Table for the class.
+ * <p>
+ * Stage <b> quizStage </b> - Creates a Stage for the class.
+ * <p>
+ * Texture <b> quizScreen, checkMark, crossMark, samplePicture </b> - Store
+ * Textures for the class.
+ * <p>
+ * BitmapFont <b> quizFont </b> - Stores and renders the BitmapFont for this
+ * class.
+ * <p>
+ * TextButton <b> option1, option2, option3, continueButton </b> - Creates
+ * TextButtons for the class.
+ * <p>
+ * List &lt;Boolean&gt <b> questionsAsked </b> - Keeps track of the questions
+ * that have been asked.
+ * <p>
+ * List &lt;String&gt <b> questions, choices, answers </b> - Stores the
+ * questions, choices and answers.
+ * <p>
+ * String <b> userChosenAnswer </b> - Stores the answer that the user has
+ * chosen.
+ * <p>
+ * int <b> questionNumber </b> - Keeps track of the current question number.
+ * <p>
+ * boolean <b> generateQuestion, isCorrect, exitMinigame </b> - Logic Variables
+ * <p>
+ * ClickListener <b> listener1, listener2, listener3, listener3 </b> - Listener
+ * interfaces for the buttons.
+ * <p>
+ * float <b> screenWidth, screenHeight </b> - Stores the screen dimensions.
+ * <h2>Course Info:</h2> ICS4U0 with Krasteva, V.
+ * <p>
+ * 
+ * @version 5.0 | 06.06.2017
+ * @author <b> XploraStudios </b> - [Cyrus Gandevia and Michael Done].
+ */
+
 public class EducationalQuiz extends GameObjectController {
 
+	//Fields
 	private SpriteBatch quizBackground;
 	private Skin quizSkin;
 	private Table quizTable;
@@ -34,7 +84,14 @@ public class EducationalQuiz extends GameObjectController {
 	private float screenWidth;
 	private float screenHeight;
 
-	//Constructor
+	/**
+	 * EducationalQuiz Class Constructor. Initializes all assets, fields,
+	 * buttons and listener interfaces. Additionally, creates the quiz table and
+	 * adds it to the stage.
+	 * 
+	 * @param settings
+	 *            - Stores the current settings.
+	 */
 	public EducationalQuiz(Settings settings) {
 		super(settings);
 		quizBackground = new SpriteBatch();
@@ -108,7 +165,23 @@ public class EducationalQuiz extends GameObjectController {
 		quizStage.addActor(quizTable);
 	}
 
-	//Modifier Method
+	/**
+	 * Modifier Method which allows the EducationalQuiz class to become an
+	 * editable template. This method allows all subclasses to directly
+	 * implement their question, choice and answer systems through the
+	 * EducationalQuiz class that works as a template.
+	 * 
+	 * @param question
+	 *            - Stores the question to be added.
+	 * @param choice1
+	 *            - Stores the first choice to be added.
+	 * @param choice2
+	 *            - Stores the second choice to be added.
+	 * @param choice3
+	 *            - Stores the third choice to be added.
+	 * @param answer
+	 *            - Stores the answer to be added.
+	 */
 	public void addElements(String question, String choice1, String choice2, String choice3, String answer) {
 		questions.add(question);
 		choices.add(choice1);
@@ -118,12 +191,24 @@ public class EducationalQuiz extends GameObjectController {
 		questionsAsked.add(false);
 	}
 
-	//Modifier Method #2
+	/**
+	 * Second modifier method that allows the subclasses to import their stock
+	 * graphic/image for their minigame screen.
+	 * 
+	 * @param passedTexture
+	 *            - Stores the texture to be placed on the quiz template.
+	 */
 	public void addQuestionTexture(Texture passedTexture) {
 		samplePicture = passedTexture;
 	}
 
-	//Checks if all the questions have been answered
+	/**
+	 * Checks if all the questions of the quiz have already been answered. This
+	 * method does so by using a sequential search algorithm.
+	 * 
+	 * @return Returns false if there are still questions to be asked. Returns
+	 *         true otherwise.
+	 */
 	private boolean isCycleFinished() {
 		for (Boolean sweeper : questionsAsked) {
 			if (!sweeper)
@@ -132,14 +217,28 @@ public class EducationalQuiz extends GameObjectController {
 		return true;
 	}
 
-	//Resets the question tracker, allowing all questions to be asked again
+	/**
+	 * Resets the question tracker which allows all questions to be asked again.
+	 * The for loop is used to iterate through each element and set it to a
+	 * value of false.
+	 */
 	private void resetCycle() {
 		for (int i = 0; i < questionsAsked.size(); i++) {
 			questionsAsked.set(i, false);
 		}
 	}
 
-	//Generates a question to be asked
+	/**
+	 * Method used to generate the question number to be asked for the quiz.
+	 * First, the method checks if all questions have been asked. If that is
+	 * true, this method resets the question cycle. Next, it searches for a
+	 * question number that has not been used in the current cycle. Once that
+	 * has been found, this question number is now considered "used" and is then
+	 * returned as a value.
+	 * 
+	 * @return Returns a random question number between 0 to 9 to be used by
+	 *         another method.
+	 */
 	private int generateQuestionNumber() {
 		int questionNumber;
 		if (isCycleFinished()) {
@@ -154,6 +253,14 @@ public class EducationalQuiz extends GameObjectController {
 		return questionNumber;
 	}
 
+	/**
+	 * Method used for the check mark and cross mark location. Depending on
+	 * which button, a, b or c, has been clicked, the markLocation will appear
+	 * accordingly.
+	 * 
+	 * @return Returns a number that corresponds with the multiple choice button
+	 *         that has been pressed. A = 0, B = 1, C = 2.
+	 */
 	private int setMarkLocation() {
 		if (userChosenAnswer.equals("a")) {
 			return 0;
@@ -164,13 +271,19 @@ public class EducationalQuiz extends GameObjectController {
 		}
 	}
 
-	//@Override - Overrides camera setup method
+	@Override
 	public void camSetup() {
 		Gdx.input.setCursorCatched(false);
 		Gdx.input.setInputProcessor(quizStage);
 	}
 
-	//Draws onto the screen every update
+	/**
+	 * Formats quiz output screen, manages quiz mechanics such as correct/wrong
+	 * answers and manages listener interfaces.
+	 * 
+	 * @param questionNumber
+	 *            - Current question to be displayed.
+	 */
 	public void regularUpdates(int questionNumber) {
 		quizBackground.draw(quizScreen, 0, 0, screenWidth, screenHeight);
 		quizBackground.draw(samplePicture, 750, 300, 430, 305);
@@ -192,7 +305,7 @@ public class EducationalQuiz extends GameObjectController {
 						100);
 				isCorrect = true;
 			} else {
-				
+
 				quizBackground.draw(crossMark, 540, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Incorrect!", 85, 260);
 				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 85, 220);
@@ -203,7 +316,11 @@ public class EducationalQuiz extends GameObjectController {
 		}
 	}
 
-	//Updates screen
+	/**
+	 * Updates the libGDX game client screen. This method is called very
+	 * frequently in order to update the screen. It also manages what is to be
+	 * drawn for the minigame quiz.
+	 */
 	public void update() {
 		if (generateQuestion) {
 			questionNumber = generateQuestionNumber();
@@ -216,7 +333,7 @@ public class EducationalQuiz extends GameObjectController {
 		quizStage.draw();
 	}
 
-	//Dispose of all resources
+	/** Disposes of all resources. */
 	public void disposeAll() {
 		quizBackground.dispose();
 		quizStage.dispose();
@@ -226,10 +343,17 @@ public class EducationalQuiz extends GameObjectController {
 		quizTable = null;
 	}
 
+	/**
+	 * Determines whether to exit he minigame or not.
+	 * 
+	 * @returns Returns true if the user answered the question correctly. False
+	 *          otherwise.
+	 */
 	public boolean isCorrect() {
 		return exitMinigame;
 	}
 
+	/** Resets the exitMinigame state variable. */
 	public void resetExitMinigame() {
 		exitMinigame = false;
 	}
