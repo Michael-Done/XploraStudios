@@ -91,6 +91,7 @@ public class ProjectXploraGame implements ApplicationListener {
 
 		scenes.put(Level.SPLASHSCREEN, new SplashScreen(settings));
 		scenes.put(Level.INSTRUCTION, new InstructionsScene(settings));
+		scenes.put(Level.ARTIFACT, new ArtifactScene (settings));
 		scenes.put(Level.LEVEL_SELECT, new LevelSelect(settings));
 		scenes.put(Level.BC, new BritishColombiaScene(settings));
 		scenes.put(Level.SETTINGS, new SettingsScene(settings));
@@ -189,6 +190,9 @@ public class ProjectXploraGame implements ApplicationListener {
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 1) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.INSTRUCTION;
+			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 2) {
+				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
+				currentScene = Level.ARTIFACT;
 			} else if (((MenuScene) scenes.get(currentScene)).getChoice() == 5) {
 				((MenuScene) scenes.get(currentScene)).resetMenuChoice();
 				currentScene = Level.SETTINGS;
@@ -207,6 +211,18 @@ public class ProjectXploraGame implements ApplicationListener {
 				((InstructionsScene) scenes.get(currentScene)).changeCurrentTexture();
 			} else if (Gdx.input.isKeyJustPressed(Keys.X)) {
 				((InstructionsScene) scenes.get(currentScene)).resetMenuScreen();
+				currentScene = Level.MENU;
+				scenes.get(currentScene).updateSettings(settings);
+				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);
+				Gdx.input.setCursorCatched(true);
+			}
+			break;
+		case ARTIFACT:
+			if (Gdx.input.isKeyJustPressed(Keys.C)) {
+				((ArtifactScene) scenes.get(currentScene)).incrementScreen();
+				((ArtifactScene) scenes.get(currentScene)).changeCurrentTexture();
+			} else if (Gdx.input.isKeyJustPressed(Keys.X)) {
+				((ArtifactScene) scenes.get(currentScene)).resetMenuScreen();
 				currentScene = Level.MENU;
 				scenes.get(currentScene).updateSettings(settings);
 				Gdx.input.setInputProcessor(scenes.get(currentScene).cameraController);

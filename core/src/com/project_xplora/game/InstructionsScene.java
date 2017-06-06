@@ -62,5 +62,4 @@ public class InstructionsScene extends GameObjectController {
 		backgroundTexture2.dispose();
 		backgroundTexture3.dispose();
 	}
-
 }
