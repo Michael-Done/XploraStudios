@@ -35,7 +35,7 @@ import com.project_xplora.game.educational.minigames.EducationalQuiz;
 import com.project_xplora.game.educational.minigames.WorldWar2Quiz;
 
 public class ProjectXploraGame implements ApplicationListener {
-	TreeSet<PlayerData> highscores;
+	static TreeSet<PlayerData> highscores;
 	static PerspectiveCamera camera;
 	ModelBatch modelBatch;
 	ObjectMap<Level, GameObjectController> scenes;

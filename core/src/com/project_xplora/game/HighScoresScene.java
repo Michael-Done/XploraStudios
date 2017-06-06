@@ -48,6 +48,12 @@ public class HighScoresScene extends GameObjectController {
 			table.row();
 		}
 		TextButton back = new TextButton("Back", skin);
+		TextButton reset = new TextButton("Reset", skin);
+		reset.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y) {
+				ProjectXploraGame.highscores.clear();
+			}
+		});
 		back.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y) {
 				backtoMenu = true;
@@ -55,6 +61,7 @@ public class HighScoresScene extends GameObjectController {
 		});
 		table.row();
 		table.add(back);
+		table.add(reset);
 		table.pack();
 		table.setX(Gdx.graphics.getWidth()/2 - table.getWidth()/2);
 		table.setY(Gdx.graphics.getHeight()/2 - table.getHeight()/2);
