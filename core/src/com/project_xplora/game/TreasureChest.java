@@ -51,7 +51,6 @@ public class TreasureChest {
 		lid.transform.rotate(1, 0, 0, 90);
 		base.transform.rotate(1, 0, 0, 90);
 		signum = (useRoll && rot > 1) || rot == 0 ? 1 : -1;
-		artifactTargetZ = z;
 		open = false;
 		this.description = new GameObject(description, new Vector3(x, y, z));
 		this.description.transform.rotate(0, 1, 0, rot);
@@ -93,9 +92,6 @@ public class TreasureChest {
 			isUnlocked = true;
 		} else {
 			isQuiz = false;
-		}
-		if(isUnlocked && !isQuiz){
-			artifactTargetZ += 2;
 		}
 		
 	}
