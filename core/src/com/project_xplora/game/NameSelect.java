@@ -67,6 +67,8 @@ public class NameSelect extends GameObjectController {
 		table.setX(Gdx.graphics.getWidth() / 2 - table.getWidth() / 2);
 		table.setY(Gdx.graphics.getHeight() / 2 - table.getHeight() / 2);
 		stage.addActor(table);
+		stage.setKeyboardFocus(field);
+		field.getOnscreenKeyboard().show(true);
 	}
 
 	public void update() {
