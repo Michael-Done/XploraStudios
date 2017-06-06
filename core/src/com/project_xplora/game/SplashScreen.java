@@ -12,6 +12,8 @@ public class SplashScreen extends GameObjectController {
 		super(settings);
 		backgroundBatch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("SplashScreen.png"));
+		screenWidth = Gdx.graphics.getWidth();
+		screenHeight = Gdx.graphics.getHeight();
 	}
 
 	public void update() {
