@@ -84,6 +84,7 @@ public class EducationalQuiz extends GameObjectController {
 					exitMinigame = true;
 					generateQuestion = true;
 				} else {
+					ProjectXploraGame.timer.add30();
 					generateQuestion = true;
 				}
 				continueButton.removeListener(listener4);
@@ -191,7 +192,7 @@ public class EducationalQuiz extends GameObjectController {
 						100);
 				isCorrect = true;
 			} else {
-				ProjectXploraGame.timer.add30();
+				
 				quizBackground.draw(crossMark, 540, 545 - (markLocation * 115), 50, 50);
 				quizFont.draw(quizBackground, "Incorrect!", 85, 260);
 				quizFont.draw(quizBackground, "Correct Answer: " + answers.get(questionNumber).toUpperCase(), 85, 220);
