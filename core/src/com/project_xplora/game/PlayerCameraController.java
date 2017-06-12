@@ -157,6 +157,11 @@ public class PlayerCameraController extends InputAdapter {
 		if (keys.containsKey(PAUSE) && !paused) {
 			pause();
 		}
+		if(keys.containsKey(Keys.SHIFT_LEFT)){
+			velocity = 20;
+		} else {
+			velocity = 5;
+		}
 		rayFrom.set(camera.position);
 		rayTo.set(camera.position.x, camera.position.y, -20f);
 		Vector2 old = new Vector2(camera.position.x, camera.position.y);
